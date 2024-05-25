@@ -4,7 +4,15 @@ This is an alternative implementation of the official [Apache Thrift](https://gi
 code generator, with a focus on the [compact protocol](https://github.com/apache/thrift/blob/master/doc/specs/thrift-compact-protocol.md).
 
 The initial goal of this project is to develop a more efficient rust parser for the metadata embedded in
-[Apache Parquet](https://github.com/apache/parquet-format/) files. 
+[Apache Parquet](https://github.com/apache/parquet-format/) files.
+
+Higher performance is achieved by the following design decisions:
+
+ - Fewer abstractions by focusing on the compact protocol.
+   - The generated code for example inlines the reading of field headers and so avoids method calls and passing of slightly larger structure like `TFieldIdentifier`.
+   - The field id and field delta can be tracked inside the generated code, similar for boolean fields, making the actual protocol code much simpler.
+ - The rust target avoids moving structures from optional local variables into fields of the returned struct by directly filling the struct.
+   This unfortunately requires all generated structs to implement the default trait.
 
 Even though the initial target language for the code generator is rust, the code generator is written in [Kotlin](https://kotlinlang.org/).
 The reasons for this choice are:
