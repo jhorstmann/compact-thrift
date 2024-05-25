@@ -536,13 +536,8 @@ mod tests {
 
     #[test]
     fn test_size_of_error() {
-        assert_eq!(std::mem::size_of::<ThriftError>(), 8);
-    }
-
-    #[test]
-    fn test_size_of_collection_len_and_type() {
-        assert_eq!(std::mem::size_of::<Option<(u32, u8)>>(), 8);
-        assert_eq!(std::mem::size_of::<Result<(u32, u8), ThriftError>>(), 8);
+        assert_eq!(std::mem::size_of::<ThriftError>(), 1);
+        assert_eq!(std::mem::size_of::<Result<(), ThriftError>>(), 1);
     }
 
     #[test]
