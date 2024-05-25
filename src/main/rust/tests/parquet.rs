@@ -1,4 +1,4 @@
-// Generated on 2024-05-25T14:11:09.261683258Z
+// Generated on 2024-05-25T16:30:54.211995022Z
 use compact_thrift_rs::*;
 
 #[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -119,6 +119,7 @@ impl CompactThriftProtocol for FieldRepetitionType {
 
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct SizeStatistics {
     pub unencoded_byte_array_data_bytes: Option<i64>,
     pub repetition_level_histogram: Option<Vec<i64>>,
@@ -129,6 +130,7 @@ impl CompactThriftProtocol for SizeStatistics {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -169,12 +171,13 @@ impl CompactThriftProtocol for SizeStatistics {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("SizeStatistics::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct Statistics {
     pub max: Option<Vec<u8>>,
     pub min: Option<Vec<u8>>,
@@ -190,6 +193,7 @@ impl CompactThriftProtocol for Statistics {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -250,12 +254,13 @@ impl CompactThriftProtocol for Statistics {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("Statistics::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct StringType {
 }
 
@@ -263,6 +268,7 @@ impl CompactThriftProtocol for StringType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -291,12 +297,13 @@ impl CompactThriftProtocol for StringType {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("StringType::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct UUIDType {
 }
 
@@ -304,6 +311,7 @@ impl CompactThriftProtocol for UUIDType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -332,12 +340,13 @@ impl CompactThriftProtocol for UUIDType {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("UUIDType::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct MapType {
 }
 
@@ -345,6 +354,7 @@ impl CompactThriftProtocol for MapType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -373,12 +383,13 @@ impl CompactThriftProtocol for MapType {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("MapType::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct ListType {
 }
 
@@ -386,6 +397,7 @@ impl CompactThriftProtocol for ListType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -414,12 +426,13 @@ impl CompactThriftProtocol for ListType {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("ListType::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct EnumType {
 }
 
@@ -427,6 +440,7 @@ impl CompactThriftProtocol for EnumType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -455,12 +469,13 @@ impl CompactThriftProtocol for EnumType {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("EnumType::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct DateType {
 }
 
@@ -468,6 +483,7 @@ impl CompactThriftProtocol for DateType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -496,12 +512,13 @@ impl CompactThriftProtocol for DateType {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("DateType::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct Float16Type {
 }
 
@@ -509,6 +526,7 @@ impl CompactThriftProtocol for Float16Type {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -537,12 +555,13 @@ impl CompactThriftProtocol for Float16Type {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("Float16Type::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct NullType {
 }
 
@@ -550,6 +569,7 @@ impl CompactThriftProtocol for NullType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -578,12 +598,13 @@ impl CompactThriftProtocol for NullType {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("NullType::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct DecimalType {
     pub scale: i32,
     pub precision: i32,
@@ -593,6 +614,7 @@ impl CompactThriftProtocol for DecimalType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut scale_set_: bool = false;
         let mut precision_set_: bool = false;
@@ -635,12 +657,13 @@ impl CompactThriftProtocol for DecimalType {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("DecimalType::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct MilliSeconds {
 }
 
@@ -648,6 +671,7 @@ impl CompactThriftProtocol for MilliSeconds {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -676,12 +700,13 @@ impl CompactThriftProtocol for MilliSeconds {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("MilliSeconds::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct MicroSeconds {
 }
 
@@ -689,6 +714,7 @@ impl CompactThriftProtocol for MicroSeconds {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -717,12 +743,13 @@ impl CompactThriftProtocol for MicroSeconds {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("MicroSeconds::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct NanoSeconds {
 }
 
@@ -730,6 +757,7 @@ impl CompactThriftProtocol for NanoSeconds {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -758,12 +786,13 @@ impl CompactThriftProtocol for NanoSeconds {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("NanoSeconds::write")
     }
 }
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub enum TimeUnit {
     MILLIS(MilliSeconds),
     MICROS(MicroSeconds),
@@ -823,12 +852,13 @@ impl CompactThriftProtocol for TimeUnit {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("TimeUnit::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct TimestampType {
     pub isAdjustedToUTC: bool,
     pub unit: TimeUnit,
@@ -838,6 +868,7 @@ impl CompactThriftProtocol for TimestampType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut isAdjustedToUTC_set_: bool = false;
         let mut unit_set_: bool = false;
@@ -880,12 +911,13 @@ impl CompactThriftProtocol for TimestampType {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("TimestampType::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct TimeType {
     pub isAdjustedToUTC: bool,
     pub unit: TimeUnit,
@@ -895,6 +927,7 @@ impl CompactThriftProtocol for TimeType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut isAdjustedToUTC_set_: bool = false;
         let mut unit_set_: bool = false;
@@ -937,12 +970,13 @@ impl CompactThriftProtocol for TimeType {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("TimeType::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct IntType {
     pub bitWidth: i8,
     pub isSigned: bool,
@@ -952,6 +986,7 @@ impl CompactThriftProtocol for IntType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut bitWidth_set_: bool = false;
         let mut isSigned_set_: bool = false;
@@ -994,12 +1029,13 @@ impl CompactThriftProtocol for IntType {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("IntType::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct JsonType {
 }
 
@@ -1007,6 +1043,7 @@ impl CompactThriftProtocol for JsonType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -1035,12 +1072,13 @@ impl CompactThriftProtocol for JsonType {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("JsonType::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct BsonType {
 }
 
@@ -1048,6 +1086,7 @@ impl CompactThriftProtocol for BsonType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -1076,12 +1115,13 @@ impl CompactThriftProtocol for BsonType {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("BsonType::write")
     }
 }
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub enum LogicalType {
     STRING(StringType),
     MAP(MapType),
@@ -1240,12 +1280,13 @@ impl CompactThriftProtocol for LogicalType {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("LogicalType::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct SchemaElement {
     pub r#type: Option<Type>,
     pub type_length: Option<i32>,
@@ -1263,6 +1304,7 @@ impl CompactThriftProtocol for SchemaElement {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut name_set_: bool = false;
         let mut last_field_id = 0_i16;
@@ -1336,7 +1378,7 @@ impl CompactThriftProtocol for SchemaElement {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("SchemaElement::write")
     }
 }
@@ -1478,6 +1520,7 @@ impl CompactThriftProtocol for BoundaryOrder {
 
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct DataPageHeader {
     pub num_values: i32,
     pub encoding: Encoding,
@@ -1490,6 +1533,7 @@ impl CompactThriftProtocol for DataPageHeader {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut num_values_set_: bool = false;
         let mut encoding_set_: bool = false;
@@ -1546,12 +1590,13 @@ impl CompactThriftProtocol for DataPageHeader {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("DataPageHeader::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct IndexPageHeader {
 }
 
@@ -1559,6 +1604,7 @@ impl CompactThriftProtocol for IndexPageHeader {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -1587,12 +1633,13 @@ impl CompactThriftProtocol for IndexPageHeader {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("IndexPageHeader::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct DictionaryPageHeader {
     pub num_values: i32,
     pub encoding: Encoding,
@@ -1603,6 +1650,7 @@ impl CompactThriftProtocol for DictionaryPageHeader {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut num_values_set_: bool = false;
         let mut encoding_set_: bool = false;
@@ -1649,12 +1697,13 @@ impl CompactThriftProtocol for DictionaryPageHeader {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("DictionaryPageHeader::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct DataPageHeaderV2 {
     pub num_values: i32,
     pub num_nulls: i32,
@@ -1670,6 +1719,7 @@ impl CompactThriftProtocol for DataPageHeaderV2 {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut num_values_set_: bool = false;
         let mut num_nulls_set_: bool = false;
@@ -1740,12 +1790,13 @@ impl CompactThriftProtocol for DataPageHeaderV2 {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("DataPageHeaderV2::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct SplitBlockAlgorithm {
 }
 
@@ -1753,6 +1804,7 @@ impl CompactThriftProtocol for SplitBlockAlgorithm {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -1781,12 +1833,13 @@ impl CompactThriftProtocol for SplitBlockAlgorithm {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("SplitBlockAlgorithm::write")
     }
 }
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub enum BloomFilterAlgorithm {
     BLOCK(SplitBlockAlgorithm),
 }
@@ -1828,12 +1881,13 @@ impl CompactThriftProtocol for BloomFilterAlgorithm {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("BloomFilterAlgorithm::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct XxHash {
 }
 
@@ -1841,6 +1895,7 @@ impl CompactThriftProtocol for XxHash {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -1869,12 +1924,13 @@ impl CompactThriftProtocol for XxHash {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("XxHash::write")
     }
 }
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub enum BloomFilterHash {
     XXHASH(XxHash),
 }
@@ -1916,12 +1972,13 @@ impl CompactThriftProtocol for BloomFilterHash {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("BloomFilterHash::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct Uncompressed {
 }
 
@@ -1929,6 +1986,7 @@ impl CompactThriftProtocol for Uncompressed {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -1957,12 +2015,13 @@ impl CompactThriftProtocol for Uncompressed {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("Uncompressed::write")
     }
 }
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub enum BloomFilterCompression {
     UNCOMPRESSED(Uncompressed),
 }
@@ -2004,12 +2063,13 @@ impl CompactThriftProtocol for BloomFilterCompression {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("BloomFilterCompression::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct BloomFilterHeader {
     pub numBytes: i32,
     pub algorithm: BloomFilterAlgorithm,
@@ -2021,6 +2081,7 @@ impl CompactThriftProtocol for BloomFilterHeader {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut numBytes_set_: bool = false;
         let mut algorithm_set_: bool = false;
@@ -2073,12 +2134,13 @@ impl CompactThriftProtocol for BloomFilterHeader {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("BloomFilterHeader::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct PageHeader {
     pub r#type: PageType,
     pub uncompressed_page_size: i32,
@@ -2094,6 +2156,7 @@ impl CompactThriftProtocol for PageHeader {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut r#type_set_: bool = false;
         let mut uncompressed_page_size_set_: bool = false;
@@ -2161,12 +2224,13 @@ impl CompactThriftProtocol for PageHeader {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("PageHeader::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct KeyValue {
     pub key: String,
     pub value: Option<String>,
@@ -2176,6 +2240,7 @@ impl CompactThriftProtocol for KeyValue {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut key_set_: bool = false;
         let mut last_field_id = 0_i16;
@@ -2217,12 +2282,13 @@ impl CompactThriftProtocol for KeyValue {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("KeyValue::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct SortingColumn {
     pub column_idx: i32,
     pub descending: bool,
@@ -2233,6 +2299,7 @@ impl CompactThriftProtocol for SortingColumn {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut column_idx_set_: bool = false;
         let mut descending_set_: bool = false;
@@ -2280,12 +2347,13 @@ impl CompactThriftProtocol for SortingColumn {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("SortingColumn::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct PageEncodingStats {
     pub page_type: PageType,
     pub encoding: Encoding,
@@ -2296,6 +2364,7 @@ impl CompactThriftProtocol for PageEncodingStats {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut page_type_set_: bool = false;
         let mut encoding_set_: bool = false;
@@ -2343,12 +2412,13 @@ impl CompactThriftProtocol for PageEncodingStats {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("PageEncodingStats::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct ColumnMetaData {
     pub r#type: Type,
     pub encodings: Vec<Encoding>,
@@ -2372,6 +2442,7 @@ impl CompactThriftProtocol for ColumnMetaData {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut r#type_set_: bool = false;
         let mut encodings_set_: bool = false;
@@ -2476,12 +2547,13 @@ impl CompactThriftProtocol for ColumnMetaData {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("ColumnMetaData::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct EncryptionWithFooterKey {
 }
 
@@ -2489,6 +2561,7 @@ impl CompactThriftProtocol for EncryptionWithFooterKey {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -2517,12 +2590,13 @@ impl CompactThriftProtocol for EncryptionWithFooterKey {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("EncryptionWithFooterKey::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct EncryptionWithColumnKey {
     pub path_in_schema: Vec<String>,
     pub key_metadata: Option<Vec<u8>>,
@@ -2532,6 +2606,7 @@ impl CompactThriftProtocol for EncryptionWithColumnKey {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut path_in_schema_set_: bool = false;
         let mut last_field_id = 0_i16;
@@ -2573,12 +2648,13 @@ impl CompactThriftProtocol for EncryptionWithColumnKey {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("EncryptionWithColumnKey::write")
     }
 }
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub enum ColumnCryptoMetaData {
     ENCRYPTION_WITH_FOOTER_KEY(EncryptionWithFooterKey),
     ENCRYPTION_WITH_COLUMN_KEY(EncryptionWithColumnKey),
@@ -2629,12 +2705,13 @@ impl CompactThriftProtocol for ColumnCryptoMetaData {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("ColumnCryptoMetaData::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct ColumnChunk {
     pub file_path: Option<String>,
     pub file_offset: i64,
@@ -2651,6 +2728,7 @@ impl CompactThriftProtocol for ColumnChunk {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut file_offset_set_: bool = false;
         let mut last_field_id = 0_i16;
@@ -2720,12 +2798,13 @@ impl CompactThriftProtocol for ColumnChunk {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("ColumnChunk::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct RowGroup {
     pub columns: Vec<ColumnChunk>,
     pub total_byte_size: i64,
@@ -2740,6 +2819,7 @@ impl CompactThriftProtocol for RowGroup {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut columns_set_: bool = false;
         let mut total_byte_size_set_: bool = false;
@@ -2803,12 +2883,13 @@ impl CompactThriftProtocol for RowGroup {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("RowGroup::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct TypeDefinedOrder {
 }
 
@@ -2816,6 +2897,7 @@ impl CompactThriftProtocol for TypeDefinedOrder {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -2844,12 +2926,13 @@ impl CompactThriftProtocol for TypeDefinedOrder {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("TypeDefinedOrder::write")
     }
 }
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub enum ColumnOrder {
     TYPE_ORDER(TypeDefinedOrder),
 }
@@ -2891,12 +2974,13 @@ impl CompactThriftProtocol for ColumnOrder {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("ColumnOrder::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct PageLocation {
     pub offset: i64,
     pub compressed_page_size: i32,
@@ -2907,6 +2991,7 @@ impl CompactThriftProtocol for PageLocation {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut offset_set_: bool = false;
         let mut compressed_page_size_set_: bool = false;
@@ -2954,12 +3039,13 @@ impl CompactThriftProtocol for PageLocation {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("PageLocation::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct OffsetIndex {
     pub page_locations: Vec<PageLocation>,
     pub unencoded_byte_array_data_bytes: Option<Vec<i64>>,
@@ -2969,6 +3055,7 @@ impl CompactThriftProtocol for OffsetIndex {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut page_locations_set_: bool = false;
         let mut last_field_id = 0_i16;
@@ -3010,12 +3097,13 @@ impl CompactThriftProtocol for OffsetIndex {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("OffsetIndex::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct ColumnIndex {
     pub null_pages: Vec<bool>,
     pub min_values: Vec<Vec<u8>>,
@@ -3030,6 +3118,7 @@ impl CompactThriftProtocol for ColumnIndex {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut null_pages_set_: bool = false;
         let mut min_values_set_: bool = false;
@@ -3094,12 +3183,13 @@ impl CompactThriftProtocol for ColumnIndex {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("ColumnIndex::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct AesGcmV1 {
     pub aad_prefix: Option<Vec<u8>>,
     pub aad_file_unique: Option<Vec<u8>>,
@@ -3110,6 +3200,7 @@ impl CompactThriftProtocol for AesGcmV1 {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -3150,12 +3241,13 @@ impl CompactThriftProtocol for AesGcmV1 {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("AesGcmV1::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct AesGcmCtrV1 {
     pub aad_prefix: Option<Vec<u8>>,
     pub aad_file_unique: Option<Vec<u8>>,
@@ -3166,6 +3258,7 @@ impl CompactThriftProtocol for AesGcmCtrV1 {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
@@ -3206,12 +3299,13 @@ impl CompactThriftProtocol for AesGcmCtrV1 {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("AesGcmCtrV1::write")
     }
 }
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub enum EncryptionAlgorithm {
     AES_GCM_V1(AesGcmV1),
     AES_GCM_CTR_V1(AesGcmCtrV1),
@@ -3262,12 +3356,13 @@ impl CompactThriftProtocol for EncryptionAlgorithm {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("EncryptionAlgorithm::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct FileMetaData {
     pub version: i32,
     pub schema: Vec<SchemaElement>,
@@ -3284,6 +3379,7 @@ impl CompactThriftProtocol for FileMetaData {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut version_set_: bool = false;
         let mut schema_set_: bool = false;
@@ -3356,12 +3452,13 @@ impl CompactThriftProtocol for FileMetaData {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("FileMetaData::write")
     }
 }
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
+#[allow(non_snake_case)]
 pub struct FileCryptoMetaData {
     pub encryption_algorithm: EncryptionAlgorithm,
     pub key_metadata: Option<Vec<u8>>,
@@ -3371,6 +3468,7 @@ impl CompactThriftProtocol for FileCryptoMetaData {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
+    #[allow(non_snake_case)]
     fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut encryption_algorithm_set_: bool = false;
         let mut last_field_id = 0_i16;
@@ -3412,7 +3510,7 @@ impl CompactThriftProtocol for FileCryptoMetaData {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
         unimplemented!("FileCryptoMetaData::write")
     }
 }

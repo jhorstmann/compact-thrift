@@ -89,6 +89,7 @@ class RustGenerator() : DocumentVisitor {
     }
 
     override fun visitHeader(header: Header) {
+        code.appendln("#[allow(non_snake_case)]")
         val namespace = header.namespaces["rust"] ?: header.namespaces["*"]
         val prefix = namespace?.let { it.replace(".", "::") + "::" } ?: ""
         code.appendln("// Generated on ${Instant.now()}")
@@ -166,6 +167,7 @@ class RustDefinitionVisitor(val code: StringBuilder) : DefinitionVisitor {
         code.appendln("""
             #[derive(Default, Clone, Debug)]
             #[allow(non_camel_case_types)]
+            #[allow(non_snake_case)]
             pub struct $identifier {${definition.fields.values.map { """
                 pub ${rustIdentifier(it.identifier)}: ${rustType(it.type, it.req)},""" }.joinToString("")}
             }
@@ -174,6 +176,7 @@ class RustDefinitionVisitor(val code: StringBuilder) : DefinitionVisitor {
                 const FIELD_TYPE: u8 = 12;
                 
                 #[inline(never)]
+                #[allow(non_snake_case)]
                 fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {${definition.fields.values.filter { it.required() }.map { """
                     let mut ${rustIdentifier(it.identifier)}_set_: bool = false;""" }.joinToString("")}
                     let mut last_field_id = 0_i16;
@@ -211,7 +214,7 @@ class RustDefinitionVisitor(val code: StringBuilder) : DefinitionVisitor {
                     Ok(())
                 }
                 
-                fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+                fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
                     unimplemented!("${definition.identifier}::write")
                 }
             }""".trimIndent()
@@ -224,6 +227,7 @@ class RustDefinitionVisitor(val code: StringBuilder) : DefinitionVisitor {
             """
             #[derive(Clone, Debug)]
             #[allow(non_camel_case_types)]
+            #[allow(non_snake_case)]
             pub enum $identifier {${
                 definition.fields.values.map { """
                 ${it.identifier}(${rustType(it.type, FieldReq.REQUIRED)}),"""
@@ -272,7 +276,7 @@ class RustDefinitionVisitor(val code: StringBuilder) : DefinitionVisitor {
                     Ok(())
                 }
                 
-                fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+                fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
                     unimplemented!("${definition.identifier}::write")
                 }
             }
