@@ -13,5 +13,5 @@ The reasons for this choice are:
  - Kotlins `sealed` and `data` classes are very powerful for modeling domain objects (similar to rust enums).
  - Kotlin has built-in support for string templates, which are checked at compile time.
 
-The runtime support for the generated rust code can be found in the [`src/main/rust`](tree/main/src/main/rust) folder.
+The runtime support for the generated rust code can be found in the [`src/main/rust`](https://github.com/jhorstmann/compact-thrift/tree/main/src/main/rust) folder.
 
