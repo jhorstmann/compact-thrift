@@ -96,7 +96,7 @@ pub trait CompactThriftInput {
 }
 
 #[inline]
-pub fn read_collection_len_and_type<T: CompactThriftInput>(input: &mut T) -> Result<(u32, u8), ThriftError> {
+fn read_collection_len_and_type<T: CompactThriftInput>(input: &mut T) -> Result<(u32, u8), ThriftError> {
     let header = input.read_byte()?;
     let field_type = header & 0x0F;
     let maybe_len = (header & 0xF0) >> 4;
@@ -115,7 +115,7 @@ pub fn read_collection_len_and_type<T: CompactThriftInput>(input: &mut T) -> Res
 }
 
 #[inline]
-pub fn read_map_len_and_types<T: CompactThriftInput>(input: &mut T) -> Result<(u32, u8, u8), ThriftError> {
+fn read_map_len_and_types<T: CompactThriftInput>(input: &mut T) -> Result<(u32, u8, u8), ThriftError> {
     let len = input.read_len()?;
     if len == 0 {
         return Ok((0, 0, 0))
