@@ -501,10 +501,9 @@ impl <P: CompactThriftProtocol + Default> CompactThriftProtocol for Option<P> {
         if self.is_some() {
             return Err(ThriftError::DuplicateField);
         }
-        // avoid generating drop calls for any old value
-        let old = self.replace(P::default());
-        std::mem::forget(old); // is always None because of check above
         unsafe {
+            // avoid generating drop calls, content is always None because of check above
+            std::ptr::write(self as *mut _, Some(P::default()));
             self.as_mut().unwrap_unchecked().fill(input)?;
         }
         Ok(())
