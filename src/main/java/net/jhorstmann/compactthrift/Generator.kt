@@ -201,7 +201,7 @@ class RustDefinitionVisitor(val code: StringBuilder) : DefinitionVisitor {
                                 self.${rustIdentifier(it.identifier)}.fill_field(input, field_type)?;
                             }""" }.joinToString("")}
                             _ => {
-                                skip_field(input, field_type)?;
+                                input.skip_field(field_type)?;
                             }
                         }
                     }

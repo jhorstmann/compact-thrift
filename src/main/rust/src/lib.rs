@@ -91,10 +91,13 @@ pub trait CompactThriftInput {
         self.read_binary()?;
         Ok(())
     }
+    fn skip_field(&mut self, field_type: u8) -> Result<(), ThriftError> {
+        skip_field(self, field_type)
+    }
 }
 
 #[inline]
-fn read_collection_len_and_type<T: CompactThriftInput>(input: &mut T) -> Result<(u32, u8), ThriftError> {
+fn read_collection_len_and_type<T: CompactThriftInput + ?Sized>(input: &mut T) -> Result<(u32, u8), ThriftError> {
     let header = input.read_byte()?;
     let field_type = header & 0x0F;
     let maybe_len = (header & 0xF0) >> 4;
@@ -113,7 +116,7 @@ fn read_collection_len_and_type<T: CompactThriftInput>(input: &mut T) -> Result<
 }
 
 #[inline]
-fn read_map_len_and_types<T: CompactThriftInput>(input: &mut T) -> Result<(u32, u8, u8), ThriftError> {
+fn read_map_len_and_types<T: CompactThriftInput + ?Sized>(input: &mut T) -> Result<(u32, u8, u8), ThriftError> {
     let len = input.read_len()?;
     if len == 0 {
         return Ok((0, 0, 0))
@@ -130,7 +133,7 @@ fn read_map_len_and_types<T: CompactThriftInput>(input: &mut T) -> Result<(u32, 
     Ok((len as u32, key_type, val_type))
 }
 
-pub fn skip_field<T: CompactThriftInput>(input: &mut T, field_type: u8) -> Result<(), ThriftError> {
+fn skip_field<T: CompactThriftInput + ?Sized>(input: &mut T, field_type: u8) -> Result<(), ThriftError> {
     match field_type {
         0..=2 => {
             // nothing else to read for STOP, TRUE, FALSE.

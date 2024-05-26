@@ -1,4 +1,5 @@
-// Generated on 2024-05-25T16:30:54.211995022Z
+#[allow(non_snake_case)]
+// Generated on 2024-05-26T12:36:27.283941578Z
 use compact_thrift_rs::*;
 
 #[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -162,7 +163,7 @@ impl CompactThriftProtocol for SizeStatistics {
                     self.definition_level_histogram.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -245,7 +246,7 @@ impl CompactThriftProtocol for Statistics {
                     self.is_min_value_exact.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -288,7 +289,7 @@ impl CompactThriftProtocol for StringType {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -331,7 +332,7 @@ impl CompactThriftProtocol for UUIDType {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -374,7 +375,7 @@ impl CompactThriftProtocol for MapType {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -417,7 +418,7 @@ impl CompactThriftProtocol for ListType {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -460,7 +461,7 @@ impl CompactThriftProtocol for EnumType {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -503,7 +504,7 @@ impl CompactThriftProtocol for DateType {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -546,7 +547,7 @@ impl CompactThriftProtocol for Float16Type {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -589,7 +590,7 @@ impl CompactThriftProtocol for NullType {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -644,7 +645,7 @@ impl CompactThriftProtocol for DecimalType {
                     self.precision.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -691,7 +692,7 @@ impl CompactThriftProtocol for MilliSeconds {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -734,7 +735,7 @@ impl CompactThriftProtocol for MicroSeconds {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -777,7 +778,7 @@ impl CompactThriftProtocol for NanoSeconds {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -898,7 +899,7 @@ impl CompactThriftProtocol for TimestampType {
                     self.unit.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -957,7 +958,7 @@ impl CompactThriftProtocol for TimeType {
                     self.unit.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -1016,7 +1017,7 @@ impl CompactThriftProtocol for IntType {
                     self.isSigned.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -1063,7 +1064,7 @@ impl CompactThriftProtocol for JsonType {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -1106,7 +1107,7 @@ impl CompactThriftProtocol for BsonType {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -1365,7 +1366,7 @@ impl CompactThriftProtocol for SchemaElement {
                     self.logicalType.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -1577,7 +1578,7 @@ impl CompactThriftProtocol for DataPageHeader {
                     self.statistics.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -1624,7 +1625,7 @@ impl CompactThriftProtocol for IndexPageHeader {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -1684,7 +1685,7 @@ impl CompactThriftProtocol for DictionaryPageHeader {
                     self.is_sorted.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -1777,7 +1778,7 @@ impl CompactThriftProtocol for DataPageHeaderV2 {
                     self.statistics.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -1824,7 +1825,7 @@ impl CompactThriftProtocol for SplitBlockAlgorithm {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -1915,7 +1916,7 @@ impl CompactThriftProtocol for XxHash {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -2006,7 +2007,7 @@ impl CompactThriftProtocol for Uncompressed {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -2121,7 +2122,7 @@ impl CompactThriftProtocol for BloomFilterHeader {
                     self.compression.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -2211,7 +2212,7 @@ impl CompactThriftProtocol for PageHeader {
                     self.data_page_header_v2.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -2269,7 +2270,7 @@ impl CompactThriftProtocol for KeyValue {
                     self.value.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -2334,7 +2335,7 @@ impl CompactThriftProtocol for SortingColumn {
                     self.nulls_first.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -2399,7 +2400,7 @@ impl CompactThriftProtocol for PageEncodingStats {
                     self.count.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -2534,7 +2535,7 @@ impl CompactThriftProtocol for ColumnMetaData {
                     self.size_statistics.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -2581,7 +2582,7 @@ impl CompactThriftProtocol for EncryptionWithFooterKey {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -2635,7 +2636,7 @@ impl CompactThriftProtocol for EncryptionWithColumnKey {
                     self.key_metadata.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -2785,7 +2786,7 @@ impl CompactThriftProtocol for ColumnChunk {
                     self.encrypted_column_metadata.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -2870,7 +2871,7 @@ impl CompactThriftProtocol for RowGroup {
                     self.ordinal.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -2917,7 +2918,7 @@ impl CompactThriftProtocol for TypeDefinedOrder {
 
             match last_field_id {
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -3026,7 +3027,7 @@ impl CompactThriftProtocol for PageLocation {
                     self.first_row_index.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -3084,7 +3085,7 @@ impl CompactThriftProtocol for OffsetIndex {
                     self.unencoded_byte_array_data_bytes.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -3170,7 +3171,7 @@ impl CompactThriftProtocol for ColumnIndex {
                     self.definition_level_histograms.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -3232,7 +3233,7 @@ impl CompactThriftProtocol for AesGcmV1 {
                     self.supply_aad_prefix.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -3290,7 +3291,7 @@ impl CompactThriftProtocol for AesGcmCtrV1 {
                     self.supply_aad_prefix.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -3439,7 +3440,7 @@ impl CompactThriftProtocol for FileMetaData {
                     self.footer_signing_key_metadata.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
@@ -3497,7 +3498,7 @@ impl CompactThriftProtocol for FileCryptoMetaData {
                     self.key_metadata.fill_field(input, field_type)?;
                 }
                 _ => {
-                    skip_field(input, field_type)?;
+                    input.skip_field(field_type)?;
                 }
             }
         }
