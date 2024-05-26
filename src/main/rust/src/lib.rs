@@ -28,26 +28,20 @@ impl From<ErrorKind> for ThriftError {
     }
 }
 
-#[inline]
-fn decode_uleb<const MAX_BITS: u32, I: CompactThriftInput>(input: &mut I) -> Result<u64, ThriftError> {
+fn decode_uleb<I: CompactThriftInput>(input: &mut I) -> Result<u64, ThriftError> {
     let mut shift = 0_u32;
     let mut value = 0_u64;
     loop {
         let byte = input.read_byte()?;
 
-        value |= ((byte & 0x7F) as u64) << shift;
-
-        if (byte & 0x80) == 0 {
-            break;
-        }
-
+        // overlong sequences are not treated as an error for performance reasons
+        value |= ((byte & 0x7F) as u64).wrapping_shl(shift);
         shift += 7;
 
-        if shift >= MAX_BITS {
-            return Err(ThriftError::InvalidNumber);
+        if (byte & 0x80) == 0 {
+            return Ok(value);
         }
     }
-    Ok(value)
 }
 
 #[inline(always)]
@@ -68,19 +62,19 @@ fn zigzag64(i: u64) -> i64 {
 pub trait CompactThriftInput {
     fn read_byte(&mut self) -> Result<u8, ThriftError>;
     fn read_len(&mut self) -> Result<usize, ThriftError> where Self: Sized {
-        let len = decode_uleb::<28, _>(self)?;
+        let len = decode_uleb(self)?;
         Ok(len as _)
     }
     fn read_i16(&mut self) -> Result<i16, ThriftError> where Self: Sized {
-        let i = decode_uleb::<16, _>(self)?;
+        let i = decode_uleb(self)?;
         Ok(zigzag16(i as _))
     }
     fn read_i32(&mut self) -> Result<i32, ThriftError> where Self: Sized{
-        let i = decode_uleb::<32, _>(self)?;
+        let i = decode_uleb(self)?;
         Ok(zigzag32(i as _))
     }
     fn read_i64(&mut self) -> Result<i64, ThriftError> where Self: Sized{
-        let i = decode_uleb::<64, _>(self)?;
+        let i = decode_uleb(self)?;
         Ok(zigzag64(i as _))
     }
     fn read_double(&mut self) -> Result<f64, ThriftError>;
@@ -548,8 +542,26 @@ mod tests {
 
     #[test]
     fn test_read_uleb() {
-        assert_eq!(decode_uleb::<16, _>(&mut SliceInput::new(&[1])).unwrap(), 1);
-        assert_eq!(decode_uleb::<16, _>(&mut SliceInput::new(&[0b0111_1111])).unwrap(), 0b0111_1111);
-        assert_eq!(decode_uleb::<16, _>(&mut SliceInput::new(&[0b1000_1111, 0b0111_0101])).unwrap(), 0b0011_1010_1000_1111);
+        assert_eq!(decode_uleb(&mut SliceInput::new(&[1])).unwrap(), 1);
+        assert_eq!(decode_uleb(&mut SliceInput::new(&[0b0111_1111])).unwrap(), 0b0111_1111);
+        assert_eq!(decode_uleb(&mut SliceInput::new(&[0b1000_1111, 0b0111_0101])).unwrap(), 0b0011_1010_1000_1111);
     }
+
+    #[test]
+    fn test_read_uleb_overlong() {
+        decode_uleb(&mut SliceInput::new(&[0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0])).unwrap();
+    }
+
+     #[test]
+    fn test_slice_input_read_i32() {
+        assert_eq!(SliceInput::new(&[0]).read_i32().unwrap(), 0);
+        assert_eq!(SliceInput::new(&[1]).read_i32().unwrap(), -1);
+        assert_eq!(SliceInput::new(&[2]).read_i32().unwrap(), 1);
+
+        assert_eq!(SliceInput::new(&[0b0111_1111]).read_i32().unwrap(), -64);
+        assert_eq!(SliceInput::new(&[0b1000_1111, 0b0111_0101]).read_i32().unwrap(), -7496);
+        assert_eq!(SliceInput::new(&[0b1000_1111, 0b0111_0101, 0, 0]).read_i32().unwrap(), -7496);
+        assert_eq!(SliceInput::new(&[0b1000_1111, 0b0111_0101, 0, 0, 0]).read_i32().unwrap(), -7496);
+    }
+
 }
