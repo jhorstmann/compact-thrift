@@ -241,9 +241,9 @@ impl CompactThriftInput for SliceInput<'_> {
         if self.0.len() < 1 {
             return Err(ThriftError::from(ErrorKind::UnexpectedEof))
         }
-        let (first, rest) = std::mem::replace(self, Self(&mut [])).0.split_at(1);
-        *self = Self(rest);
-        Ok(first[0])
+        let first = self.0[0];
+        self.0 = &self.0[1..];
+        Ok(first)
     }
 
     #[inline]
@@ -251,9 +251,9 @@ impl CompactThriftInput for SliceInput<'_> {
         if self.0.len() < 8 {
             return Err(ThriftError::from(ErrorKind::UnexpectedEof))
         }
-        let (first, rest) = std::mem::replace(self, Self(&mut [])).0.split_at(8);
-        *self = Self(rest);
-        Ok(f64::from_le_bytes(first.try_into().unwrap()))
+        let value = f64::from_le_bytes(self.0[..8].try_into().unwrap());
+        self.0 = &self.0[8..];
+        Ok(value)
     }
 
     fn read_binary(&mut self) -> Result<Vec<u8>, ThriftError> {
@@ -264,14 +264,14 @@ impl CompactThriftInput for SliceInput<'_> {
         if self.0.len() < len {
             return Err(ThriftError::from(ErrorKind::UnexpectedEof))
         }
-        let (first, rest) = std::mem::replace(self, Self(&mut [])).0.split_at(len);
+        let (first, rest) = std::mem::replace(&mut self.0, &mut []).split_at(len);
         let mut vec = Vec::<u8>::default();
         vec.try_reserve(len).map_err(|_|ThriftError::ReserveError)?;
         unsafe {
             vec.as_mut_ptr().copy_from_nonoverlapping(first.as_ptr(), len);
             vec.set_len(len);
         }
-        *self = Self(rest);
+        self.0 = rest;
         Ok(vec)
     }
 
@@ -280,9 +280,10 @@ impl CompactThriftInput for SliceInput<'_> {
         if len > MAX_BINARY_LEN {
             return Err(ThriftError::InvalidBinaryLen);
         }
-        let len = len as usize;
-        let (_first, rest) = std::mem::replace(self, Self(&mut [])).0.split_at(len);
-        *self = Self(rest);
+        if self.0.len() < len {
+            return Err(ThriftError::from(ErrorKind::UnexpectedEof))
+        }
+        self.0 = &self.0[len..];
         Ok(())
     }
 }
