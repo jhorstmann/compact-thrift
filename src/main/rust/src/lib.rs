@@ -28,7 +28,7 @@ impl From<ErrorKind> for ThriftError {
     }
 }
 
-fn decode_uleb<I: CompactThriftInput>(input: &mut I) -> Result<u64, ThriftError> {
+fn decode_uleb<I: CompactThriftInput + ?Sized>(input: &mut I) -> Result<u64, ThriftError> {
     let mut shift = 0_u32;
     let mut value = 0_u64;
     loop {
@@ -61,19 +61,19 @@ fn zigzag64(i: u64) -> i64 {
 
 pub trait CompactThriftInput {
     fn read_byte(&mut self) -> Result<u8, ThriftError>;
-    fn read_len(&mut self) -> Result<usize, ThriftError> where Self: Sized {
+    fn read_len(&mut self) -> Result<usize, ThriftError> {
         let len = decode_uleb(self)?;
         Ok(len as _)
     }
-    fn read_i16(&mut self) -> Result<i16, ThriftError> where Self: Sized {
+    fn read_i16(&mut self) -> Result<i16, ThriftError> {
         let i = decode_uleb(self)?;
         Ok(zigzag16(i as _))
     }
-    fn read_i32(&mut self) -> Result<i32, ThriftError> where Self: Sized{
+    fn read_i32(&mut self) -> Result<i32, ThriftError> {
         let i = decode_uleb(self)?;
         Ok(zigzag32(i as _))
     }
-    fn read_i64(&mut self) -> Result<i64, ThriftError> where Self: Sized{
+    fn read_i64(&mut self) -> Result<i64, ThriftError> {
         let i = decode_uleb(self)?;
         Ok(zigzag64(i as _))
     }
@@ -82,6 +82,10 @@ pub trait CompactThriftInput {
     fn read_string(&mut self) -> Result<String, ThriftError> {
         let binary = self.read_binary()?;
         String::from_utf8(binary).map_err(|_| ThriftError::InvalidString)
+    }
+    fn skip_integer(&mut self) -> Result<(), ThriftError> {
+        let _ = self.read_i64()?;
+        Ok(())
     }
     fn skip_binary(&mut self) -> Result<(), ThriftError> {
         self.read_binary()?;
@@ -129,24 +133,22 @@ fn read_map_len_and_types<T: CompactThriftInput>(input: &mut T) -> Result<(u32, 
 pub fn skip_field<T: CompactThriftInput>(input: &mut T, field_type: u8) -> Result<(), ThriftError> {
     match field_type {
         0..=2 => {
-            // nothing else to read for STOP, TRUE, FALSE
+            // nothing else to read for STOP, TRUE, FALSE.
         }
         3 => {
             input.read_byte()?;
         }
-        4 => {
-            input.read_i16()?;
-        }
-        5 => {
-            input.read_i32()?;
-        }
-        6 => {
-            input.read_i64()?;
+        4..=6 => {
+            // since we do not error on overlong sequences,
+            // skipping for all integer types works the same.
+            input.skip_integer()?;
         }
         7 => {
             input.read_double()?;
         }
         8 => {
+            // thrift does not distinguish binary and string types in field_type,
+            // consequently there is not utf8 validation for skipped strings.
             input.skip_binary()?;
         }
         9 | 10 => {
