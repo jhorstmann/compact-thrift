@@ -1,4 +1,6 @@
+use std::borrow::Cow;
 use std::io::{Error as IOError, ErrorKind, Read};
+use std::str::from_utf8;
 
 pub const MAX_BINARY_LEN: usize = 1024*1024;
 pub const MAX_COLLECTION_LEN: usize = 10_000_000;
@@ -28,7 +30,7 @@ impl From<ErrorKind> for ThriftError {
     }
 }
 
-fn decode_uleb<I: CompactThriftInput + ?Sized>(input: &mut I) -> Result<u64, ThriftError> {
+fn decode_uleb<'i, I: CompactThriftInput<'i> + ?Sized>(input: &mut I) -> Result<u64, ThriftError> {
     let mut shift = 0_u32;
     let mut value = 0_u64;
     loop {
@@ -59,7 +61,7 @@ fn zigzag64(i: u64) -> i64 {
     (i >> 1) as i64 ^ -((i & 1) as i64)
 }
 
-pub trait CompactThriftInput {
+pub trait CompactThriftInput<'i> {
     fn read_byte(&mut self) -> Result<u8, ThriftError>;
     fn read_len(&mut self) -> Result<usize, ThriftError> {
         let len = decode_uleb(self)?;
@@ -78,10 +80,13 @@ pub trait CompactThriftInput {
         Ok(zigzag64(i as _))
     }
     fn read_double(&mut self) -> Result<f64, ThriftError>;
-    fn read_binary(&mut self) -> Result<Vec<u8>, ThriftError>;
-    fn read_string(&mut self) -> Result<String, ThriftError> {
-        let binary = self.read_binary()?;
-        String::from_utf8(binary).map_err(|_| ThriftError::InvalidString)
+    fn read_binary(&mut self) -> Result<Cow<'i, [u8]>, ThriftError>;
+    #[inline]
+    fn read_string(&mut self) -> Result<Cow<'i, str>, ThriftError> {
+        match self.read_binary()? {
+            Cow::Owned(v) => String::from_utf8(v).map_err(|_| ThriftError::InvalidString).map(|s| Cow::Owned(s)),
+            Cow::Borrowed(v) => from_utf8(v).map_err(|_| ThriftError::InvalidString).map(|s| Cow::Borrowed(s)),
+        }
     }
     fn skip_integer(&mut self) -> Result<(), ThriftError> {
         let _ = self.read_i64()?;
@@ -97,7 +102,7 @@ pub trait CompactThriftInput {
 }
 
 #[inline]
-fn read_collection_len_and_type<T: CompactThriftInput + ?Sized>(input: &mut T) -> Result<(u32, u8), ThriftError> {
+fn read_collection_len_and_type<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T) -> Result<(u32, u8), ThriftError> {
     let header = input.read_byte()?;
     let field_type = header & 0x0F;
     let maybe_len = (header & 0xF0) >> 4;
@@ -116,7 +121,7 @@ fn read_collection_len_and_type<T: CompactThriftInput + ?Sized>(input: &mut T) -
 }
 
 #[inline]
-fn read_map_len_and_types<T: CompactThriftInput + ?Sized>(input: &mut T) -> Result<(u32, u8, u8), ThriftError> {
+fn read_map_len_and_types<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T) -> Result<(u32, u8, u8), ThriftError> {
     let len = input.read_len()?;
     if len == 0 {
         return Ok((0, 0, 0))
@@ -133,7 +138,7 @@ fn read_map_len_and_types<T: CompactThriftInput + ?Sized>(input: &mut T) -> Resu
     Ok((len as u32, key_type, val_type))
 }
 
-fn skip_field<T: CompactThriftInput + ?Sized>(input: &mut T, field_type: u8) -> Result<(), ThriftError> {
+fn skip_field<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T, field_type: u8) -> Result<(), ThriftError> {
     match field_type {
         0..=2 => {
             // nothing else to read for STOP, TRUE, FALSE.
@@ -193,7 +198,7 @@ fn skip_field<T: CompactThriftInput + ?Sized>(input: &mut T, field_type: u8) -> 
     Ok(())
 }
 
-impl<R: Read> CompactThriftInput for R {
+impl<R: Read> CompactThriftInput<'static> for R {
     #[inline]
     fn read_byte(&mut self) -> Result<u8, ThriftError> {
         let mut buf = [0_u8; 1];
@@ -207,7 +212,7 @@ impl<R: Read> CompactThriftInput for R {
         Ok(f64::from_le_bytes(buf))
     }
 
-    fn read_binary(&mut self) -> Result<Vec<u8>, ThriftError> {
+    fn read_binary(&mut self) -> Result<Cow<'static, [u8]>, ThriftError> {
         let len = self.read_len()?;
         if len > MAX_BINARY_LEN {
             return Err(ThriftError::InvalidBinaryLen);
@@ -219,7 +224,7 @@ impl<R: Read> CompactThriftInput for R {
             buf.set_len(len);
         }
         self.read_exact(buf.as_mut_slice())?;
-        Ok(buf)
+        Ok(buf.into())
     }
 
 }
@@ -238,7 +243,7 @@ impl <'a> From<&'a [u8]> for SliceInput<'a> {
     }
 }
 
-impl CompactThriftInput for SliceInput<'_> {
+impl <'i> CompactThriftInput<'i> for SliceInput<'i> {
     #[inline]
     fn read_byte(&mut self) -> Result<u8, ThriftError> {
         if self.0.len() < 1 {
@@ -259,7 +264,7 @@ impl CompactThriftInput for SliceInput<'_> {
         Ok(value)
     }
 
-    fn read_binary(&mut self) -> Result<Vec<u8>, ThriftError> {
+    fn read_binary(&mut self) -> Result<Cow<'i, [u8]>, ThriftError> {
         let len = self.read_len()?;
         if len > MAX_BINARY_LEN {
             return Err(ThriftError::InvalidBinaryLen);
@@ -268,14 +273,17 @@ impl CompactThriftInput for SliceInput<'_> {
             return Err(ThriftError::from(ErrorKind::UnexpectedEof))
         }
         let (first, rest) = std::mem::replace(&mut self.0, &mut []).split_at(len);
+        self.0 = rest;
+        /*
         let mut vec = Vec::<u8>::default();
         vec.try_reserve(len).map_err(|_|ThriftError::ReserveError)?;
         unsafe {
             vec.as_mut_ptr().copy_from_nonoverlapping(first.as_ptr(), len);
             vec.set_len(len);
         }
-        self.0 = rest;
-        Ok(vec)
+
+         */
+        Ok(Cow::Borrowed(first))
     }
 
     fn skip_binary(&mut self) -> Result<(), ThriftError> {
@@ -303,17 +311,17 @@ pub trait CompactThriftOutput {
     }
 }
 
-pub trait CompactThriftProtocol {
+pub trait CompactThriftProtocol<'i> {
     const FIELD_TYPE: u8;
 
-    fn read<T: CompactThriftInput>(input: &mut T) -> Result<Self, ThriftError> where Self: Default{
+    fn read<T: CompactThriftInput<'i>>(input: &mut T) -> Result<Self, ThriftError> where Self: Default{
         let mut result = Self::default();
         Self::fill(&mut result, input)?;
         Ok(result)
     }
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError>;
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError>;
     #[inline]
-    fn fill_field<T: CompactThriftInput>(&mut self, input: &mut T, field_type: u8) -> Result<(), ThriftError> {
+    fn fill_field<T: CompactThriftInput<'i>>(&mut self, input: &mut T, field_type: u8) -> Result<(), ThriftError> {
         if field_type != Self::FIELD_TYPE {
             return Err(ThriftError::InvalidType)
         }
@@ -327,11 +335,11 @@ pub trait CompactThriftProtocol {
     }
 }
 
-impl CompactThriftProtocol for bool {
+impl <'i> CompactThriftProtocol<'i> for bool {
     const FIELD_TYPE: u8 = 2; // TRUE = 1, FALSE = 2
 
     #[inline]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         *self = match input.read_byte()? {
             0 => false,
             1 => true,
@@ -341,7 +349,7 @@ impl CompactThriftProtocol for bool {
     }
 
     #[inline]
-    fn fill_field<T: CompactThriftInput>(&mut self, _input: &mut T, field_type: u8) -> Result<(), ThriftError> {
+    fn fill_field<T: CompactThriftInput<'i>>(&mut self, _input: &mut T, field_type: u8) -> Result<(), ThriftError> {
         *self = match field_type {
             1 => true,
             2 => false,
@@ -361,11 +369,11 @@ impl CompactThriftProtocol for bool {
     }
 }
 
-impl CompactThriftProtocol for i8 {
+impl <'i> CompactThriftProtocol<'i> for i8 {
     const FIELD_TYPE: u8 = 3;
 
     #[inline]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         *self = input.read_byte()? as i8;
         Ok(())
     }
@@ -376,11 +384,11 @@ impl CompactThriftProtocol for i8 {
     }
 }
 
-impl CompactThriftProtocol for i16 {
+impl <'i> CompactThriftProtocol<'i> for i16 {
     const FIELD_TYPE: u8 = 4;
 
     #[inline]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         *self = input.read_i16()?;
         Ok(())
     }
@@ -391,11 +399,11 @@ impl CompactThriftProtocol for i16 {
     }
 }
 
-impl CompactThriftProtocol for i32 {
+impl <'i> CompactThriftProtocol<'i> for i32 {
     const FIELD_TYPE: u8 = 5;
 
     #[inline]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         *self = input.read_i32()?;
         Ok(())
     }
@@ -406,11 +414,11 @@ impl CompactThriftProtocol for i32 {
     }
 }
 
-impl CompactThriftProtocol for i64 {
+impl <'i> CompactThriftProtocol<'i> for i64 {
     const FIELD_TYPE: u8 = 6;
 
     #[inline]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         *self = input.read_i64()?;
         Ok(())
     }
@@ -421,11 +429,11 @@ impl CompactThriftProtocol for i64 {
     }
 }
 
-impl CompactThriftProtocol for f64 {
+impl <'i> CompactThriftProtocol<'i> for f64 {
     const FIELD_TYPE: u8 = 7;
 
     #[inline]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         *self = input.read_double()?;
         Ok(())
     }
@@ -436,12 +444,12 @@ impl CompactThriftProtocol for f64 {
     }
 }
 
-impl CompactThriftProtocol for Vec<u8> {
+impl <'i> CompactThriftProtocol<'i> for Vec<u8> {
     const FIELD_TYPE: u8 = 8;
 
     #[inline]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        *self = input.read_binary()?;
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+        *self = input.read_binary()?.to_vec();
         Ok(())
     }
 
@@ -451,12 +459,12 @@ impl CompactThriftProtocol for Vec<u8> {
     }
 }
 
-impl CompactThriftProtocol for String {
+impl <'i> CompactThriftProtocol<'i> for String {
     const FIELD_TYPE: u8 = 8; // Same type as Binary?
 
     #[inline]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        *self = input.read_string()?;
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+        *self = input.read_string()?.into_owned();
         Ok(())
     }
 
@@ -466,17 +474,45 @@ impl CompactThriftProtocol for String {
     }
 }
 
+impl <'i> CompactThriftProtocol<'i> for Cow<'i, [u8]> {
+    const FIELD_TYPE: u8 = 8;
 
-impl <P: CompactThriftProtocol + Default> CompactThriftProtocol for Vec<P> {
+    #[inline]
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+        *self = input.read_binary()?;
+        Ok(())
+    }
+
+    #[inline]
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        output.write_binary(self.as_ref())
+    }
+}
+
+impl <'i> CompactThriftProtocol<'i> for Cow<'i, str> {
+    const FIELD_TYPE: u8 = 8;
+
+    #[inline]
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+        *self = input.read_string()?;
+        Ok(())
+    }
+
+    #[inline]
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        output.write_string(self.as_ref())
+    }
+}
+
+impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for Vec<P> {
     const FIELD_TYPE: u8 = 9;
 
     #[inline]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let (len, element_type) = read_collection_len_and_type(input)?;
         if element_type != P::FIELD_TYPE {
             return Err(ThriftError::InvalidType);
         }
-        // *self = (0..len).map(|_| P::read(input)).collect::<Result<Vec<P>, ThriftError>>()?;
         self.clear();
         self.try_reserve(len as usize).map_err(|_| ThriftError::ReserveError)?;
         for _ in 0..len {
@@ -493,11 +529,11 @@ impl <P: CompactThriftProtocol + Default> CompactThriftProtocol for Vec<P> {
     }
 }
 
-impl <P: CompactThriftProtocol + Default> CompactThriftProtocol for Option<P> {
+impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for Option<P> {
     const FIELD_TYPE: u8 = P::FIELD_TYPE;
 
     #[inline]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         if self.is_some() {
             return Err(ThriftError::DuplicateField);
         }

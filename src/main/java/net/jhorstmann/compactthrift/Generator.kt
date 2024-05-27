@@ -2,15 +2,6 @@ package net.jhorstmann.compactthrift
 
 import java.time.Instant
 
-fun rustType(fieldType: FieldType, fieldReq: FieldReq = FieldReq.REQUIRED): String {
-    val type = fieldType.visit(RustFieldTypeVisitor)
-
-    return if (fieldReq == FieldReq.REQUIRED) {
-        type
-    } else {
-        "Option<$type>"
-    }
-}
 
 val RESERVED_IDENTIFIERS = setOf<String>("type")
 
@@ -26,8 +17,18 @@ private fun rustConstantValue(value: ConstValue): String {
     return value.visit(RustConstValueVisitor)
 }
 
-object RustFieldTypeVisitor : FieldTypeVisitor<String> {
-    override fun visitNamedType(namedType: NamedType): String = namedType.name
+class RustFieldTypeVisitor(val document: Document) : FieldTypeVisitor<String> {
+    fun lifetimeAnnotation(name: String): String {
+        val definition = document.definitions[name]
+        return if (definition is StructDefinition) {
+            "<'i>"
+        } else if (definition is UnionDefinition) {
+            "<'i>"
+        } else {
+            ""
+        }
+    }
+    override fun visitNamedType(namedType: NamedType): String = "${namedType.name}${lifetimeAnnotation(namedType.name)}"
 
     override fun visitBaseType(baseType: BaseType): String {
         return when (baseType.type) {
@@ -37,17 +38,17 @@ object RustFieldTypeVisitor : FieldTypeVisitor<String> {
             BuiltinType.I32 -> "i32"
             BuiltinType.I64 -> "i64"
             BuiltinType.DOUBLE -> "f64"
-            BuiltinType.STRING -> "String"
-            BuiltinType.BINARY -> "Vec<u8>"
+            BuiltinType.STRING -> "Cow<'i, str>"
+            BuiltinType.BINARY -> "Cow<'i, [u8]>"
         }
     }
 
     override fun visitMapType(mapType: MapType): String =
-        "HashMap<${rustType(mapType.keyType)}, ${rustType(mapType.valueType)}>"
+        "HashMap<${mapType.keyType.visit(this)}, ${mapType.valueType.visit(this)}>"
 
-    override fun visitSetType(setType: SetType): String = "HashSet<${rustType(setType.elementType)}>"
+    override fun visitSetType(setType: SetType): String = "HashSet<${setType.elementType.visit(this)}>"
 
-    override fun visitListType(listType: ListType): String = "Vec<${rustType(listType.elementType)}>"
+    override fun visitListType(listType: ListType): String = "Vec<${listType.elementType.visit(this)}>"
 }
 
 object RustConstValueVisitor : ConstantValueVisitor<String> {
@@ -67,8 +68,13 @@ object RustConstValueVisitor : ConstantValueVisitor<String> {
 }
 
 
-class RustGenerator() : DocumentVisitor {
+class RustGenerator(val document: Document) : DocumentVisitor {
     val code: StringBuilder = java.lang.StringBuilder()
+
+    fun generate(): String {
+        document.visit(this)
+        return toString()
+    }
 
     override fun toString(): String {
         return code.toString()
@@ -99,16 +105,29 @@ class RustGenerator() : DocumentVisitor {
         header.includes.forEach {
             code.appendln("use crate::$prefix$it;")
         }
+        code.appendln("use std::borrow::Cow;")
+        code.appendln("use std::marker::PhantomData;")
         code.appendln("use compact_thrift_rs::*;")
     }
 
     override fun visitDefinition(definition: Definition) {
-        definition.visit(RustDefinitionVisitor(code))
+        definition.visit(RustDefinitionVisitor(document, code))
     }
 }
 
 //@formatter:off
-class RustDefinitionVisitor(val code: StringBuilder) : DefinitionVisitor {
+class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : DefinitionVisitor {
+    fun rustType(fieldType: FieldType, fieldReq: FieldReq = FieldReq.REQUIRED): String {
+        val type = fieldType.visit(RustFieldTypeVisitor(document))
+
+        return if (fieldReq == FieldReq.REQUIRED) {
+            type
+        } else {
+            "Option<$type>"
+        }
+    }
+
+
     override fun visitConstant(definition: ConstantDefinition) {
         code.appendln("""
             pub const ${rustIdentifier(definition.identifier)}: ${rustType(definition.fieldType)} = ${rustConstantValue(definition.constValue)};
@@ -147,9 +166,9 @@ class RustDefinitionVisitor(val code: StringBuilder) : DefinitionVisitor {
             }""".trimIndent())
 
         code.appendln("""
-            impl CompactThriftProtocol for $identifier {
+            impl <'i> CompactThriftProtocol<'i> for $identifier {
                 const FIELD_TYPE: u8 = 5; // i32
-                fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+                fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
                     self.0 = input.read_i32()?;
                     Ok(())
                 }
@@ -168,16 +187,17 @@ class RustDefinitionVisitor(val code: StringBuilder) : DefinitionVisitor {
             #[derive(Default, Clone, Debug)]
             #[allow(non_camel_case_types)]
             #[allow(non_snake_case)]
-            pub struct $identifier {${definition.fields.values.map { """
+            pub struct $identifier<'i> {${definition.fields.values.map { """
                 pub ${rustIdentifier(it.identifier)}: ${rustType(it.type, it.req)},""" }.joinToString("")}
+                __phantom_lifetime: PhantomData<&'i ()>,
             }
             
-            impl CompactThriftProtocol for $identifier {
+            impl <'i> CompactThriftProtocol<'i> for $identifier<'i> {
                 const FIELD_TYPE: u8 = 12;
                 
                 #[inline(never)]
                 #[allow(non_snake_case)]
-                fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {${definition.fields.values.filter { it.required() }.map { """
+                fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {${definition.fields.values.filter { it.required() }.map { """
                     let mut ${rustIdentifier(it.identifier)}_set_: bool = false;""" }.joinToString("")}
                     let mut last_field_id = 0_i16;
                     loop {
@@ -228,14 +248,14 @@ class RustDefinitionVisitor(val code: StringBuilder) : DefinitionVisitor {
             #[derive(Clone, Debug)]
             #[allow(non_camel_case_types)]
             #[allow(non_snake_case)]
-            pub enum $identifier {${
+            pub enum $identifier<'i> {${
                 definition.fields.values.map { """
                 ${it.identifier}(${rustType(it.type, FieldReq.REQUIRED)}),"""
                 }.joinToString("")}
             }""".trimIndent())
 
         code.appendln("""
-            impl Default for $identifier {
+            impl Default for $identifier<'_> {
                 fn default() -> Self {
                     Self::${definition.fields.values.first().identifier}(Default::default())
                 }
@@ -243,9 +263,9 @@ class RustDefinitionVisitor(val code: StringBuilder) : DefinitionVisitor {
             """.trimIndent())
 
         code.appendln("""
-            impl CompactThriftProtocol for $identifier {
+            impl <'i> CompactThriftProtocol<'i> for $identifier<'i> {
                 const FIELD_TYPE: u8 = 12;
-                fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+                fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
                     let field_type = input.read_byte()?;
                         
                     if field_type == 0 {

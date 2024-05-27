@@ -16,7 +16,6 @@ fun main() {
     val documentContext = parser.document()
     val document = mapDocument(documentContext)
     //println(document)
-    val generator = RustGenerator()
-    document.visit(generator)
-    println(generator)
+    val generator = RustGenerator(document)
+    println(generator.generate())
 }
