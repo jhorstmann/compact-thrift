@@ -1,5 +1,7 @@
 #[allow(non_snake_case)]
-// Generated on 2024-05-26T12:36:27.283941578Z
+// Generated on 2024-05-26T16:16:04.652791354Z
+use std::borrow::Cow;
+use std::marker::PhantomData;
 use compact_thrift_rs::*;
 
 #[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -25,9 +27,9 @@ impl From<i32> for Type {
         Self(value)
     }
 }
-impl CompactThriftProtocol for Type {
+impl <'i> CompactThriftProtocol<'i> for Type {
     const FIELD_TYPE: u8 = 5; // i32
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         self.0 = input.read_i32()?;
         Ok(())
     }
@@ -75,9 +77,9 @@ impl From<i32> for ConvertedType {
         Self(value)
     }
 }
-impl CompactThriftProtocol for ConvertedType {
+impl <'i> CompactThriftProtocol<'i> for ConvertedType {
     const FIELD_TYPE: u8 = 5; // i32
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         self.0 = input.read_i32()?;
         Ok(())
     }
@@ -106,9 +108,9 @@ impl From<i32> for FieldRepetitionType {
         Self(value)
     }
 }
-impl CompactThriftProtocol for FieldRepetitionType {
+impl <'i> CompactThriftProtocol<'i> for FieldRepetitionType {
     const FIELD_TYPE: u8 = 5; // i32
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         self.0 = input.read_i32()?;
         Ok(())
     }
@@ -121,18 +123,19 @@ impl CompactThriftProtocol for FieldRepetitionType {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct SizeStatistics {
+pub struct SizeStatistics<'i> {
     pub unencoded_byte_array_data_bytes: Option<i64>,
     pub repetition_level_histogram: Option<Vec<i64>>,
     pub definition_level_histogram: Option<Vec<i64>>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for SizeStatistics {
+impl <'i> CompactThriftProtocol<'i> for SizeStatistics<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -179,23 +182,24 @@ impl CompactThriftProtocol for SizeStatistics {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct Statistics {
-    pub max: Option<Vec<u8>>,
-    pub min: Option<Vec<u8>>,
+pub struct Statistics<'i> {
+    pub max: Option<Cow<'i, [u8]>>,
+    pub min: Option<Cow<'i, [u8]>>,
     pub null_count: Option<i64>,
     pub distinct_count: Option<i64>,
-    pub max_value: Option<Vec<u8>>,
-    pub min_value: Option<Vec<u8>>,
+    pub max_value: Option<Cow<'i, [u8]>>,
+    pub min_value: Option<Cow<'i, [u8]>>,
     pub is_max_value_exact: Option<bool>,
     pub is_min_value_exact: Option<bool>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for Statistics {
+impl <'i> CompactThriftProtocol<'i> for Statistics<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -262,15 +266,16 @@ impl CompactThriftProtocol for Statistics {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct StringType {
+pub struct StringType<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for StringType {
+impl <'i> CompactThriftProtocol<'i> for StringType<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -305,15 +310,16 @@ impl CompactThriftProtocol for StringType {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct UUIDType {
+pub struct UUIDType<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for UUIDType {
+impl <'i> CompactThriftProtocol<'i> for UUIDType<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -348,15 +354,16 @@ impl CompactThriftProtocol for UUIDType {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct MapType {
+pub struct MapType<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for MapType {
+impl <'i> CompactThriftProtocol<'i> for MapType<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -391,15 +398,16 @@ impl CompactThriftProtocol for MapType {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct ListType {
+pub struct ListType<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for ListType {
+impl <'i> CompactThriftProtocol<'i> for ListType<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -434,15 +442,16 @@ impl CompactThriftProtocol for ListType {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct EnumType {
+pub struct EnumType<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for EnumType {
+impl <'i> CompactThriftProtocol<'i> for EnumType<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -477,15 +486,16 @@ impl CompactThriftProtocol for EnumType {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct DateType {
+pub struct DateType<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for DateType {
+impl <'i> CompactThriftProtocol<'i> for DateType<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -520,15 +530,16 @@ impl CompactThriftProtocol for DateType {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct Float16Type {
+pub struct Float16Type<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for Float16Type {
+impl <'i> CompactThriftProtocol<'i> for Float16Type<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -563,15 +574,16 @@ impl CompactThriftProtocol for Float16Type {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct NullType {
+pub struct NullType<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for NullType {
+impl <'i> CompactThriftProtocol<'i> for NullType<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -606,17 +618,18 @@ impl CompactThriftProtocol for NullType {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct DecimalType {
+pub struct DecimalType<'i> {
     pub scale: i32,
     pub precision: i32,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for DecimalType {
+impl <'i> CompactThriftProtocol<'i> for DecimalType<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut scale_set_: bool = false;
         let mut precision_set_: bool = false;
         let mut last_field_id = 0_i16;
@@ -665,15 +678,16 @@ impl CompactThriftProtocol for DecimalType {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct MilliSeconds {
+pub struct MilliSeconds<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for MilliSeconds {
+impl <'i> CompactThriftProtocol<'i> for MilliSeconds<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -708,15 +722,16 @@ impl CompactThriftProtocol for MilliSeconds {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct MicroSeconds {
+pub struct MicroSeconds<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for MicroSeconds {
+impl <'i> CompactThriftProtocol<'i> for MicroSeconds<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -751,15 +766,16 @@ impl CompactThriftProtocol for MicroSeconds {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct NanoSeconds {
+pub struct NanoSeconds<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for NanoSeconds {
+impl <'i> CompactThriftProtocol<'i> for NanoSeconds<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -794,19 +810,19 @@ impl CompactThriftProtocol for NanoSeconds {
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub enum TimeUnit {
-    MILLIS(MilliSeconds),
-    MICROS(MicroSeconds),
-    NANOS(NanoSeconds),
+pub enum TimeUnit<'i> {
+    MILLIS(MilliSeconds<'i>),
+    MICROS(MicroSeconds<'i>),
+    NANOS(NanoSeconds<'i>),
 }
-impl Default for TimeUnit {
+impl Default for TimeUnit<'_> {
     fn default() -> Self {
         Self::MILLIS(Default::default())
     }
 }
-impl CompactThriftProtocol for TimeUnit {
+impl <'i> CompactThriftProtocol<'i> for TimeUnit<'i> {
     const FIELD_TYPE: u8 = 12;
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let field_type = input.read_byte()?;
 
         if field_type == 0 {
@@ -860,17 +876,18 @@ impl CompactThriftProtocol for TimeUnit {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct TimestampType {
+pub struct TimestampType<'i> {
     pub isAdjustedToUTC: bool,
-    pub unit: TimeUnit,
+    pub unit: TimeUnit<'i>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for TimestampType {
+impl <'i> CompactThriftProtocol<'i> for TimestampType<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut isAdjustedToUTC_set_: bool = false;
         let mut unit_set_: bool = false;
         let mut last_field_id = 0_i16;
@@ -919,17 +936,18 @@ impl CompactThriftProtocol for TimestampType {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct TimeType {
+pub struct TimeType<'i> {
     pub isAdjustedToUTC: bool,
-    pub unit: TimeUnit,
+    pub unit: TimeUnit<'i>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for TimeType {
+impl <'i> CompactThriftProtocol<'i> for TimeType<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut isAdjustedToUTC_set_: bool = false;
         let mut unit_set_: bool = false;
         let mut last_field_id = 0_i16;
@@ -978,17 +996,18 @@ impl CompactThriftProtocol for TimeType {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct IntType {
+pub struct IntType<'i> {
     pub bitWidth: i8,
     pub isSigned: bool,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for IntType {
+impl <'i> CompactThriftProtocol<'i> for IntType<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut bitWidth_set_: bool = false;
         let mut isSigned_set_: bool = false;
         let mut last_field_id = 0_i16;
@@ -1037,15 +1056,16 @@ impl CompactThriftProtocol for IntType {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct JsonType {
+pub struct JsonType<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for JsonType {
+impl <'i> CompactThriftProtocol<'i> for JsonType<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -1080,15 +1100,16 @@ impl CompactThriftProtocol for JsonType {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct BsonType {
+pub struct BsonType<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for BsonType {
+impl <'i> CompactThriftProtocol<'i> for BsonType<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -1123,30 +1144,30 @@ impl CompactThriftProtocol for BsonType {
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub enum LogicalType {
-    STRING(StringType),
-    MAP(MapType),
-    LIST(ListType),
-    ENUM(EnumType),
-    DECIMAL(DecimalType),
-    DATE(DateType),
-    TIME(TimeType),
-    TIMESTAMP(TimestampType),
-    INTEGER(IntType),
-    UNKNOWN(NullType),
-    JSON(JsonType),
-    BSON(BsonType),
-    UUID(UUIDType),
-    FLOAT16(Float16Type),
+pub enum LogicalType<'i> {
+    STRING(StringType<'i>),
+    MAP(MapType<'i>),
+    LIST(ListType<'i>),
+    ENUM(EnumType<'i>),
+    DECIMAL(DecimalType<'i>),
+    DATE(DateType<'i>),
+    TIME(TimeType<'i>),
+    TIMESTAMP(TimestampType<'i>),
+    INTEGER(IntType<'i>),
+    UNKNOWN(NullType<'i>),
+    JSON(JsonType<'i>),
+    BSON(BsonType<'i>),
+    UUID(UUIDType<'i>),
+    FLOAT16(Float16Type<'i>),
 }
-impl Default for LogicalType {
+impl Default for LogicalType<'_> {
     fn default() -> Self {
         Self::STRING(Default::default())
     }
 }
-impl CompactThriftProtocol for LogicalType {
+impl <'i> CompactThriftProtocol<'i> for LogicalType<'i> {
     const FIELD_TYPE: u8 = 12;
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let field_type = input.read_byte()?;
 
         if field_type == 0 {
@@ -1288,25 +1309,26 @@ impl CompactThriftProtocol for LogicalType {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct SchemaElement {
+pub struct SchemaElement<'i> {
     pub r#type: Option<Type>,
     pub type_length: Option<i32>,
     pub repetition_type: Option<FieldRepetitionType>,
-    pub name: String,
+    pub name: Cow<'i, str>,
     pub num_children: Option<i32>,
     pub converted_type: Option<ConvertedType>,
     pub scale: Option<i32>,
     pub precision: Option<i32>,
     pub field_id: Option<i32>,
-    pub logicalType: Option<LogicalType>,
+    pub logicalType: Option<LogicalType<'i>>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for SchemaElement {
+impl <'i> CompactThriftProtocol<'i> for SchemaElement<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut name_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
@@ -1408,9 +1430,9 @@ impl From<i32> for Encoding {
         Self(value)
     }
 }
-impl CompactThriftProtocol for Encoding {
+impl <'i> CompactThriftProtocol<'i> for Encoding {
     const FIELD_TYPE: u8 = 5; // i32
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         self.0 = input.read_i32()?;
         Ok(())
     }
@@ -1444,9 +1466,9 @@ impl From<i32> for CompressionCodec {
         Self(value)
     }
 }
-impl CompactThriftProtocol for CompressionCodec {
+impl <'i> CompactThriftProtocol<'i> for CompressionCodec {
     const FIELD_TYPE: u8 = 5; // i32
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         self.0 = input.read_i32()?;
         Ok(())
     }
@@ -1476,9 +1498,9 @@ impl From<i32> for PageType {
         Self(value)
     }
 }
-impl CompactThriftProtocol for PageType {
+impl <'i> CompactThriftProtocol<'i> for PageType {
     const FIELD_TYPE: u8 = 5; // i32
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         self.0 = input.read_i32()?;
         Ok(())
     }
@@ -1507,9 +1529,9 @@ impl From<i32> for BoundaryOrder {
         Self(value)
     }
 }
-impl CompactThriftProtocol for BoundaryOrder {
+impl <'i> CompactThriftProtocol<'i> for BoundaryOrder {
     const FIELD_TYPE: u8 = 5; // i32
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         self.0 = input.read_i32()?;
         Ok(())
     }
@@ -1522,20 +1544,21 @@ impl CompactThriftProtocol for BoundaryOrder {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct DataPageHeader {
+pub struct DataPageHeader<'i> {
     pub num_values: i32,
     pub encoding: Encoding,
     pub definition_level_encoding: Encoding,
     pub repetition_level_encoding: Encoding,
-    pub statistics: Option<Statistics>,
+    pub statistics: Option<Statistics<'i>>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for DataPageHeader {
+impl <'i> CompactThriftProtocol<'i> for DataPageHeader<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut num_values_set_: bool = false;
         let mut encoding_set_: bool = false;
         let mut definition_level_encoding_set_: bool = false;
@@ -1598,15 +1621,16 @@ impl CompactThriftProtocol for DataPageHeader {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct IndexPageHeader {
+pub struct IndexPageHeader<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for IndexPageHeader {
+impl <'i> CompactThriftProtocol<'i> for IndexPageHeader<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -1641,18 +1665,19 @@ impl CompactThriftProtocol for IndexPageHeader {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct DictionaryPageHeader {
+pub struct DictionaryPageHeader<'i> {
     pub num_values: i32,
     pub encoding: Encoding,
     pub is_sorted: Option<bool>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for DictionaryPageHeader {
+impl <'i> CompactThriftProtocol<'i> for DictionaryPageHeader<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut num_values_set_: bool = false;
         let mut encoding_set_: bool = false;
         let mut last_field_id = 0_i16;
@@ -1705,7 +1730,7 @@ impl CompactThriftProtocol for DictionaryPageHeader {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct DataPageHeaderV2 {
+pub struct DataPageHeaderV2<'i> {
     pub num_values: i32,
     pub num_nulls: i32,
     pub num_rows: i32,
@@ -1713,15 +1738,16 @@ pub struct DataPageHeaderV2 {
     pub definition_levels_byte_length: i32,
     pub repetition_levels_byte_length: i32,
     pub is_compressed: Option<bool>,
-    pub statistics: Option<Statistics>,
+    pub statistics: Option<Statistics<'i>>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for DataPageHeaderV2 {
+impl <'i> CompactThriftProtocol<'i> for DataPageHeaderV2<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut num_values_set_: bool = false;
         let mut num_nulls_set_: bool = false;
         let mut num_rows_set_: bool = false;
@@ -1798,15 +1824,16 @@ impl CompactThriftProtocol for DataPageHeaderV2 {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct SplitBlockAlgorithm {
+pub struct SplitBlockAlgorithm<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for SplitBlockAlgorithm {
+impl <'i> CompactThriftProtocol<'i> for SplitBlockAlgorithm<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -1841,17 +1868,17 @@ impl CompactThriftProtocol for SplitBlockAlgorithm {
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub enum BloomFilterAlgorithm {
-    BLOCK(SplitBlockAlgorithm),
+pub enum BloomFilterAlgorithm<'i> {
+    BLOCK(SplitBlockAlgorithm<'i>),
 }
-impl Default for BloomFilterAlgorithm {
+impl Default for BloomFilterAlgorithm<'_> {
     fn default() -> Self {
         Self::BLOCK(Default::default())
     }
 }
-impl CompactThriftProtocol for BloomFilterAlgorithm {
+impl <'i> CompactThriftProtocol<'i> for BloomFilterAlgorithm<'i> {
     const FIELD_TYPE: u8 = 12;
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let field_type = input.read_byte()?;
 
         if field_type == 0 {
@@ -1889,15 +1916,16 @@ impl CompactThriftProtocol for BloomFilterAlgorithm {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct XxHash {
+pub struct XxHash<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for XxHash {
+impl <'i> CompactThriftProtocol<'i> for XxHash<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -1932,17 +1960,17 @@ impl CompactThriftProtocol for XxHash {
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub enum BloomFilterHash {
-    XXHASH(XxHash),
+pub enum BloomFilterHash<'i> {
+    XXHASH(XxHash<'i>),
 }
-impl Default for BloomFilterHash {
+impl Default for BloomFilterHash<'_> {
     fn default() -> Self {
         Self::XXHASH(Default::default())
     }
 }
-impl CompactThriftProtocol for BloomFilterHash {
+impl <'i> CompactThriftProtocol<'i> for BloomFilterHash<'i> {
     const FIELD_TYPE: u8 = 12;
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let field_type = input.read_byte()?;
 
         if field_type == 0 {
@@ -1980,15 +2008,16 @@ impl CompactThriftProtocol for BloomFilterHash {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct Uncompressed {
+pub struct Uncompressed<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for Uncompressed {
+impl <'i> CompactThriftProtocol<'i> for Uncompressed<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -2023,17 +2052,17 @@ impl CompactThriftProtocol for Uncompressed {
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub enum BloomFilterCompression {
-    UNCOMPRESSED(Uncompressed),
+pub enum BloomFilterCompression<'i> {
+    UNCOMPRESSED(Uncompressed<'i>),
 }
-impl Default for BloomFilterCompression {
+impl Default for BloomFilterCompression<'_> {
     fn default() -> Self {
         Self::UNCOMPRESSED(Default::default())
     }
 }
-impl CompactThriftProtocol for BloomFilterCompression {
+impl <'i> CompactThriftProtocol<'i> for BloomFilterCompression<'i> {
     const FIELD_TYPE: u8 = 12;
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let field_type = input.read_byte()?;
 
         if field_type == 0 {
@@ -2071,19 +2100,20 @@ impl CompactThriftProtocol for BloomFilterCompression {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct BloomFilterHeader {
+pub struct BloomFilterHeader<'i> {
     pub numBytes: i32,
-    pub algorithm: BloomFilterAlgorithm,
-    pub hash: BloomFilterHash,
-    pub compression: BloomFilterCompression,
+    pub algorithm: BloomFilterAlgorithm<'i>,
+    pub hash: BloomFilterHash<'i>,
+    pub compression: BloomFilterCompression<'i>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for BloomFilterHeader {
+impl <'i> CompactThriftProtocol<'i> for BloomFilterHeader<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut numBytes_set_: bool = false;
         let mut algorithm_set_: bool = false;
         let mut hash_set_: bool = false;
@@ -2142,23 +2172,24 @@ impl CompactThriftProtocol for BloomFilterHeader {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct PageHeader {
+pub struct PageHeader<'i> {
     pub r#type: PageType,
     pub uncompressed_page_size: i32,
     pub compressed_page_size: i32,
     pub crc: Option<i32>,
-    pub data_page_header: Option<DataPageHeader>,
-    pub index_page_header: Option<IndexPageHeader>,
-    pub dictionary_page_header: Option<DictionaryPageHeader>,
-    pub data_page_header_v2: Option<DataPageHeaderV2>,
+    pub data_page_header: Option<DataPageHeader<'i>>,
+    pub index_page_header: Option<IndexPageHeader<'i>>,
+    pub dictionary_page_header: Option<DictionaryPageHeader<'i>>,
+    pub data_page_header_v2: Option<DataPageHeaderV2<'i>>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for PageHeader {
+impl <'i> CompactThriftProtocol<'i> for PageHeader<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut r#type_set_: bool = false;
         let mut uncompressed_page_size_set_: bool = false;
         let mut compressed_page_size_set_: bool = false;
@@ -2232,17 +2263,18 @@ impl CompactThriftProtocol for PageHeader {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct KeyValue {
-    pub key: String,
-    pub value: Option<String>,
+pub struct KeyValue<'i> {
+    pub key: Cow<'i, str>,
+    pub value: Option<Cow<'i, str>>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for KeyValue {
+impl <'i> CompactThriftProtocol<'i> for KeyValue<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut key_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
@@ -2290,18 +2322,19 @@ impl CompactThriftProtocol for KeyValue {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct SortingColumn {
+pub struct SortingColumn<'i> {
     pub column_idx: i32,
     pub descending: bool,
     pub nulls_first: bool,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for SortingColumn {
+impl <'i> CompactThriftProtocol<'i> for SortingColumn<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut column_idx_set_: bool = false;
         let mut descending_set_: bool = false;
         let mut nulls_first_set_: bool = false;
@@ -2355,18 +2388,19 @@ impl CompactThriftProtocol for SortingColumn {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct PageEncodingStats {
+pub struct PageEncodingStats<'i> {
     pub page_type: PageType,
     pub encoding: Encoding,
     pub count: i32,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for PageEncodingStats {
+impl <'i> CompactThriftProtocol<'i> for PageEncodingStats<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut page_type_set_: bool = false;
         let mut encoding_set_: bool = false;
         let mut count_set_: bool = false;
@@ -2420,31 +2454,32 @@ impl CompactThriftProtocol for PageEncodingStats {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct ColumnMetaData {
+pub struct ColumnMetaData<'i> {
     pub r#type: Type,
     pub encodings: Vec<Encoding>,
-    pub path_in_schema: Vec<String>,
+    pub path_in_schema: Vec<Cow<'i, str>>,
     pub codec: CompressionCodec,
     pub num_values: i64,
     pub total_uncompressed_size: i64,
     pub total_compressed_size: i64,
-    pub key_value_metadata: Option<Vec<KeyValue>>,
+    pub key_value_metadata: Option<Vec<KeyValue<'i>>>,
     pub data_page_offset: i64,
     pub index_page_offset: Option<i64>,
     pub dictionary_page_offset: Option<i64>,
-    pub statistics: Option<Statistics>,
-    pub encoding_stats: Option<Vec<PageEncodingStats>>,
+    pub statistics: Option<Statistics<'i>>,
+    pub encoding_stats: Option<Vec<PageEncodingStats<'i>>>,
     pub bloom_filter_offset: Option<i64>,
     pub bloom_filter_length: Option<i32>,
-    pub size_statistics: Option<SizeStatistics>,
+    pub size_statistics: Option<SizeStatistics<'i>>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for ColumnMetaData {
+impl <'i> CompactThriftProtocol<'i> for ColumnMetaData<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut r#type_set_: bool = false;
         let mut encodings_set_: bool = false;
         let mut path_in_schema_set_: bool = false;
@@ -2555,15 +2590,16 @@ impl CompactThriftProtocol for ColumnMetaData {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct EncryptionWithFooterKey {
+pub struct EncryptionWithFooterKey<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for EncryptionWithFooterKey {
+impl <'i> CompactThriftProtocol<'i> for EncryptionWithFooterKey<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -2598,17 +2634,18 @@ impl CompactThriftProtocol for EncryptionWithFooterKey {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct EncryptionWithColumnKey {
-    pub path_in_schema: Vec<String>,
-    pub key_metadata: Option<Vec<u8>>,
+pub struct EncryptionWithColumnKey<'i> {
+    pub path_in_schema: Vec<Cow<'i, str>>,
+    pub key_metadata: Option<Cow<'i, [u8]>>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for EncryptionWithColumnKey {
+impl <'i> CompactThriftProtocol<'i> for EncryptionWithColumnKey<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut path_in_schema_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
@@ -2656,18 +2693,18 @@ impl CompactThriftProtocol for EncryptionWithColumnKey {
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub enum ColumnCryptoMetaData {
-    ENCRYPTION_WITH_FOOTER_KEY(EncryptionWithFooterKey),
-    ENCRYPTION_WITH_COLUMN_KEY(EncryptionWithColumnKey),
+pub enum ColumnCryptoMetaData<'i> {
+    ENCRYPTION_WITH_FOOTER_KEY(EncryptionWithFooterKey<'i>),
+    ENCRYPTION_WITH_COLUMN_KEY(EncryptionWithColumnKey<'i>),
 }
-impl Default for ColumnCryptoMetaData {
+impl Default for ColumnCryptoMetaData<'_> {
     fn default() -> Self {
         Self::ENCRYPTION_WITH_FOOTER_KEY(Default::default())
     }
 }
-impl CompactThriftProtocol for ColumnCryptoMetaData {
+impl <'i> CompactThriftProtocol<'i> for ColumnCryptoMetaData<'i> {
     const FIELD_TYPE: u8 = 12;
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let field_type = input.read_byte()?;
 
         if field_type == 0 {
@@ -2713,24 +2750,25 @@ impl CompactThriftProtocol for ColumnCryptoMetaData {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct ColumnChunk {
-    pub file_path: Option<String>,
+pub struct ColumnChunk<'i> {
+    pub file_path: Option<Cow<'i, str>>,
     pub file_offset: i64,
-    pub meta_data: Option<ColumnMetaData>,
+    pub meta_data: Option<ColumnMetaData<'i>>,
     pub offset_index_offset: Option<i64>,
     pub offset_index_length: Option<i32>,
     pub column_index_offset: Option<i64>,
     pub column_index_length: Option<i32>,
-    pub crypto_metadata: Option<ColumnCryptoMetaData>,
-    pub encrypted_column_metadata: Option<Vec<u8>>,
+    pub crypto_metadata: Option<ColumnCryptoMetaData<'i>>,
+    pub encrypted_column_metadata: Option<Cow<'i, [u8]>>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for ColumnChunk {
+impl <'i> CompactThriftProtocol<'i> for ColumnChunk<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut file_offset_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
@@ -2806,22 +2844,23 @@ impl CompactThriftProtocol for ColumnChunk {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct RowGroup {
-    pub columns: Vec<ColumnChunk>,
+pub struct RowGroup<'i> {
+    pub columns: Vec<ColumnChunk<'i>>,
     pub total_byte_size: i64,
     pub num_rows: i64,
-    pub sorting_columns: Option<Vec<SortingColumn>>,
+    pub sorting_columns: Option<Vec<SortingColumn<'i>>>,
     pub file_offset: Option<i64>,
     pub total_compressed_size: Option<i64>,
     pub ordinal: Option<i16>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for RowGroup {
+impl <'i> CompactThriftProtocol<'i> for RowGroup<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut columns_set_: bool = false;
         let mut total_byte_size_set_: bool = false;
         let mut num_rows_set_: bool = false;
@@ -2891,15 +2930,16 @@ impl CompactThriftProtocol for RowGroup {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct TypeDefinedOrder {
+pub struct TypeDefinedOrder<'i> {
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for TypeDefinedOrder {
+impl <'i> CompactThriftProtocol<'i> for TypeDefinedOrder<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -2934,17 +2974,17 @@ impl CompactThriftProtocol for TypeDefinedOrder {
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub enum ColumnOrder {
-    TYPE_ORDER(TypeDefinedOrder),
+pub enum ColumnOrder<'i> {
+    TYPE_ORDER(TypeDefinedOrder<'i>),
 }
-impl Default for ColumnOrder {
+impl Default for ColumnOrder<'_> {
     fn default() -> Self {
         Self::TYPE_ORDER(Default::default())
     }
 }
-impl CompactThriftProtocol for ColumnOrder {
+impl <'i> CompactThriftProtocol<'i> for ColumnOrder<'i> {
     const FIELD_TYPE: u8 = 12;
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let field_type = input.read_byte()?;
 
         if field_type == 0 {
@@ -2982,18 +3022,19 @@ impl CompactThriftProtocol for ColumnOrder {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct PageLocation {
+pub struct PageLocation<'i> {
     pub offset: i64,
     pub compressed_page_size: i32,
     pub first_row_index: i64,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for PageLocation {
+impl <'i> CompactThriftProtocol<'i> for PageLocation<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut offset_set_: bool = false;
         let mut compressed_page_size_set_: bool = false;
         let mut first_row_index_set_: bool = false;
@@ -3047,17 +3088,18 @@ impl CompactThriftProtocol for PageLocation {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct OffsetIndex {
-    pub page_locations: Vec<PageLocation>,
+pub struct OffsetIndex<'i> {
+    pub page_locations: Vec<PageLocation<'i>>,
     pub unencoded_byte_array_data_bytes: Option<Vec<i64>>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for OffsetIndex {
+impl <'i> CompactThriftProtocol<'i> for OffsetIndex<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut page_locations_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
@@ -3105,22 +3147,23 @@ impl CompactThriftProtocol for OffsetIndex {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct ColumnIndex {
+pub struct ColumnIndex<'i> {
     pub null_pages: Vec<bool>,
-    pub min_values: Vec<Vec<u8>>,
-    pub max_values: Vec<Vec<u8>>,
+    pub min_values: Vec<Cow<'i, [u8]>>,
+    pub max_values: Vec<Cow<'i, [u8]>>,
     pub boundary_order: BoundaryOrder,
     pub null_counts: Option<Vec<i64>>,
     pub repetition_level_histograms: Option<Vec<i64>>,
     pub definition_level_histograms: Option<Vec<i64>>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for ColumnIndex {
+impl <'i> CompactThriftProtocol<'i> for ColumnIndex<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut null_pages_set_: bool = false;
         let mut min_values_set_: bool = false;
         let mut max_values_set_: bool = false;
@@ -3191,18 +3234,19 @@ impl CompactThriftProtocol for ColumnIndex {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct AesGcmV1 {
-    pub aad_prefix: Option<Vec<u8>>,
-    pub aad_file_unique: Option<Vec<u8>>,
+pub struct AesGcmV1<'i> {
+    pub aad_prefix: Option<Cow<'i, [u8]>>,
+    pub aad_file_unique: Option<Cow<'i, [u8]>>,
     pub supply_aad_prefix: Option<bool>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for AesGcmV1 {
+impl <'i> CompactThriftProtocol<'i> for AesGcmV1<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -3249,18 +3293,19 @@ impl CompactThriftProtocol for AesGcmV1 {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct AesGcmCtrV1 {
-    pub aad_prefix: Option<Vec<u8>>,
-    pub aad_file_unique: Option<Vec<u8>>,
+pub struct AesGcmCtrV1<'i> {
+    pub aad_prefix: Option<Cow<'i, [u8]>>,
+    pub aad_file_unique: Option<Cow<'i, [u8]>>,
     pub supply_aad_prefix: Option<bool>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for AesGcmCtrV1 {
+impl <'i> CompactThriftProtocol<'i> for AesGcmCtrV1<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
             let field_header = input.read_byte()?;
@@ -3307,18 +3352,18 @@ impl CompactThriftProtocol for AesGcmCtrV1 {
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub enum EncryptionAlgorithm {
-    AES_GCM_V1(AesGcmV1),
-    AES_GCM_CTR_V1(AesGcmCtrV1),
+pub enum EncryptionAlgorithm<'i> {
+    AES_GCM_V1(AesGcmV1<'i>),
+    AES_GCM_CTR_V1(AesGcmCtrV1<'i>),
 }
-impl Default for EncryptionAlgorithm {
+impl Default for EncryptionAlgorithm<'_> {
     fn default() -> Self {
         Self::AES_GCM_V1(Default::default())
     }
 }
-impl CompactThriftProtocol for EncryptionAlgorithm {
+impl <'i> CompactThriftProtocol<'i> for EncryptionAlgorithm<'i> {
     const FIELD_TYPE: u8 = 12;
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let field_type = input.read_byte()?;
 
         if field_type == 0 {
@@ -3364,24 +3409,25 @@ impl CompactThriftProtocol for EncryptionAlgorithm {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct FileMetaData {
+pub struct FileMetaData<'i> {
     pub version: i32,
-    pub schema: Vec<SchemaElement>,
+    pub schema: Vec<SchemaElement<'i>>,
     pub num_rows: i64,
-    pub row_groups: Vec<RowGroup>,
-    pub key_value_metadata: Option<Vec<KeyValue>>,
-    pub created_by: Option<String>,
-    pub column_orders: Option<Vec<ColumnOrder>>,
-    pub encryption_algorithm: Option<EncryptionAlgorithm>,
-    pub footer_signing_key_metadata: Option<Vec<u8>>,
+    pub row_groups: Vec<RowGroup<'i>>,
+    pub key_value_metadata: Option<Vec<KeyValue<'i>>>,
+    pub created_by: Option<Cow<'i, str>>,
+    pub column_orders: Option<Vec<ColumnOrder<'i>>>,
+    pub encryption_algorithm: Option<EncryptionAlgorithm<'i>>,
+    pub footer_signing_key_metadata: Option<Cow<'i, [u8]>>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for FileMetaData {
+impl <'i> CompactThriftProtocol<'i> for FileMetaData<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut version_set_: bool = false;
         let mut schema_set_: bool = false;
         let mut num_rows_set_: bool = false;
@@ -3460,17 +3506,18 @@ impl CompactThriftProtocol for FileMetaData {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct FileCryptoMetaData {
-    pub encryption_algorithm: EncryptionAlgorithm,
-    pub key_metadata: Option<Vec<u8>>,
+pub struct FileCryptoMetaData<'i> {
+    pub encryption_algorithm: EncryptionAlgorithm<'i>,
+    pub key_metadata: Option<Cow<'i, [u8]>>,
+    __phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl CompactThriftProtocol for FileCryptoMetaData {
+impl <'i> CompactThriftProtocol<'i> for FileCryptoMetaData<'i> {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
     #[allow(non_snake_case)]
-    fn fill<T: CompactThriftInput>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut encryption_algorithm_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
