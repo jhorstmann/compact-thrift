@@ -1,6 +1,6 @@
 use std::borrow::Cow;
 use std::io::{Error as IOError, ErrorKind, Read};
-use std::str::from_utf8;
+use std::str::{from_utf8, from_utf8_unchecked};
 
 pub const MAX_BINARY_LEN: usize = 1024*1024;
 pub const MAX_COLLECTION_LEN: usize = 10_000_000;
@@ -81,11 +81,15 @@ pub trait CompactThriftInput<'i> {
     }
     fn read_double(&mut self) -> Result<f64, ThriftError>;
     fn read_binary(&mut self) -> Result<Cow<'i, [u8]>, ThriftError>;
-    #[inline]
     fn read_string(&mut self) -> Result<Cow<'i, str>, ThriftError> {
-        match self.read_binary()? {
-            Cow::Owned(v) => String::from_utf8(v).map_err(|_| ThriftError::InvalidString).map(|s| Cow::Owned(s)),
-            Cow::Borrowed(v) => from_utf8(v).map_err(|_| ThriftError::InvalidString).map(|s| Cow::Borrowed(s)),
+        let binary = self.read_binary()?;
+        let _ = from_utf8(binary.as_ref()).map_err(|_| ThriftError::InvalidString)?;
+        // Safety: just checked for valid utf8
+        unsafe {
+            match binary {
+                Cow::Owned(v) => Ok(Cow::Owned(String::from_utf8_unchecked(v))),
+                Cow::Borrowed(v) => Ok(Cow::Borrowed(from_utf8_unchecked(v))),
+            }
         }
     }
     fn skip_integer(&mut self) -> Result<(), ThriftError> {
@@ -156,7 +160,7 @@ fn skip_field<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T, field_type:
         }
         8 => {
             // thrift does not distinguish binary and string types in field_type,
-            // consequently there is not utf8 validation for skipped strings.
+            // consequently there is no utf8 validation for skipped strings.
             input.skip_binary()?;
         }
         9 | 10 => {
@@ -274,15 +278,6 @@ impl <'i> CompactThriftInput<'i> for SliceInput<'i> {
         }
         let (first, rest) = std::mem::replace(&mut self.0, &mut []).split_at(len);
         self.0 = rest;
-        /*
-        let mut vec = Vec::<u8>::default();
-        vec.try_reserve(len).map_err(|_|ThriftError::ReserveError)?;
-        unsafe {
-            vec.as_mut_ptr().copy_from_nonoverlapping(first.as_ptr(), len);
-            vec.set_len(len);
-        }
-
-         */
         Ok(Cow::Borrowed(first))
     }
 
@@ -515,8 +510,35 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
         }
         self.clear();
         self.try_reserve(len as usize).map_err(|_| ThriftError::ReserveError)?;
-        for _ in 0..len {
-            self.push(P::read(input)?);
+
+        // workaround for unnecessary memcpy calls when using Vec::push(P::default()) with larger structs
+
+        struct SetLenOnDrop<'a, T> {
+            vec: &'a mut Vec<T>,
+            len: usize,
+        }
+
+        impl <'a, T> Drop for SetLenOnDrop<'a, T> {
+            fn drop(&mut self) {
+                unsafe {
+                    self.vec.set_len(self.len)
+                }
+            }
+        }
+
+        let mut guard = SetLenOnDrop {
+            vec: self,
+            len: 0,
+        };
+
+        for i in 0..len as usize {
+            // Safety: len was reserved
+            unsafe {
+                let ptr = guard.vec.as_mut_ptr().add(i);
+                ptr.write(P::default());
+                (*ptr).fill(input)?;
+                guard.len = i;
+            }
         }
         Ok(())
     }
@@ -537,8 +559,8 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
         if self.is_some() {
             return Err(ThriftError::DuplicateField);
         }
+        // Safety: avoid generating drop calls, content is always None because of check above
         unsafe {
-            // avoid generating drop calls, content is always None because of check above
             std::ptr::write(self as *mut _, Some(P::default()));
             self.as_mut().unwrap_unchecked().fill(input)?;
         }
