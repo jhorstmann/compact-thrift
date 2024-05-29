@@ -1,5 +1,5 @@
 #[allow(non_snake_case)]
-// Generated on 2024-05-26T16:16:04.652791354Z
+// Generated on 2024-05-29T21:19:49.416375107Z
 use std::borrow::Cow;
 use std::marker::PhantomData;
 use compact_thrift_rs::*;
@@ -175,8 +175,13 @@ impl <'i> CompactThriftProtocol<'i> for SizeStatistics<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("SizeStatistics::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.unencoded_byte_array_data_bytes.write_field(output, 1, &mut last_field_id)?;
+        self.repetition_level_histogram.write_field(output, 2, &mut last_field_id)?;
+        self.definition_level_histogram.write_field(output, 3, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -259,8 +264,18 @@ impl <'i> CompactThriftProtocol<'i> for Statistics<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("Statistics::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.max.write_field(output, 1, &mut last_field_id)?;
+        self.min.write_field(output, 2, &mut last_field_id)?;
+        self.null_count.write_field(output, 3, &mut last_field_id)?;
+        self.distinct_count.write_field(output, 4, &mut last_field_id)?;
+        self.max_value.write_field(output, 5, &mut last_field_id)?;
+        self.min_value.write_field(output, 6, &mut last_field_id)?;
+        self.is_max_value_exact.write_field(output, 7, &mut last_field_id)?;
+        self.is_min_value_exact.write_field(output, 8, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -303,8 +318,10 @@ impl <'i> CompactThriftProtocol<'i> for StringType<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("StringType::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -347,8 +364,10 @@ impl <'i> CompactThriftProtocol<'i> for UUIDType<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("UUIDType::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -391,8 +410,10 @@ impl <'i> CompactThriftProtocol<'i> for MapType<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("MapType::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -435,8 +456,10 @@ impl <'i> CompactThriftProtocol<'i> for ListType<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("ListType::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -479,8 +502,10 @@ impl <'i> CompactThriftProtocol<'i> for EnumType<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("EnumType::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -523,8 +548,10 @@ impl <'i> CompactThriftProtocol<'i> for DateType<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("DateType::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -567,8 +594,10 @@ impl <'i> CompactThriftProtocol<'i> for Float16Type<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("Float16Type::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -611,8 +640,10 @@ impl <'i> CompactThriftProtocol<'i> for NullType<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("NullType::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -671,8 +702,12 @@ impl <'i> CompactThriftProtocol<'i> for DecimalType<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("DecimalType::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.scale.write_field(output, 1, &mut last_field_id)?;
+        self.precision.write_field(output, 2, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -715,8 +750,10 @@ impl <'i> CompactThriftProtocol<'i> for MilliSeconds<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("MilliSeconds::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -759,8 +796,10 @@ impl <'i> CompactThriftProtocol<'i> for MicroSeconds<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("MicroSeconds::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -803,8 +842,10 @@ impl <'i> CompactThriftProtocol<'i> for NanoSeconds<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("NanoSeconds::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Clone, Debug)]
@@ -869,8 +910,13 @@ impl <'i> CompactThriftProtocol<'i> for TimeUnit<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("TimeUnit::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        match self {
+            Self::MILLIS(inner) => inner.write_field(output, 1, &mut last_field_id),
+            Self::MICROS(inner) => inner.write_field(output, 2, &mut last_field_id),
+            Self::NANOS(inner) => inner.write_field(output, 3, &mut last_field_id),
+        }
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -929,8 +975,12 @@ impl <'i> CompactThriftProtocol<'i> for TimestampType<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("TimestampType::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.isAdjustedToUTC.write_field(output, 1, &mut last_field_id)?;
+        self.unit.write_field(output, 2, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -989,8 +1039,12 @@ impl <'i> CompactThriftProtocol<'i> for TimeType<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("TimeType::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.isAdjustedToUTC.write_field(output, 1, &mut last_field_id)?;
+        self.unit.write_field(output, 2, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -1049,8 +1103,12 @@ impl <'i> CompactThriftProtocol<'i> for IntType<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("IntType::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.bitWidth.write_field(output, 1, &mut last_field_id)?;
+        self.isSigned.write_field(output, 2, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -1093,8 +1151,10 @@ impl <'i> CompactThriftProtocol<'i> for JsonType<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("JsonType::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -1137,8 +1197,10 @@ impl <'i> CompactThriftProtocol<'i> for BsonType<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("BsonType::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Clone, Debug)]
@@ -1302,8 +1364,24 @@ impl <'i> CompactThriftProtocol<'i> for LogicalType<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("LogicalType::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        match self {
+            Self::STRING(inner) => inner.write_field(output, 1, &mut last_field_id),
+            Self::MAP(inner) => inner.write_field(output, 2, &mut last_field_id),
+            Self::LIST(inner) => inner.write_field(output, 3, &mut last_field_id),
+            Self::ENUM(inner) => inner.write_field(output, 4, &mut last_field_id),
+            Self::DECIMAL(inner) => inner.write_field(output, 5, &mut last_field_id),
+            Self::DATE(inner) => inner.write_field(output, 6, &mut last_field_id),
+            Self::TIME(inner) => inner.write_field(output, 7, &mut last_field_id),
+            Self::TIMESTAMP(inner) => inner.write_field(output, 8, &mut last_field_id),
+            Self::INTEGER(inner) => inner.write_field(output, 10, &mut last_field_id),
+            Self::UNKNOWN(inner) => inner.write_field(output, 11, &mut last_field_id),
+            Self::JSON(inner) => inner.write_field(output, 12, &mut last_field_id),
+            Self::BSON(inner) => inner.write_field(output, 13, &mut last_field_id),
+            Self::UUID(inner) => inner.write_field(output, 14, &mut last_field_id),
+            Self::FLOAT16(inner) => inner.write_field(output, 15, &mut last_field_id),
+        }
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -1401,8 +1479,20 @@ impl <'i> CompactThriftProtocol<'i> for SchemaElement<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("SchemaElement::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.r#type.write_field(output, 1, &mut last_field_id)?;
+        self.type_length.write_field(output, 2, &mut last_field_id)?;
+        self.repetition_type.write_field(output, 3, &mut last_field_id)?;
+        self.name.write_field(output, 4, &mut last_field_id)?;
+        self.num_children.write_field(output, 5, &mut last_field_id)?;
+        self.converted_type.write_field(output, 6, &mut last_field_id)?;
+        self.scale.write_field(output, 7, &mut last_field_id)?;
+        self.precision.write_field(output, 8, &mut last_field_id)?;
+        self.field_id.write_field(output, 9, &mut last_field_id)?;
+        self.logicalType.write_field(output, 10, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 
@@ -1614,8 +1704,15 @@ impl <'i> CompactThriftProtocol<'i> for DataPageHeader<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("DataPageHeader::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.num_values.write_field(output, 1, &mut last_field_id)?;
+        self.encoding.write_field(output, 2, &mut last_field_id)?;
+        self.definition_level_encoding.write_field(output, 3, &mut last_field_id)?;
+        self.repetition_level_encoding.write_field(output, 4, &mut last_field_id)?;
+        self.statistics.write_field(output, 5, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -1658,8 +1755,10 @@ impl <'i> CompactThriftProtocol<'i> for IndexPageHeader<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("IndexPageHeader::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -1723,8 +1822,13 @@ impl <'i> CompactThriftProtocol<'i> for DictionaryPageHeader<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("DictionaryPageHeader::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.num_values.write_field(output, 1, &mut last_field_id)?;
+        self.encoding.write_field(output, 2, &mut last_field_id)?;
+        self.is_sorted.write_field(output, 3, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -1817,8 +1921,18 @@ impl <'i> CompactThriftProtocol<'i> for DataPageHeaderV2<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("DataPageHeaderV2::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.num_values.write_field(output, 1, &mut last_field_id)?;
+        self.num_nulls.write_field(output, 2, &mut last_field_id)?;
+        self.num_rows.write_field(output, 3, &mut last_field_id)?;
+        self.encoding.write_field(output, 4, &mut last_field_id)?;
+        self.definition_levels_byte_length.write_field(output, 5, &mut last_field_id)?;
+        self.repetition_levels_byte_length.write_field(output, 6, &mut last_field_id)?;
+        self.is_compressed.write_field(output, 7, &mut last_field_id)?;
+        self.statistics.write_field(output, 8, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -1861,8 +1975,10 @@ impl <'i> CompactThriftProtocol<'i> for SplitBlockAlgorithm<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("SplitBlockAlgorithm::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Clone, Debug)]
@@ -1909,8 +2025,11 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterAlgorithm<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("BloomFilterAlgorithm::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        match self {
+            Self::BLOCK(inner) => inner.write_field(output, 1, &mut last_field_id),
+        }
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -1953,8 +2072,10 @@ impl <'i> CompactThriftProtocol<'i> for XxHash<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("XxHash::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Clone, Debug)]
@@ -2001,8 +2122,11 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterHash<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("BloomFilterHash::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        match self {
+            Self::XXHASH(inner) => inner.write_field(output, 1, &mut last_field_id),
+        }
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -2045,8 +2169,10 @@ impl <'i> CompactThriftProtocol<'i> for Uncompressed<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("Uncompressed::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Clone, Debug)]
@@ -2093,8 +2219,11 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterCompression<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("BloomFilterCompression::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        match self {
+            Self::UNCOMPRESSED(inner) => inner.write_field(output, 1, &mut last_field_id),
+        }
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -2165,8 +2294,14 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterHeader<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("BloomFilterHeader::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.numBytes.write_field(output, 1, &mut last_field_id)?;
+        self.algorithm.write_field(output, 2, &mut last_field_id)?;
+        self.hash.write_field(output, 3, &mut last_field_id)?;
+        self.compression.write_field(output, 4, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -2256,8 +2391,18 @@ impl <'i> CompactThriftProtocol<'i> for PageHeader<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("PageHeader::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.r#type.write_field(output, 1, &mut last_field_id)?;
+        self.uncompressed_page_size.write_field(output, 2, &mut last_field_id)?;
+        self.compressed_page_size.write_field(output, 3, &mut last_field_id)?;
+        self.crc.write_field(output, 4, &mut last_field_id)?;
+        self.data_page_header.write_field(output, 5, &mut last_field_id)?;
+        self.index_page_header.write_field(output, 6, &mut last_field_id)?;
+        self.dictionary_page_header.write_field(output, 7, &mut last_field_id)?;
+        self.data_page_header_v2.write_field(output, 8, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -2315,8 +2460,12 @@ impl <'i> CompactThriftProtocol<'i> for KeyValue<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("KeyValue::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.key.write_field(output, 1, &mut last_field_id)?;
+        self.value.write_field(output, 2, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -2381,8 +2530,13 @@ impl <'i> CompactThriftProtocol<'i> for SortingColumn<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("SortingColumn::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.column_idx.write_field(output, 1, &mut last_field_id)?;
+        self.descending.write_field(output, 2, &mut last_field_id)?;
+        self.nulls_first.write_field(output, 3, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -2447,8 +2601,13 @@ impl <'i> CompactThriftProtocol<'i> for PageEncodingStats<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("PageEncodingStats::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.page_type.write_field(output, 1, &mut last_field_id)?;
+        self.encoding.write_field(output, 2, &mut last_field_id)?;
+        self.count.write_field(output, 3, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -2583,8 +2742,26 @@ impl <'i> CompactThriftProtocol<'i> for ColumnMetaData<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("ColumnMetaData::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.r#type.write_field(output, 1, &mut last_field_id)?;
+        self.encodings.write_field(output, 2, &mut last_field_id)?;
+        self.path_in_schema.write_field(output, 3, &mut last_field_id)?;
+        self.codec.write_field(output, 4, &mut last_field_id)?;
+        self.num_values.write_field(output, 5, &mut last_field_id)?;
+        self.total_uncompressed_size.write_field(output, 6, &mut last_field_id)?;
+        self.total_compressed_size.write_field(output, 7, &mut last_field_id)?;
+        self.key_value_metadata.write_field(output, 8, &mut last_field_id)?;
+        self.data_page_offset.write_field(output, 9, &mut last_field_id)?;
+        self.index_page_offset.write_field(output, 10, &mut last_field_id)?;
+        self.dictionary_page_offset.write_field(output, 11, &mut last_field_id)?;
+        self.statistics.write_field(output, 12, &mut last_field_id)?;
+        self.encoding_stats.write_field(output, 13, &mut last_field_id)?;
+        self.bloom_filter_offset.write_field(output, 14, &mut last_field_id)?;
+        self.bloom_filter_length.write_field(output, 15, &mut last_field_id)?;
+        self.size_statistics.write_field(output, 16, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -2627,8 +2804,10 @@ impl <'i> CompactThriftProtocol<'i> for EncryptionWithFooterKey<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("EncryptionWithFooterKey::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -2686,8 +2865,12 @@ impl <'i> CompactThriftProtocol<'i> for EncryptionWithColumnKey<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("EncryptionWithColumnKey::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.path_in_schema.write_field(output, 1, &mut last_field_id)?;
+        self.key_metadata.write_field(output, 2, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Clone, Debug)]
@@ -2743,8 +2926,12 @@ impl <'i> CompactThriftProtocol<'i> for ColumnCryptoMetaData<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("ColumnCryptoMetaData::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        match self {
+            Self::ENCRYPTION_WITH_FOOTER_KEY(inner) => inner.write_field(output, 1, &mut last_field_id),
+            Self::ENCRYPTION_WITH_COLUMN_KEY(inner) => inner.write_field(output, 2, &mut last_field_id),
+        }
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -2837,8 +3024,19 @@ impl <'i> CompactThriftProtocol<'i> for ColumnChunk<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("ColumnChunk::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.file_path.write_field(output, 1, &mut last_field_id)?;
+        self.file_offset.write_field(output, 2, &mut last_field_id)?;
+        self.meta_data.write_field(output, 3, &mut last_field_id)?;
+        self.offset_index_offset.write_field(output, 4, &mut last_field_id)?;
+        self.offset_index_length.write_field(output, 5, &mut last_field_id)?;
+        self.column_index_offset.write_field(output, 6, &mut last_field_id)?;
+        self.column_index_length.write_field(output, 7, &mut last_field_id)?;
+        self.crypto_metadata.write_field(output, 8, &mut last_field_id)?;
+        self.encrypted_column_metadata.write_field(output, 9, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -2923,8 +3121,17 @@ impl <'i> CompactThriftProtocol<'i> for RowGroup<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("RowGroup::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.columns.write_field(output, 1, &mut last_field_id)?;
+        self.total_byte_size.write_field(output, 2, &mut last_field_id)?;
+        self.num_rows.write_field(output, 3, &mut last_field_id)?;
+        self.sorting_columns.write_field(output, 4, &mut last_field_id)?;
+        self.file_offset.write_field(output, 5, &mut last_field_id)?;
+        self.total_compressed_size.write_field(output, 6, &mut last_field_id)?;
+        self.ordinal.write_field(output, 7, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -2967,8 +3174,10 @@ impl <'i> CompactThriftProtocol<'i> for TypeDefinedOrder<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("TypeDefinedOrder::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Clone, Debug)]
@@ -3015,8 +3224,11 @@ impl <'i> CompactThriftProtocol<'i> for ColumnOrder<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("ColumnOrder::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        match self {
+            Self::TYPE_ORDER(inner) => inner.write_field(output, 1, &mut last_field_id),
+        }
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -3081,8 +3293,13 @@ impl <'i> CompactThriftProtocol<'i> for PageLocation<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("PageLocation::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.offset.write_field(output, 1, &mut last_field_id)?;
+        self.compressed_page_size.write_field(output, 2, &mut last_field_id)?;
+        self.first_row_index.write_field(output, 3, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -3140,8 +3357,12 @@ impl <'i> CompactThriftProtocol<'i> for OffsetIndex<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("OffsetIndex::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.page_locations.write_field(output, 1, &mut last_field_id)?;
+        self.unencoded_byte_array_data_bytes.write_field(output, 2, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -3227,8 +3448,17 @@ impl <'i> CompactThriftProtocol<'i> for ColumnIndex<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("ColumnIndex::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.null_pages.write_field(output, 1, &mut last_field_id)?;
+        self.min_values.write_field(output, 2, &mut last_field_id)?;
+        self.max_values.write_field(output, 3, &mut last_field_id)?;
+        self.boundary_order.write_field(output, 4, &mut last_field_id)?;
+        self.null_counts.write_field(output, 5, &mut last_field_id)?;
+        self.repetition_level_histograms.write_field(output, 6, &mut last_field_id)?;
+        self.definition_level_histograms.write_field(output, 7, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -3286,8 +3516,13 @@ impl <'i> CompactThriftProtocol<'i> for AesGcmV1<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("AesGcmV1::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.aad_prefix.write_field(output, 1, &mut last_field_id)?;
+        self.aad_file_unique.write_field(output, 2, &mut last_field_id)?;
+        self.supply_aad_prefix.write_field(output, 3, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -3345,8 +3580,13 @@ impl <'i> CompactThriftProtocol<'i> for AesGcmCtrV1<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("AesGcmCtrV1::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.aad_prefix.write_field(output, 1, &mut last_field_id)?;
+        self.aad_file_unique.write_field(output, 2, &mut last_field_id)?;
+        self.supply_aad_prefix.write_field(output, 3, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Clone, Debug)]
@@ -3402,8 +3642,12 @@ impl <'i> CompactThriftProtocol<'i> for EncryptionAlgorithm<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("EncryptionAlgorithm::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        match self {
+            Self::AES_GCM_V1(inner) => inner.write_field(output, 1, &mut last_field_id),
+            Self::AES_GCM_CTR_V1(inner) => inner.write_field(output, 2, &mut last_field_id),
+        }
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -3499,8 +3743,19 @@ impl <'i> CompactThriftProtocol<'i> for FileMetaData<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("FileMetaData::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.version.write_field(output, 1, &mut last_field_id)?;
+        self.schema.write_field(output, 2, &mut last_field_id)?;
+        self.num_rows.write_field(output, 3, &mut last_field_id)?;
+        self.row_groups.write_field(output, 4, &mut last_field_id)?;
+        self.key_value_metadata.write_field(output, 5, &mut last_field_id)?;
+        self.created_by.write_field(output, 6, &mut last_field_id)?;
+        self.column_orders.write_field(output, 7, &mut last_field_id)?;
+        self.encryption_algorithm.write_field(output, 8, &mut last_field_id)?;
+        self.footer_signing_key_metadata.write_field(output, 9, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[derive(Default, Clone, Debug)]
@@ -3558,8 +3813,12 @@ impl <'i> CompactThriftProtocol<'i> for FileCryptoMetaData<'i> {
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-        unimplemented!("FileCryptoMetaData::write")
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let mut last_field_id = 0_i16;
+        self.encryption_algorithm.write_field(output, 1, &mut last_field_id)?;
+        self.key_metadata.write_field(output, 2, &mut last_field_id)?;
+        output.write_byte(0)?;
+        Ok(())
     }
 }
 #[cfg(test)]

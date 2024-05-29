@@ -234,8 +234,11 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
                     Ok(())
                 }
                 
-                fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-                    unimplemented!("${definition.identifier}::write")
+                fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+                    ${if (definition.fields.isEmpty()) "" else "let mut last_field_id = 0_i16;"}${definition.fields.values.map { """
+                    self.${rustIdentifier(it.identifier)}.write_field(output, ${it.id}, &mut last_field_id)?;""" }.joinToString("") }
+                    output.write_byte(0)?;
+                    Ok(())
                 }
             }""".trimIndent()
         )
@@ -296,8 +299,11 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
                     Ok(())
                 }
                 
-                fn write<T: CompactThriftOutput>(&self, _output: &mut T) -> Result<(), ThriftError> {
-                    unimplemented!("${definition.identifier}::write")
+                fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+                    let mut last_field_id = 0_i16;
+                    match self {${definition.fields.values.map { """
+                        Self::${it.identifier}(inner) => inner.write_field(output, ${it.id}, &mut last_field_id), """ }.joinToString("")}
+                    }
                 }
             }
         """.trimIndent())

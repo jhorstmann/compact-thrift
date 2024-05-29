@@ -1,5 +1,5 @@
 use std::borrow::Cow;
-use std::io::{Error as IOError, ErrorKind, Read};
+use std::io::{Error as IOError, ErrorKind, Read, Write};
 use std::str::{from_utf8, from_utf8_unchecked};
 
 pub const MAX_BINARY_LEN: usize = 1024*1024;
@@ -12,6 +12,7 @@ pub enum ThriftError {
     InvalidBinaryLen,
     InvalidCollectionLen,
     MissingField,
+    MissingValue,
     DuplicateField,
     InvalidType,
     ReserveError,
@@ -46,19 +47,42 @@ fn decode_uleb<'i, I: CompactThriftInput<'i> + ?Sized>(input: &mut I) -> Result<
     }
 }
 
+fn encode_uleb<O: CompactThriftOutput + ?Sized>(output: &mut O, mut value: u64) -> Result<(), ThriftError> {
+    while value > 0x7F {
+        output.write_byte((value as u8) | 0x80)?;
+        value >>= 7;
+    }
+    output.write_byte(value as u8)
+}
+
 #[inline(always)]
-fn zigzag16(i: u16) -> i16 {
+fn zigzag_decode16(i: u16) -> i16 {
     (i >> 1) as i16 ^ -((i & 1) as i16)
 }
 
 #[inline(always)]
-fn zigzag32(i: u32) -> i32 {
+fn zigzag_decode32(i: u32) -> i32 {
     (i >> 1) as i32 ^ -((i & 1) as i32)
 }
 
 #[inline(always)]
-fn zigzag64(i: u64) -> i64 {
+fn zigzag_decode64(i: u64) -> i64 {
     (i >> 1) as i64 ^ -((i & 1) as i64)
+}
+
+#[inline(always)]
+fn zigzag_encode16(i: i16) -> u16 {
+    ((i << 1) ^ (i >> 15)) as u16
+}
+
+#[inline(always)]
+fn zigzag_encode32(i: i32) -> u32 {
+    ((i << 1) ^ (i >> 31)) as u32
+}
+
+#[inline(always)]
+fn zigzag_encode64(i: i64) -> u64 {
+    ((i << 1) ^ (i >> 63)) as u64
 }
 
 pub trait CompactThriftInput<'i> {
@@ -69,15 +93,15 @@ pub trait CompactThriftInput<'i> {
     }
     fn read_i16(&mut self) -> Result<i16, ThriftError> {
         let i = decode_uleb(self)?;
-        Ok(zigzag16(i as _))
+        Ok(zigzag_decode16(i as _))
     }
     fn read_i32(&mut self) -> Result<i32, ThriftError> {
         let i = decode_uleb(self)?;
-        Ok(zigzag32(i as _))
+        Ok(zigzag_decode32(i as _))
     }
     fn read_i64(&mut self) -> Result<i64, ThriftError> {
         let i = decode_uleb(self)?;
-        Ok(zigzag64(i as _))
+        Ok(zigzag_decode64(i as _))
     }
     fn read_double(&mut self) -> Result<f64, ThriftError>;
     fn read_binary(&mut self) -> Result<Cow<'i, [u8]>, ThriftError>;
@@ -202,7 +226,22 @@ fn skip_field<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T, field_type:
     Ok(())
 }
 
-impl<R: Read> CompactThriftInput<'static> for R {
+#[inline]
+fn write_field_header<T: CompactThriftOutput>(output: &mut T, field_type: u8, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
+    let field_delta = field_id.wrapping_sub(*last_field_id);
+
+    if field_delta > 15 {
+        output.write_byte(field_type)?;
+        output.write_i16(field_delta)?
+    } else {
+        output.write_byte(field_type | ((field_delta as u8) << 4))?;
+    }
+    *last_field_id = field_id;
+    Ok(())
+}
+
+
+impl<R: Read + ?Sized> CompactThriftInput<'static> for R {
     #[inline]
     fn read_byte(&mut self) -> Result<u8, ThriftError> {
         let mut buf = [0_u8; 1];
@@ -296,6 +335,7 @@ impl <'i> CompactThriftInput<'i> for SliceInput<'i> {
 
 pub trait CompactThriftOutput {
     fn write_byte(&mut self, value: u8) -> Result<(), ThriftError>;
+    fn write_len(&mut self, value: usize) -> Result<(), ThriftError>;
     fn write_i16(&mut self, value: i16) -> Result<(), ThriftError>;
     fn write_i32(&mut self, value: i32) -> Result<(), ThriftError>;
     fn write_i64(&mut self, value: i64) -> Result<(), ThriftError>;
@@ -303,6 +343,43 @@ pub trait CompactThriftOutput {
     fn write_binary(&mut self, value: &[u8]) -> Result<(), ThriftError>;
     fn write_string(&mut self, value: &str) -> Result<(), ThriftError> {
         self.write_binary(value.as_bytes())
+    }
+}
+
+impl <W: Write> CompactThriftOutput for W {
+    fn write_byte(&mut self, value: u8) -> Result<(), ThriftError> {
+        self.write(&[value])?;
+        Ok(())
+    }
+
+    fn write_len(&mut self, value: usize) -> Result<(), ThriftError> {
+        encode_uleb(self, value as _)
+    }
+
+    fn write_i16(&mut self, value: i16) -> Result<(), ThriftError> {
+        encode_uleb(self, zigzag_encode16(value) as _)
+    }
+
+    fn write_i32(&mut self, value: i32) -> Result<(), ThriftError> {
+        encode_uleb(self, zigzag_encode32(value) as _)
+    }
+
+    fn write_i64(&mut self, value: i64) -> Result<(), ThriftError> {
+        encode_uleb(self, zigzag_encode64(value) as _)
+    }
+
+    fn write_double(&mut self, value: f64) -> Result<(), ThriftError> {
+        self.write(&value.to_le_bytes())?;
+        Ok(())
+    }
+
+    fn write_binary(&mut self, value: &[u8]) -> Result<(), ThriftError> {
+        if value.len() > MAX_BINARY_LEN {
+            return Err(ThriftError::InvalidBinaryLen);
+        }
+        self.write_len(value.len())?;
+        self.write(value)?;
+        Ok(())
     }
 }
 
@@ -323,8 +400,9 @@ pub trait CompactThriftProtocol<'i> {
         self.fill(input)
     }
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError>;
-    fn write_field<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
-        output.write_byte(Self::FIELD_TYPE)?;
+    #[inline]
+    fn write_field<T: CompactThriftOutput>(&self, output: &mut T, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
+        write_field_header(output, Self::FIELD_TYPE, field_id, last_field_id)?;
         self.write(output)?;
         Ok(())
     }
@@ -358,9 +436,9 @@ impl <'i> CompactThriftProtocol<'i> for bool {
         output.write_byte(*self as u8)
     }
 
-    #[inline]
-    fn write_field<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
-        output.write_byte(1 + (!*self) as u8)
+    fn write_field<T: CompactThriftOutput>(&self, output: &mut T, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
+        let field_type = 1 + (!*self) as u8;
+        write_field_header(output, field_type, field_id, last_field_id)
     }
 }
 
@@ -545,6 +623,10 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
 
     #[inline]
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        if self.len() > MAX_COLLECTION_LEN {
+            return Err(ThriftError::InvalidCollectionLen);
+        }
+        output.write_len(self.len())?;
         self.iter().try_for_each(|value| {
             value.write(output)
         })
@@ -569,19 +651,19 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
 
     #[inline]
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
-        // no nulls, this method should not be used
         if let Some(value) = self.as_ref() {
-            value.write_field(output)
+            value.write(output)
         } else {
-            P::default().write_field(output)
+            Err(ThriftError::MissingValue)
         }
     }
 
     #[inline]
-    fn write_field<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write_field<T: CompactThriftOutput>(&self, output: &mut T, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
         // only write if present
         if let Some(value) = self.as_ref() {
-            value.write_field(output)?;
+            write_field_header(output, Self::FIELD_TYPE, field_id, last_field_id)?;
+            value.write(output)?;
         }
         Ok(())
     }
@@ -589,7 +671,7 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
 
 #[cfg(test)]
 mod tests {
-    use crate::{CompactThriftInput, decode_uleb, SliceInput, ThriftError};
+    use crate::{CompactThriftInput, CompactThriftOutput, decode_uleb, encode_uleb, SliceInput, ThriftError};
 
     #[test]
     fn test_size_of_error() {
@@ -627,4 +709,11 @@ mod tests {
         assert_eq!(SliceInput::new(&[0b1000_1111, 0b0111_0101, 0, 0, 0]).read_i32().unwrap(), -7496);
     }
 
+    #[test]
+    fn test_uleb_roundtrip() {
+        let mut w = vec![];
+        w.write_i64(1234567890).unwrap();
+        let mut r = SliceInput::new(&w);
+        assert_eq!(r.read_i64().unwrap(), 1234567890);
+    }
 }
