@@ -627,7 +627,7 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
                 let ptr = guard.vec.as_mut_ptr().add(i);
                 ptr.write(P::default());
                 (*ptr).fill(input)?;
-                guard.len = i;
+                guard.len += 1;
             }
         }
         Ok(())
