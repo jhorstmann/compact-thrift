@@ -215,6 +215,16 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
                 pub ${rustIdentifier(it.identifier)}: ${rustType(it.type, it.req)},""" }.joinToString("")}
             }
             
+            impl$lifetimeAnnotation $identifier$lifetimeAnnotation {
+                #[allow(non_camel_case_types)]
+                #[allow(non_snake_case)]
+                pub fn new(${definition.fields.values.map { "${rustIdentifier(it.identifier)}: impl Into<${rustType(it.type, it.req)}>" }.joinToString(", ")}) -> Self {
+                    Self {${definition.fields.values.map { """
+                        ${rustIdentifier(it.identifier)}: ${rustIdentifier(it.identifier)}.into(),""" }.joinToString("")}
+                    }
+                }
+            }
+            
             impl <'i> CompactThriftProtocol<'i> for $identifier$lifetimeAnnotation {
                 const FIELD_TYPE: u8 = 12;
                 
@@ -320,6 +330,10 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
                             return Err(ThriftError::MissingField)
                         }
                     }
+                    let stop = input.read_byte()?;
+                    if stop != 0 {
+                        return Err(ThriftError::MissingStop)
+                    }
                     
                     Ok(())
                 }
@@ -327,8 +341,10 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
                 fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
                     let mut last_field_id = 0_i16;
                     match self {${definition.fields.values.map { """
-                        Self::${it.identifier}(inner) => inner.write_field(output, ${it.id}, &mut last_field_id), """ }.joinToString("")}
+                        Self::${it.identifier}(inner) => inner.write_field(output, ${it.id}, &mut last_field_id)?, """ }.joinToString("")}
                     }
+                    // STOP
+                    output.write_byte(0)
                 }
             }
         """.trimIndent())

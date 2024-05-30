@@ -1,5 +1,5 @@
 #[allow(non_snake_case)]
-// Generated on 2024-05-30T16:29:25.453286782Z
+// Generated on 2024-05-30T20:57:05.810035776Z
 use std::borrow::Cow;
 use compact_thrift_rs::*;
 
@@ -128,6 +128,18 @@ pub struct SizeStatistics {
     pub definition_level_histogram: Option<Vec<i64>>,
 }
 
+impl SizeStatistics {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(unencoded_byte_array_data_bytes: impl Into<Option<i64>>, repetition_level_histogram: impl Into<Option<Vec<i64>>>, definition_level_histogram: impl Into<Option<Vec<i64>>>) -> Self {
+        Self {
+            unencoded_byte_array_data_bytes: unencoded_byte_array_data_bytes.into(),
+            repetition_level_histogram: repetition_level_histogram.into(),
+            definition_level_histogram: definition_level_histogram.into(),
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for SizeStatistics {
     const FIELD_TYPE: u8 = 12;
 
@@ -194,6 +206,23 @@ pub struct Statistics<'i> {
     pub min_value: Option<Cow<'i, [u8]>>,
     pub is_max_value_exact: Option<bool>,
     pub is_min_value_exact: Option<bool>,
+}
+
+impl<'i> Statistics<'i> {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(max: impl Into<Option<Cow<'i, [u8]>>>, min: impl Into<Option<Cow<'i, [u8]>>>, null_count: impl Into<Option<i64>>, distinct_count: impl Into<Option<i64>>, max_value: impl Into<Option<Cow<'i, [u8]>>>, min_value: impl Into<Option<Cow<'i, [u8]>>>, is_max_value_exact: impl Into<Option<bool>>, is_min_value_exact: impl Into<Option<bool>>) -> Self {
+        Self {
+            max: max.into(),
+            min: min.into(),
+            null_count: null_count.into(),
+            distinct_count: distinct_count.into(),
+            max_value: max_value.into(),
+            min_value: min_value.into(),
+            is_max_value_exact: is_max_value_exact.into(),
+            is_min_value_exact: is_min_value_exact.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for Statistics<'i> {
@@ -281,6 +310,15 @@ impl <'i> CompactThriftProtocol<'i> for Statistics<'i> {
 pub struct StringType {
 }
 
+impl StringType {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for StringType {
     const FIELD_TYPE: u8 = 12;
 
@@ -324,6 +362,15 @@ impl <'i> CompactThriftProtocol<'i> for StringType {
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct UUIDType {
+}
+
+impl UUIDType {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for UUIDType {
@@ -371,6 +418,15 @@ impl <'i> CompactThriftProtocol<'i> for UUIDType {
 pub struct MapType {
 }
 
+impl MapType {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for MapType {
     const FIELD_TYPE: u8 = 12;
 
@@ -414,6 +470,15 @@ impl <'i> CompactThriftProtocol<'i> for MapType {
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct ListType {
+}
+
+impl ListType {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for ListType {
@@ -461,6 +526,15 @@ impl <'i> CompactThriftProtocol<'i> for ListType {
 pub struct EnumType {
 }
 
+impl EnumType {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for EnumType {
     const FIELD_TYPE: u8 = 12;
 
@@ -504,6 +578,15 @@ impl <'i> CompactThriftProtocol<'i> for EnumType {
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct DateType {
+}
+
+impl DateType {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for DateType {
@@ -551,6 +634,15 @@ impl <'i> CompactThriftProtocol<'i> for DateType {
 pub struct Float16Type {
 }
 
+impl Float16Type {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for Float16Type {
     const FIELD_TYPE: u8 = 12;
 
@@ -594,6 +686,15 @@ impl <'i> CompactThriftProtocol<'i> for Float16Type {
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct NullType {
+}
+
+impl NullType {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for NullType {
@@ -641,6 +742,17 @@ impl <'i> CompactThriftProtocol<'i> for NullType {
 pub struct DecimalType {
     pub scale: i32,
     pub precision: i32,
+}
+
+impl DecimalType {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(scale: impl Into<i32>, precision: impl Into<i32>) -> Self {
+        Self {
+            scale: scale.into(),
+            precision: precision.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for DecimalType {
@@ -704,6 +816,15 @@ impl <'i> CompactThriftProtocol<'i> for DecimalType {
 pub struct MilliSeconds {
 }
 
+impl MilliSeconds {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for MilliSeconds {
     const FIELD_TYPE: u8 = 12;
 
@@ -749,6 +870,15 @@ impl <'i> CompactThriftProtocol<'i> for MilliSeconds {
 pub struct MicroSeconds {
 }
 
+impl MicroSeconds {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for MicroSeconds {
     const FIELD_TYPE: u8 = 12;
 
@@ -792,6 +922,15 @@ impl <'i> CompactThriftProtocol<'i> for MicroSeconds {
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct NanoSeconds {
+}
+
+impl NanoSeconds {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for NanoSeconds {
@@ -891,6 +1030,10 @@ impl <'i> CompactThriftProtocol<'i> for TimeUnit {
                 return Err(ThriftError::MissingField)
             }
         }
+        let stop = input.read_byte()?;
+        if stop != 0 {
+            return Err(ThriftError::MissingStop)
+        }
 
         Ok(())
     }
@@ -898,10 +1041,12 @@ impl <'i> CompactThriftProtocol<'i> for TimeUnit {
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         match self {
-            Self::MILLIS(inner) => inner.write_field(output, 1, &mut last_field_id),
-            Self::MICROS(inner) => inner.write_field(output, 2, &mut last_field_id),
-            Self::NANOS(inner) => inner.write_field(output, 3, &mut last_field_id),
+            Self::MILLIS(inner) => inner.write_field(output, 1, &mut last_field_id)?,
+            Self::MICROS(inner) => inner.write_field(output, 2, &mut last_field_id)?,
+            Self::NANOS(inner) => inner.write_field(output, 3, &mut last_field_id)?,
         }
+        // STOP
+        output.write_byte(0)
     }
 }
 #[derive(Default, Clone, Debug, PartialEq)]
@@ -910,6 +1055,17 @@ impl <'i> CompactThriftProtocol<'i> for TimeUnit {
 pub struct TimestampType {
     pub isAdjustedToUTC: bool,
     pub unit: TimeUnit,
+}
+
+impl TimestampType {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(isAdjustedToUTC: impl Into<bool>, unit: impl Into<TimeUnit>) -> Self {
+        Self {
+            isAdjustedToUTC: isAdjustedToUTC.into(),
+            unit: unit.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for TimestampType {
@@ -975,6 +1131,17 @@ pub struct TimeType {
     pub unit: TimeUnit,
 }
 
+impl TimeType {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(isAdjustedToUTC: impl Into<bool>, unit: impl Into<TimeUnit>) -> Self {
+        Self {
+            isAdjustedToUTC: isAdjustedToUTC.into(),
+            unit: unit.into(),
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for TimeType {
     const FIELD_TYPE: u8 = 12;
 
@@ -1038,6 +1205,17 @@ pub struct IntType {
     pub isSigned: bool,
 }
 
+impl IntType {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(bitWidth: impl Into<i8>, isSigned: impl Into<bool>) -> Self {
+        Self {
+            bitWidth: bitWidth.into(),
+            isSigned: isSigned.into(),
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for IntType {
     const FIELD_TYPE: u8 = 12;
 
@@ -1099,6 +1277,15 @@ impl <'i> CompactThriftProtocol<'i> for IntType {
 pub struct JsonType {
 }
 
+impl JsonType {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for JsonType {
     const FIELD_TYPE: u8 = 12;
 
@@ -1142,6 +1329,15 @@ impl <'i> CompactThriftProtocol<'i> for JsonType {
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct BsonType {
+}
+
+impl BsonType {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for BsonType {
@@ -1340,6 +1536,10 @@ impl <'i> CompactThriftProtocol<'i> for LogicalType {
                 return Err(ThriftError::MissingField)
             }
         }
+        let stop = input.read_byte()?;
+        if stop != 0 {
+            return Err(ThriftError::MissingStop)
+        }
 
         Ok(())
     }
@@ -1347,21 +1547,23 @@ impl <'i> CompactThriftProtocol<'i> for LogicalType {
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         match self {
-            Self::STRING(inner) => inner.write_field(output, 1, &mut last_field_id),
-            Self::MAP(inner) => inner.write_field(output, 2, &mut last_field_id),
-            Self::LIST(inner) => inner.write_field(output, 3, &mut last_field_id),
-            Self::ENUM(inner) => inner.write_field(output, 4, &mut last_field_id),
-            Self::DECIMAL(inner) => inner.write_field(output, 5, &mut last_field_id),
-            Self::DATE(inner) => inner.write_field(output, 6, &mut last_field_id),
-            Self::TIME(inner) => inner.write_field(output, 7, &mut last_field_id),
-            Self::TIMESTAMP(inner) => inner.write_field(output, 8, &mut last_field_id),
-            Self::INTEGER(inner) => inner.write_field(output, 10, &mut last_field_id),
-            Self::UNKNOWN(inner) => inner.write_field(output, 11, &mut last_field_id),
-            Self::JSON(inner) => inner.write_field(output, 12, &mut last_field_id),
-            Self::BSON(inner) => inner.write_field(output, 13, &mut last_field_id),
-            Self::UUID(inner) => inner.write_field(output, 14, &mut last_field_id),
-            Self::FLOAT16(inner) => inner.write_field(output, 15, &mut last_field_id),
+            Self::STRING(inner) => inner.write_field(output, 1, &mut last_field_id)?,
+            Self::MAP(inner) => inner.write_field(output, 2, &mut last_field_id)?,
+            Self::LIST(inner) => inner.write_field(output, 3, &mut last_field_id)?,
+            Self::ENUM(inner) => inner.write_field(output, 4, &mut last_field_id)?,
+            Self::DECIMAL(inner) => inner.write_field(output, 5, &mut last_field_id)?,
+            Self::DATE(inner) => inner.write_field(output, 6, &mut last_field_id)?,
+            Self::TIME(inner) => inner.write_field(output, 7, &mut last_field_id)?,
+            Self::TIMESTAMP(inner) => inner.write_field(output, 8, &mut last_field_id)?,
+            Self::INTEGER(inner) => inner.write_field(output, 10, &mut last_field_id)?,
+            Self::UNKNOWN(inner) => inner.write_field(output, 11, &mut last_field_id)?,
+            Self::JSON(inner) => inner.write_field(output, 12, &mut last_field_id)?,
+            Self::BSON(inner) => inner.write_field(output, 13, &mut last_field_id)?,
+            Self::UUID(inner) => inner.write_field(output, 14, &mut last_field_id)?,
+            Self::FLOAT16(inner) => inner.write_field(output, 15, &mut last_field_id)?,
         }
+        // STOP
+        output.write_byte(0)
     }
 }
 #[derive(Default, Clone, Debug, PartialEq)]
@@ -1378,6 +1580,25 @@ pub struct SchemaElement<'i> {
     pub precision: Option<i32>,
     pub field_id: Option<i32>,
     pub logicalType: Option<LogicalType>,
+}
+
+impl<'i> SchemaElement<'i> {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(r#type: impl Into<Option<Type>>, type_length: impl Into<Option<i32>>, repetition_type: impl Into<Option<FieldRepetitionType>>, name: impl Into<Cow<'i, str>>, num_children: impl Into<Option<i32>>, converted_type: impl Into<Option<ConvertedType>>, scale: impl Into<Option<i32>>, precision: impl Into<Option<i32>>, field_id: impl Into<Option<i32>>, logicalType: impl Into<Option<LogicalType>>) -> Self {
+        Self {
+            r#type: r#type.into(),
+            type_length: type_length.into(),
+            repetition_type: repetition_type.into(),
+            name: name.into(),
+            num_children: num_children.into(),
+            converted_type: converted_type.into(),
+            scale: scale.into(),
+            precision: precision.into(),
+            field_id: field_id.into(),
+            logicalType: logicalType.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for SchemaElement<'i> {
@@ -1621,6 +1842,20 @@ pub struct DataPageHeader<'i> {
     pub statistics: Option<Statistics<'i>>,
 }
 
+impl<'i> DataPageHeader<'i> {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(num_values: impl Into<i32>, encoding: impl Into<Encoding>, definition_level_encoding: impl Into<Encoding>, repetition_level_encoding: impl Into<Encoding>, statistics: impl Into<Option<Statistics<'i>>>) -> Self {
+        Self {
+            num_values: num_values.into(),
+            encoding: encoding.into(),
+            definition_level_encoding: definition_level_encoding.into(),
+            repetition_level_encoding: repetition_level_encoding.into(),
+            statistics: statistics.into(),
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for DataPageHeader<'i> {
     const FIELD_TYPE: u8 = 12;
 
@@ -1699,6 +1934,15 @@ impl <'i> CompactThriftProtocol<'i> for DataPageHeader<'i> {
 pub struct IndexPageHeader {
 }
 
+impl IndexPageHeader {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for IndexPageHeader {
     const FIELD_TYPE: u8 = 12;
 
@@ -1745,6 +1989,18 @@ pub struct DictionaryPageHeader {
     pub num_values: i32,
     pub encoding: Encoding,
     pub is_sorted: Option<bool>,
+}
+
+impl DictionaryPageHeader {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(num_values: impl Into<i32>, encoding: impl Into<Encoding>, is_sorted: impl Into<Option<bool>>) -> Self {
+        Self {
+            num_values: num_values.into(),
+            encoding: encoding.into(),
+            is_sorted: is_sorted.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for DictionaryPageHeader {
@@ -1819,6 +2075,23 @@ pub struct DataPageHeaderV2<'i> {
     pub repetition_levels_byte_length: i32,
     pub is_compressed: Option<bool>,
     pub statistics: Option<Statistics<'i>>,
+}
+
+impl<'i> DataPageHeaderV2<'i> {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(num_values: impl Into<i32>, num_nulls: impl Into<i32>, num_rows: impl Into<i32>, encoding: impl Into<Encoding>, definition_levels_byte_length: impl Into<i32>, repetition_levels_byte_length: impl Into<i32>, is_compressed: impl Into<Option<bool>>, statistics: impl Into<Option<Statistics<'i>>>) -> Self {
+        Self {
+            num_values: num_values.into(),
+            num_nulls: num_nulls.into(),
+            num_rows: num_rows.into(),
+            encoding: encoding.into(),
+            definition_levels_byte_length: definition_levels_byte_length.into(),
+            repetition_levels_byte_length: repetition_levels_byte_length.into(),
+            is_compressed: is_compressed.into(),
+            statistics: statistics.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for DataPageHeaderV2<'i> {
@@ -1916,6 +2189,15 @@ impl <'i> CompactThriftProtocol<'i> for DataPageHeaderV2<'i> {
 pub struct SplitBlockAlgorithm {
 }
 
+impl SplitBlockAlgorithm {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for SplitBlockAlgorithm {
     const FIELD_TYPE: u8 = 12;
 
@@ -1995,6 +2277,10 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterAlgorithm {
                 return Err(ThriftError::MissingField)
             }
         }
+        let stop = input.read_byte()?;
+        if stop != 0 {
+            return Err(ThriftError::MissingStop)
+        }
 
         Ok(())
     }
@@ -2002,14 +2288,25 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterAlgorithm {
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         match self {
-            Self::BLOCK(inner) => inner.write_field(output, 1, &mut last_field_id),
+            Self::BLOCK(inner) => inner.write_field(output, 1, &mut last_field_id)?,
         }
+        // STOP
+        output.write_byte(0)
     }
 }
 #[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct XxHash {
+}
+
+impl XxHash {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for XxHash {
@@ -2091,6 +2388,10 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterHash {
                 return Err(ThriftError::MissingField)
             }
         }
+        let stop = input.read_byte()?;
+        if stop != 0 {
+            return Err(ThriftError::MissingStop)
+        }
 
         Ok(())
     }
@@ -2098,14 +2399,25 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterHash {
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         match self {
-            Self::XXHASH(inner) => inner.write_field(output, 1, &mut last_field_id),
+            Self::XXHASH(inner) => inner.write_field(output, 1, &mut last_field_id)?,
         }
+        // STOP
+        output.write_byte(0)
     }
 }
 #[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct Uncompressed {
+}
+
+impl Uncompressed {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for Uncompressed {
@@ -2187,6 +2499,10 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterCompression {
                 return Err(ThriftError::MissingField)
             }
         }
+        let stop = input.read_byte()?;
+        if stop != 0 {
+            return Err(ThriftError::MissingStop)
+        }
 
         Ok(())
     }
@@ -2194,8 +2510,10 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterCompression {
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         match self {
-            Self::UNCOMPRESSED(inner) => inner.write_field(output, 1, &mut last_field_id),
+            Self::UNCOMPRESSED(inner) => inner.write_field(output, 1, &mut last_field_id)?,
         }
+        // STOP
+        output.write_byte(0)
     }
 }
 #[derive(Default, Clone, Debug, PartialEq)]
@@ -2206,6 +2524,19 @@ pub struct BloomFilterHeader {
     pub algorithm: BloomFilterAlgorithm,
     pub hash: BloomFilterHash,
     pub compression: BloomFilterCompression,
+}
+
+impl BloomFilterHeader {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(numBytes: impl Into<i32>, algorithm: impl Into<BloomFilterAlgorithm>, hash: impl Into<BloomFilterHash>, compression: impl Into<BloomFilterCompression>) -> Self {
+        Self {
+            numBytes: numBytes.into(),
+            algorithm: algorithm.into(),
+            hash: hash.into(),
+            compression: compression.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for BloomFilterHeader {
@@ -2287,6 +2618,23 @@ pub struct PageHeader<'i> {
     pub index_page_header: Option<IndexPageHeader>,
     pub dictionary_page_header: Option<DictionaryPageHeader>,
     pub data_page_header_v2: Option<DataPageHeaderV2<'i>>,
+}
+
+impl<'i> PageHeader<'i> {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(r#type: impl Into<PageType>, uncompressed_page_size: impl Into<i32>, compressed_page_size: impl Into<i32>, crc: impl Into<Option<i32>>, data_page_header: impl Into<Option<DataPageHeader<'i>>>, index_page_header: impl Into<Option<IndexPageHeader>>, dictionary_page_header: impl Into<Option<DictionaryPageHeader>>, data_page_header_v2: impl Into<Option<DataPageHeaderV2<'i>>>) -> Self {
+        Self {
+            r#type: r#type.into(),
+            uncompressed_page_size: uncompressed_page_size.into(),
+            compressed_page_size: compressed_page_size.into(),
+            crc: crc.into(),
+            data_page_header: data_page_header.into(),
+            index_page_header: index_page_header.into(),
+            dictionary_page_header: dictionary_page_header.into(),
+            data_page_header_v2: data_page_header_v2.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for PageHeader<'i> {
@@ -2383,6 +2731,17 @@ pub struct KeyValue<'i> {
     pub value: Option<Cow<'i, str>>,
 }
 
+impl<'i> KeyValue<'i> {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(key: impl Into<Cow<'i, str>>, value: impl Into<Option<Cow<'i, str>>>) -> Self {
+        Self {
+            key: key.into(),
+            value: value.into(),
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for KeyValue<'i> {
     const FIELD_TYPE: u8 = 12;
 
@@ -2444,6 +2803,18 @@ pub struct SortingColumn {
     pub column_idx: i32,
     pub descending: bool,
     pub nulls_first: bool,
+}
+
+impl SortingColumn {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(column_idx: impl Into<i32>, descending: impl Into<bool>, nulls_first: impl Into<bool>) -> Self {
+        Self {
+            column_idx: column_idx.into(),
+            descending: descending.into(),
+            nulls_first: nulls_first.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for SortingColumn {
@@ -2514,6 +2885,18 @@ pub struct PageEncodingStats {
     pub page_type: PageType,
     pub encoding: Encoding,
     pub count: i32,
+}
+
+impl PageEncodingStats {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(page_type: impl Into<PageType>, encoding: impl Into<Encoding>, count: impl Into<i32>) -> Self {
+        Self {
+            page_type: page_type.into(),
+            encoding: encoding.into(),
+            count: count.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for PageEncodingStats {
@@ -2597,6 +2980,31 @@ pub struct ColumnMetaData<'i> {
     pub bloom_filter_offset: Option<i64>,
     pub bloom_filter_length: Option<i32>,
     pub size_statistics: Option<SizeStatistics>,
+}
+
+impl<'i> ColumnMetaData<'i> {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(r#type: impl Into<Type>, encodings: impl Into<Vec<Encoding>>, path_in_schema: impl Into<Vec<Cow<'i, str>>>, codec: impl Into<CompressionCodec>, num_values: impl Into<i64>, total_uncompressed_size: impl Into<i64>, total_compressed_size: impl Into<i64>, key_value_metadata: impl Into<Option<Vec<KeyValue<'i>>>>, data_page_offset: impl Into<i64>, index_page_offset: impl Into<Option<i64>>, dictionary_page_offset: impl Into<Option<i64>>, statistics: impl Into<Option<Statistics<'i>>>, encoding_stats: impl Into<Option<Vec<PageEncodingStats>>>, bloom_filter_offset: impl Into<Option<i64>>, bloom_filter_length: impl Into<Option<i32>>, size_statistics: impl Into<Option<SizeStatistics>>) -> Self {
+        Self {
+            r#type: r#type.into(),
+            encodings: encodings.into(),
+            path_in_schema: path_in_schema.into(),
+            codec: codec.into(),
+            num_values: num_values.into(),
+            total_uncompressed_size: total_uncompressed_size.into(),
+            total_compressed_size: total_compressed_size.into(),
+            key_value_metadata: key_value_metadata.into(),
+            data_page_offset: data_page_offset.into(),
+            index_page_offset: index_page_offset.into(),
+            dictionary_page_offset: dictionary_page_offset.into(),
+            statistics: statistics.into(),
+            encoding_stats: encoding_stats.into(),
+            bloom_filter_offset: bloom_filter_offset.into(),
+            bloom_filter_length: bloom_filter_length.into(),
+            size_statistics: size_statistics.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for ColumnMetaData<'i> {
@@ -2736,6 +3144,15 @@ impl <'i> CompactThriftProtocol<'i> for ColumnMetaData<'i> {
 pub struct EncryptionWithFooterKey {
 }
 
+impl EncryptionWithFooterKey {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for EncryptionWithFooterKey {
     const FIELD_TYPE: u8 = 12;
 
@@ -2781,6 +3198,17 @@ impl <'i> CompactThriftProtocol<'i> for EncryptionWithFooterKey {
 pub struct EncryptionWithColumnKey<'i> {
     pub path_in_schema: Vec<Cow<'i, str>>,
     pub key_metadata: Option<Cow<'i, [u8]>>,
+}
+
+impl<'i> EncryptionWithColumnKey<'i> {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(path_in_schema: impl Into<Vec<Cow<'i, str>>>, key_metadata: impl Into<Option<Cow<'i, [u8]>>>) -> Self {
+        Self {
+            path_in_schema: path_in_schema.into(),
+            key_metadata: key_metadata.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for EncryptionWithColumnKey<'i> {
@@ -2886,6 +3314,10 @@ impl <'i> CompactThriftProtocol<'i> for ColumnCryptoMetaData<'i> {
                 return Err(ThriftError::MissingField)
             }
         }
+        let stop = input.read_byte()?;
+        if stop != 0 {
+            return Err(ThriftError::MissingStop)
+        }
 
         Ok(())
     }
@@ -2893,9 +3325,11 @@ impl <'i> CompactThriftProtocol<'i> for ColumnCryptoMetaData<'i> {
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         match self {
-            Self::ENCRYPTION_WITH_FOOTER_KEY(inner) => inner.write_field(output, 1, &mut last_field_id),
-            Self::ENCRYPTION_WITH_COLUMN_KEY(inner) => inner.write_field(output, 2, &mut last_field_id),
+            Self::ENCRYPTION_WITH_FOOTER_KEY(inner) => inner.write_field(output, 1, &mut last_field_id)?,
+            Self::ENCRYPTION_WITH_COLUMN_KEY(inner) => inner.write_field(output, 2, &mut last_field_id)?,
         }
+        // STOP
+        output.write_byte(0)
     }
 }
 #[derive(Default, Clone, Debug, PartialEq)]
@@ -2911,6 +3345,24 @@ pub struct ColumnChunk<'i> {
     pub column_index_length: Option<i32>,
     pub crypto_metadata: Option<ColumnCryptoMetaData<'i>>,
     pub encrypted_column_metadata: Option<Cow<'i, [u8]>>,
+}
+
+impl<'i> ColumnChunk<'i> {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(file_path: impl Into<Option<Cow<'i, str>>>, file_offset: impl Into<i64>, meta_data: impl Into<Option<ColumnMetaData<'i>>>, offset_index_offset: impl Into<Option<i64>>, offset_index_length: impl Into<Option<i32>>, column_index_offset: impl Into<Option<i64>>, column_index_length: impl Into<Option<i32>>, crypto_metadata: impl Into<Option<ColumnCryptoMetaData<'i>>>, encrypted_column_metadata: impl Into<Option<Cow<'i, [u8]>>>) -> Self {
+        Self {
+            file_path: file_path.into(),
+            file_offset: file_offset.into(),
+            meta_data: meta_data.into(),
+            offset_index_offset: offset_index_offset.into(),
+            offset_index_length: offset_index_length.into(),
+            column_index_offset: column_index_offset.into(),
+            column_index_length: column_index_length.into(),
+            crypto_metadata: crypto_metadata.into(),
+            encrypted_column_metadata: encrypted_column_metadata.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for ColumnChunk<'i> {
@@ -3015,6 +3467,22 @@ pub struct RowGroup<'i> {
     pub ordinal: Option<i16>,
 }
 
+impl<'i> RowGroup<'i> {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(columns: impl Into<Vec<ColumnChunk<'i>>>, total_byte_size: impl Into<i64>, num_rows: impl Into<i64>, sorting_columns: impl Into<Option<Vec<SortingColumn>>>, file_offset: impl Into<Option<i64>>, total_compressed_size: impl Into<Option<i64>>, ordinal: impl Into<Option<i16>>) -> Self {
+        Self {
+            columns: columns.into(),
+            total_byte_size: total_byte_size.into(),
+            num_rows: num_rows.into(),
+            sorting_columns: sorting_columns.into(),
+            file_offset: file_offset.into(),
+            total_compressed_size: total_compressed_size.into(),
+            ordinal: ordinal.into(),
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for RowGroup<'i> {
     const FIELD_TYPE: u8 = 12;
 
@@ -3102,6 +3570,15 @@ impl <'i> CompactThriftProtocol<'i> for RowGroup<'i> {
 pub struct TypeDefinedOrder {
 }
 
+impl TypeDefinedOrder {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new() -> Self {
+        Self {
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for TypeDefinedOrder {
     const FIELD_TYPE: u8 = 12;
 
@@ -3181,6 +3658,10 @@ impl <'i> CompactThriftProtocol<'i> for ColumnOrder {
                 return Err(ThriftError::MissingField)
             }
         }
+        let stop = input.read_byte()?;
+        if stop != 0 {
+            return Err(ThriftError::MissingStop)
+        }
 
         Ok(())
     }
@@ -3188,8 +3669,10 @@ impl <'i> CompactThriftProtocol<'i> for ColumnOrder {
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         match self {
-            Self::TYPE_ORDER(inner) => inner.write_field(output, 1, &mut last_field_id),
+            Self::TYPE_ORDER(inner) => inner.write_field(output, 1, &mut last_field_id)?,
         }
+        // STOP
+        output.write_byte(0)
     }
 }
 #[derive(Default, Clone, Debug, PartialEq)]
@@ -3199,6 +3682,18 @@ pub struct PageLocation {
     pub offset: i64,
     pub compressed_page_size: i32,
     pub first_row_index: i64,
+}
+
+impl PageLocation {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(offset: impl Into<i64>, compressed_page_size: impl Into<i32>, first_row_index: impl Into<i64>) -> Self {
+        Self {
+            offset: offset.into(),
+            compressed_page_size: compressed_page_size.into(),
+            first_row_index: first_row_index.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for PageLocation {
@@ -3270,6 +3765,17 @@ pub struct OffsetIndex {
     pub unencoded_byte_array_data_bytes: Option<Vec<i64>>,
 }
 
+impl OffsetIndex {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(page_locations: impl Into<Vec<PageLocation>>, unencoded_byte_array_data_bytes: impl Into<Option<Vec<i64>>>) -> Self {
+        Self {
+            page_locations: page_locations.into(),
+            unencoded_byte_array_data_bytes: unencoded_byte_array_data_bytes.into(),
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for OffsetIndex {
     const FIELD_TYPE: u8 = 12;
 
@@ -3335,6 +3841,22 @@ pub struct ColumnIndex<'i> {
     pub null_counts: Option<Vec<i64>>,
     pub repetition_level_histograms: Option<Vec<i64>>,
     pub definition_level_histograms: Option<Vec<i64>>,
+}
+
+impl<'i> ColumnIndex<'i> {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(null_pages: impl Into<Vec<bool>>, min_values: impl Into<Vec<Cow<'i, [u8]>>>, max_values: impl Into<Vec<Cow<'i, [u8]>>>, boundary_order: impl Into<BoundaryOrder>, null_counts: impl Into<Option<Vec<i64>>>, repetition_level_histograms: impl Into<Option<Vec<i64>>>, definition_level_histograms: impl Into<Option<Vec<i64>>>) -> Self {
+        Self {
+            null_pages: null_pages.into(),
+            min_values: min_values.into(),
+            max_values: max_values.into(),
+            boundary_order: boundary_order.into(),
+            null_counts: null_counts.into(),
+            repetition_level_histograms: repetition_level_histograms.into(),
+            definition_level_histograms: definition_level_histograms.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for ColumnIndex<'i> {
@@ -3428,6 +3950,18 @@ pub struct AesGcmV1<'i> {
     pub supply_aad_prefix: Option<bool>,
 }
 
+impl<'i> AesGcmV1<'i> {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(aad_prefix: impl Into<Option<Cow<'i, [u8]>>>, aad_file_unique: impl Into<Option<Cow<'i, [u8]>>>, supply_aad_prefix: impl Into<Option<bool>>) -> Self {
+        Self {
+            aad_prefix: aad_prefix.into(),
+            aad_file_unique: aad_file_unique.into(),
+            supply_aad_prefix: supply_aad_prefix.into(),
+        }
+    }
+}
+
 impl <'i> CompactThriftProtocol<'i> for AesGcmV1<'i> {
     const FIELD_TYPE: u8 = 12;
 
@@ -3489,6 +4023,18 @@ pub struct AesGcmCtrV1<'i> {
     pub aad_prefix: Option<Cow<'i, [u8]>>,
     pub aad_file_unique: Option<Cow<'i, [u8]>>,
     pub supply_aad_prefix: Option<bool>,
+}
+
+impl<'i> AesGcmCtrV1<'i> {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(aad_prefix: impl Into<Option<Cow<'i, [u8]>>>, aad_file_unique: impl Into<Option<Cow<'i, [u8]>>>, supply_aad_prefix: impl Into<Option<bool>>) -> Self {
+        Self {
+            aad_prefix: aad_prefix.into(),
+            aad_file_unique: aad_file_unique.into(),
+            supply_aad_prefix: supply_aad_prefix.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for AesGcmCtrV1<'i> {
@@ -3594,6 +4140,10 @@ impl <'i> CompactThriftProtocol<'i> for EncryptionAlgorithm<'i> {
                 return Err(ThriftError::MissingField)
             }
         }
+        let stop = input.read_byte()?;
+        if stop != 0 {
+            return Err(ThriftError::MissingStop)
+        }
 
         Ok(())
     }
@@ -3601,9 +4151,11 @@ impl <'i> CompactThriftProtocol<'i> for EncryptionAlgorithm<'i> {
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         match self {
-            Self::AES_GCM_V1(inner) => inner.write_field(output, 1, &mut last_field_id),
-            Self::AES_GCM_CTR_V1(inner) => inner.write_field(output, 2, &mut last_field_id),
+            Self::AES_GCM_V1(inner) => inner.write_field(output, 1, &mut last_field_id)?,
+            Self::AES_GCM_CTR_V1(inner) => inner.write_field(output, 2, &mut last_field_id)?,
         }
+        // STOP
+        output.write_byte(0)
     }
 }
 #[derive(Default, Clone, Debug, PartialEq)]
@@ -3619,6 +4171,24 @@ pub struct FileMetaData<'i> {
     pub column_orders: Option<Vec<ColumnOrder>>,
     pub encryption_algorithm: Option<EncryptionAlgorithm<'i>>,
     pub footer_signing_key_metadata: Option<Cow<'i, [u8]>>,
+}
+
+impl<'i> FileMetaData<'i> {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(version: impl Into<i32>, schema: impl Into<Vec<SchemaElement<'i>>>, num_rows: impl Into<i64>, row_groups: impl Into<Vec<RowGroup<'i>>>, key_value_metadata: impl Into<Option<Vec<KeyValue<'i>>>>, created_by: impl Into<Option<Cow<'i, str>>>, column_orders: impl Into<Option<Vec<ColumnOrder>>>, encryption_algorithm: impl Into<Option<EncryptionAlgorithm<'i>>>, footer_signing_key_metadata: impl Into<Option<Cow<'i, [u8]>>>) -> Self {
+        Self {
+            version: version.into(),
+            schema: schema.into(),
+            num_rows: num_rows.into(),
+            row_groups: row_groups.into(),
+            key_value_metadata: key_value_metadata.into(),
+            created_by: created_by.into(),
+            column_orders: column_orders.into(),
+            encryption_algorithm: encryption_algorithm.into(),
+            footer_signing_key_metadata: footer_signing_key_metadata.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for FileMetaData<'i> {
@@ -3719,6 +4289,17 @@ impl <'i> CompactThriftProtocol<'i> for FileMetaData<'i> {
 pub struct FileCryptoMetaData<'i> {
     pub encryption_algorithm: EncryptionAlgorithm<'i>,
     pub key_metadata: Option<Cow<'i, [u8]>>,
+}
+
+impl<'i> FileCryptoMetaData<'i> {
+    #[allow(non_camel_case_types)]
+    #[allow(non_snake_case)]
+    pub fn new(encryption_algorithm: impl Into<EncryptionAlgorithm<'i>>, key_metadata: impl Into<Option<Cow<'i, [u8]>>>) -> Self {
+        Self {
+            encryption_algorithm: encryption_algorithm.into(),
+            key_metadata: key_metadata.into(),
+        }
+    }
 }
 
 impl <'i> CompactThriftProtocol<'i> for FileCryptoMetaData<'i> {

@@ -15,6 +15,7 @@ pub enum ThriftError {
     InvalidCollectionLen,
     MissingField,
     MissingValue,
+    MissingStop,
     DuplicateField,
     InvalidType,
     ReserveError,
@@ -290,6 +291,10 @@ impl <'a> SliceInput<'a> {
     pub fn new(slice: &'a [u8]) -> Self {
         Self(slice)
     }
+
+    pub fn as_slice(&self) -> &'a [u8] {
+        self.0
+    }
 }
 
 impl <'a> From<&'a [u8]> for SliceInput<'a> {
@@ -425,21 +430,17 @@ impl <'i> CompactThriftProtocol<'i> for bool {
 
     #[inline]
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        *self = match input.read_byte()? {
-            0 => false,
-            1 => true,
-            _ => return Err(ThriftError::InvalidType)
-        };
+        let byte = input.read_byte()?;
+        // according to the spec the bytes in a collection should be FALSE = 0, TRUE = 1,
+        // but at least the java implementation writes the same values as for field types
+        *self = byte == 1;
         Ok(())
     }
 
     #[inline]
     fn fill_field<T: CompactThriftInput<'i>>(&mut self, _input: &mut T, field_type: u8) -> Result<(), ThriftError> {
-        *self = match field_type {
-            1 => true,
-            2 => false,
-            _ => return Err(ThriftError::InvalidType),
-        };
+        // no error checking
+        *self = field_type == 1;
         Ok(())
     }
 
@@ -595,7 +596,7 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
     #[inline]
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let (len, element_type) = read_collection_len_and_type(input)?;
-        if element_type != P::FIELD_TYPE {
+        if element_type != P::FIELD_TYPE && !(P::FIELD_TYPE == bool::FIELD_TYPE && element_type == 1) {
             return Err(ThriftError::InvalidType);
         }
         self.clear();
@@ -683,7 +684,7 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
 
 #[cfg(test)]
 mod tests {
-    use crate::{CompactThriftInput, CompactThriftOutput, decode_uleb, encode_uleb, SliceInput, ThriftError};
+    use crate::{CompactThriftInput, CompactThriftOutput, CompactThriftProtocol, decode_uleb, encode_uleb, SliceInput, ThriftError};
 
     #[test]
     fn test_size_of_error() {
@@ -727,5 +728,20 @@ mod tests {
         w.write_i64(1234567890).unwrap();
         let mut r = SliceInput::new(&w);
         assert_eq!(r.read_i64().unwrap(), 1234567890);
+    }
+
+    #[test]
+    fn test_read_vec_bool() {
+        let mut data = SliceInput::new(&[0x42, 0, 1, 1, 0]);
+        let actual = Vec::<bool>::read(&mut data).unwrap();
+        let expected = vec![false, true, true, false];
+        assert_eq!(&actual, &expected);
+
+        // also allow element type 1 for boolean
+        let mut data = SliceInput::new(&[0x41, 0, 1, 1, 0]);
+        let actual = Vec::<bool>::read(&mut data).unwrap();
+        let expected = vec![false, true, true, false];
+        assert_eq!(&actual, &expected);
+
     }
 }
