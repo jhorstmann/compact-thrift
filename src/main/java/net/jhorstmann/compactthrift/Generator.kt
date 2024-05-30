@@ -130,7 +130,6 @@ class RustGenerator(val document: Document) : DocumentVisitor {
             code.appendln("use crate::$prefix$it;")
         }
         code.appendln("use std::borrow::Cow;")
-        code.appendln("use std::marker::PhantomData;")
         code.appendln("use compact_thrift_rs::*;")
     }
 
@@ -214,7 +213,6 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
             #[allow(non_snake_case)]
             pub struct $identifier$lifetimeAnnotation {${definition.fields.values.map { """
                 pub ${rustIdentifier(it.identifier)}: ${rustType(it.type, it.req)},""" }.joinToString("")}
-                //__phantom_lifetime: PhantomData<&'i ()>,
             }
             
             impl <'i> CompactThriftProtocol<'i> for $identifier$lifetimeAnnotation {
