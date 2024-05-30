@@ -169,7 +169,7 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
             """
             #[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
             #[allow(non_camel_case_types)]
-            pub struct $identifier(i32);
+            pub struct $identifier(pub i32);
 
             impl $identifier {${
                 definition.fields.values.map {
@@ -208,7 +208,7 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
         val identifier = rustIdentifier(definition.identifier)
         val lifetimeAnnotation = lifetimeAnnotation(document, definition)
         code.appendln("""
-            #[derive(Default, Clone, Debug)]
+            #[derive(Default, Clone, Debug, PartialEq)]
             #[allow(non_camel_case_types)]
             #[allow(non_snake_case)]
             pub struct $identifier$lifetimeAnnotation {${definition.fields.values.map { """
@@ -273,7 +273,7 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
 
         code.appendln(
             """
-            #[derive(Clone, Debug)]
+            #[derive(Clone, Debug, PartialEq)]
             #[allow(non_camel_case_types)]
             #[allow(non_snake_case)]
             pub enum $identifier$lifetimeAnnotation {${

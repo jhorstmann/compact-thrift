@@ -1,11 +1,11 @@
 #[allow(non_snake_case)]
-// Generated on 2024-05-30T16:26:49.910569205Z
+// Generated on 2024-05-30T16:29:25.453286782Z
 use std::borrow::Cow;
 use compact_thrift_rs::*;
 
 #[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
-pub struct Type(i32);
+pub struct Type(pub i32);
 
 impl Type {
     pub const BOOLEAN: Self = Self(0);
@@ -41,7 +41,7 @@ impl <'i> CompactThriftProtocol<'i> for Type {
 
 #[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
-pub struct ConvertedType(i32);
+pub struct ConvertedType(pub i32);
 
 impl ConvertedType {
     pub const UTF8: Self = Self(0);
@@ -91,7 +91,7 @@ impl <'i> CompactThriftProtocol<'i> for ConvertedType {
 
 #[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
-pub struct FieldRepetitionType(i32);
+pub struct FieldRepetitionType(pub i32);
 
 impl FieldRepetitionType {
     pub const REQUIRED: Self = Self(0);
@@ -119,7 +119,7 @@ impl <'i> CompactThriftProtocol<'i> for FieldRepetitionType {
     }
 }
 
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct SizeStatistics {
@@ -182,7 +182,7 @@ impl <'i> CompactThriftProtocol<'i> for SizeStatistics {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct Statistics<'i> {
@@ -275,7 +275,7 @@ impl <'i> CompactThriftProtocol<'i> for Statistics<'i> {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct StringType {
@@ -320,7 +320,7 @@ impl <'i> CompactThriftProtocol<'i> for StringType {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct UUIDType {
@@ -365,7 +365,7 @@ impl <'i> CompactThriftProtocol<'i> for UUIDType {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct MapType {
@@ -410,7 +410,7 @@ impl <'i> CompactThriftProtocol<'i> for MapType {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct ListType {
@@ -455,7 +455,7 @@ impl <'i> CompactThriftProtocol<'i> for ListType {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct EnumType {
@@ -500,7 +500,7 @@ impl <'i> CompactThriftProtocol<'i> for EnumType {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct DateType {
@@ -545,7 +545,7 @@ impl <'i> CompactThriftProtocol<'i> for DateType {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct Float16Type {
@@ -590,7 +590,7 @@ impl <'i> CompactThriftProtocol<'i> for Float16Type {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct NullType {
@@ -635,7 +635,7 @@ impl <'i> CompactThriftProtocol<'i> for NullType {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct DecimalType {
@@ -698,7 +698,7 @@ impl <'i> CompactThriftProtocol<'i> for DecimalType {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct MilliSeconds {
@@ -743,7 +743,7 @@ impl <'i> CompactThriftProtocol<'i> for MilliSeconds {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct MicroSeconds {
@@ -788,7 +788,7 @@ impl <'i> CompactThriftProtocol<'i> for MicroSeconds {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct NanoSeconds {
@@ -833,7 +833,7 @@ impl <'i> CompactThriftProtocol<'i> for NanoSeconds {
         Ok(())
     }
 }
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub enum TimeUnit {
@@ -904,7 +904,7 @@ impl <'i> CompactThriftProtocol<'i> for TimeUnit {
         }
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct TimestampType {
@@ -967,7 +967,7 @@ impl <'i> CompactThriftProtocol<'i> for TimestampType {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct TimeType {
@@ -1030,7 +1030,7 @@ impl <'i> CompactThriftProtocol<'i> for TimeType {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct IntType {
@@ -1093,7 +1093,7 @@ impl <'i> CompactThriftProtocol<'i> for IntType {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct JsonType {
@@ -1138,7 +1138,7 @@ impl <'i> CompactThriftProtocol<'i> for JsonType {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct BsonType {
@@ -1183,7 +1183,7 @@ impl <'i> CompactThriftProtocol<'i> for BsonType {
         Ok(())
     }
 }
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub enum LogicalType {
@@ -1364,7 +1364,7 @@ impl <'i> CompactThriftProtocol<'i> for LogicalType {
         }
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct SchemaElement<'i> {
@@ -1477,7 +1477,7 @@ impl <'i> CompactThriftProtocol<'i> for SchemaElement<'i> {
 
 #[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
-pub struct Encoding(i32);
+pub struct Encoding(pub i32);
 
 impl Encoding {
     pub const PLAIN: Self = Self(0);
@@ -1514,7 +1514,7 @@ impl <'i> CompactThriftProtocol<'i> for Encoding {
 
 #[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
-pub struct CompressionCodec(i32);
+pub struct CompressionCodec(pub i32);
 
 impl CompressionCodec {
     pub const UNCOMPRESSED: Self = Self(0);
@@ -1550,7 +1550,7 @@ impl <'i> CompactThriftProtocol<'i> for CompressionCodec {
 
 #[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
-pub struct PageType(i32);
+pub struct PageType(pub i32);
 
 impl PageType {
     pub const DATA_PAGE: Self = Self(0);
@@ -1582,7 +1582,7 @@ impl <'i> CompactThriftProtocol<'i> for PageType {
 
 #[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
-pub struct BoundaryOrder(i32);
+pub struct BoundaryOrder(pub i32);
 
 impl BoundaryOrder {
     pub const UNORDERED: Self = Self(0);
@@ -1610,7 +1610,7 @@ impl <'i> CompactThriftProtocol<'i> for BoundaryOrder {
     }
 }
 
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct DataPageHeader<'i> {
@@ -1693,7 +1693,7 @@ impl <'i> CompactThriftProtocol<'i> for DataPageHeader<'i> {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct IndexPageHeader {
@@ -1738,7 +1738,7 @@ impl <'i> CompactThriftProtocol<'i> for IndexPageHeader {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct DictionaryPageHeader {
@@ -1807,7 +1807,7 @@ impl <'i> CompactThriftProtocol<'i> for DictionaryPageHeader {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct DataPageHeaderV2<'i> {
@@ -1910,7 +1910,7 @@ impl <'i> CompactThriftProtocol<'i> for DataPageHeaderV2<'i> {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct SplitBlockAlgorithm {
@@ -1955,7 +1955,7 @@ impl <'i> CompactThriftProtocol<'i> for SplitBlockAlgorithm {
         Ok(())
     }
 }
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub enum BloomFilterAlgorithm {
@@ -2006,7 +2006,7 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterAlgorithm {
         }
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct XxHash {
@@ -2051,7 +2051,7 @@ impl <'i> CompactThriftProtocol<'i> for XxHash {
         Ok(())
     }
 }
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub enum BloomFilterHash {
@@ -2102,7 +2102,7 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterHash {
         }
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct Uncompressed {
@@ -2147,7 +2147,7 @@ impl <'i> CompactThriftProtocol<'i> for Uncompressed {
         Ok(())
     }
 }
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub enum BloomFilterCompression {
@@ -2198,7 +2198,7 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterCompression {
         }
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct BloomFilterHeader {
@@ -2275,7 +2275,7 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterHeader {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct PageHeader<'i> {
@@ -2375,7 +2375,7 @@ impl <'i> CompactThriftProtocol<'i> for PageHeader<'i> {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct KeyValue<'i> {
@@ -2437,7 +2437,7 @@ impl <'i> CompactThriftProtocol<'i> for KeyValue<'i> {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct SortingColumn {
@@ -2507,7 +2507,7 @@ impl <'i> CompactThriftProtocol<'i> for SortingColumn {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct PageEncodingStats {
@@ -2577,7 +2577,7 @@ impl <'i> CompactThriftProtocol<'i> for PageEncodingStats {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct ColumnMetaData<'i> {
@@ -2730,7 +2730,7 @@ impl <'i> CompactThriftProtocol<'i> for ColumnMetaData<'i> {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct EncryptionWithFooterKey {
@@ -2775,7 +2775,7 @@ impl <'i> CompactThriftProtocol<'i> for EncryptionWithFooterKey {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct EncryptionWithColumnKey<'i> {
@@ -2837,7 +2837,7 @@ impl <'i> CompactThriftProtocol<'i> for EncryptionWithColumnKey<'i> {
         Ok(())
     }
 }
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub enum ColumnCryptoMetaData<'i> {
@@ -2898,7 +2898,7 @@ impl <'i> CompactThriftProtocol<'i> for ColumnCryptoMetaData<'i> {
         }
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct ColumnChunk<'i> {
@@ -3002,7 +3002,7 @@ impl <'i> CompactThriftProtocol<'i> for ColumnChunk<'i> {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct RowGroup<'i> {
@@ -3096,7 +3096,7 @@ impl <'i> CompactThriftProtocol<'i> for RowGroup<'i> {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct TypeDefinedOrder {
@@ -3141,7 +3141,7 @@ impl <'i> CompactThriftProtocol<'i> for TypeDefinedOrder {
         Ok(())
     }
 }
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub enum ColumnOrder {
@@ -3192,7 +3192,7 @@ impl <'i> CompactThriftProtocol<'i> for ColumnOrder {
         }
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct PageLocation {
@@ -3262,7 +3262,7 @@ impl <'i> CompactThriftProtocol<'i> for PageLocation {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct OffsetIndex {
@@ -3324,7 +3324,7 @@ impl <'i> CompactThriftProtocol<'i> for OffsetIndex {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct ColumnIndex<'i> {
@@ -3419,7 +3419,7 @@ impl <'i> CompactThriftProtocol<'i> for ColumnIndex<'i> {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct AesGcmV1<'i> {
@@ -3482,7 +3482,7 @@ impl <'i> CompactThriftProtocol<'i> for AesGcmV1<'i> {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct AesGcmCtrV1<'i> {
@@ -3545,7 +3545,7 @@ impl <'i> CompactThriftProtocol<'i> for AesGcmCtrV1<'i> {
         Ok(())
     }
 }
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub enum EncryptionAlgorithm<'i> {
@@ -3606,7 +3606,7 @@ impl <'i> CompactThriftProtocol<'i> for EncryptionAlgorithm<'i> {
         }
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct FileMetaData<'i> {
@@ -3713,7 +3713,7 @@ impl <'i> CompactThriftProtocol<'i> for FileMetaData<'i> {
         Ok(())
     }
 }
-#[derive(Default, Clone, Debug)]
+#[derive(Default, Clone, Debug, PartialEq)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub struct FileCryptoMetaData<'i> {
