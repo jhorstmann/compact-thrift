@@ -151,7 +151,7 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
             impl $identifier {${
                 definition.fields.values.map {
                     """
-                pub const ${rustIdentifier(it.identifier)}: i32 = ${it.value};"""
+                pub const ${rustIdentifier(it.identifier)}: Self = Self(${it.value});"""
                 }.joinToString("")}
                 
                 pub fn value(&self) -> i32 {

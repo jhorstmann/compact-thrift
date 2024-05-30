@@ -1,5 +1,5 @@
 #[allow(non_snake_case)]
-// Generated on 2024-05-29T21:19:49.416375107Z
+// Generated on 2024-05-30T07:53:52.772289861Z
 use std::borrow::Cow;
 use std::marker::PhantomData;
 use compact_thrift_rs::*;
@@ -9,14 +9,14 @@ use compact_thrift_rs::*;
 pub struct Type(i32);
 
 impl Type {
-    pub const BOOLEAN: i32 = 0;
-    pub const INT32: i32 = 1;
-    pub const INT64: i32 = 2;
-    pub const INT96: i32 = 3;
-    pub const FLOAT: i32 = 4;
-    pub const DOUBLE: i32 = 5;
-    pub const BYTE_ARRAY: i32 = 6;
-    pub const FIXED_LEN_BYTE_ARRAY: i32 = 7;
+    pub const BOOLEAN: Self = Self(0);
+    pub const INT32: Self = Self(1);
+    pub const INT64: Self = Self(2);
+    pub const INT96: Self = Self(3);
+    pub const FLOAT: Self = Self(4);
+    pub const DOUBLE: Self = Self(5);
+    pub const BYTE_ARRAY: Self = Self(6);
+    pub const FIXED_LEN_BYTE_ARRAY: Self = Self(7);
 
     pub fn value(&self) -> i32 {
         self.0
@@ -45,28 +45,28 @@ impl <'i> CompactThriftProtocol<'i> for Type {
 pub struct ConvertedType(i32);
 
 impl ConvertedType {
-    pub const UTF8: i32 = 0;
-    pub const MAP: i32 = 1;
-    pub const MAP_KEY_VALUE: i32 = 2;
-    pub const LIST: i32 = 3;
-    pub const ENUM: i32 = 4;
-    pub const DECIMAL: i32 = 5;
-    pub const DATE: i32 = 6;
-    pub const TIME_MILLIS: i32 = 7;
-    pub const TIME_MICROS: i32 = 8;
-    pub const TIMESTAMP_MILLIS: i32 = 9;
-    pub const TIMESTAMP_MICROS: i32 = 10;
-    pub const UINT_8: i32 = 11;
-    pub const UINT_16: i32 = 12;
-    pub const UINT_32: i32 = 13;
-    pub const UINT_64: i32 = 14;
-    pub const INT_8: i32 = 15;
-    pub const INT_16: i32 = 16;
-    pub const INT_32: i32 = 17;
-    pub const INT_64: i32 = 18;
-    pub const JSON: i32 = 19;
-    pub const BSON: i32 = 20;
-    pub const INTERVAL: i32 = 21;
+    pub const UTF8: Self = Self(0);
+    pub const MAP: Self = Self(1);
+    pub const MAP_KEY_VALUE: Self = Self(2);
+    pub const LIST: Self = Self(3);
+    pub const ENUM: Self = Self(4);
+    pub const DECIMAL: Self = Self(5);
+    pub const DATE: Self = Self(6);
+    pub const TIME_MILLIS: Self = Self(7);
+    pub const TIME_MICROS: Self = Self(8);
+    pub const TIMESTAMP_MILLIS: Self = Self(9);
+    pub const TIMESTAMP_MICROS: Self = Self(10);
+    pub const UINT_8: Self = Self(11);
+    pub const UINT_16: Self = Self(12);
+    pub const UINT_32: Self = Self(13);
+    pub const UINT_64: Self = Self(14);
+    pub const INT_8: Self = Self(15);
+    pub const INT_16: Self = Self(16);
+    pub const INT_32: Self = Self(17);
+    pub const INT_64: Self = Self(18);
+    pub const JSON: Self = Self(19);
+    pub const BSON: Self = Self(20);
+    pub const INTERVAL: Self = Self(21);
 
     pub fn value(&self) -> i32 {
         self.0
@@ -95,9 +95,9 @@ impl <'i> CompactThriftProtocol<'i> for ConvertedType {
 pub struct FieldRepetitionType(i32);
 
 impl FieldRepetitionType {
-    pub const REQUIRED: i32 = 0;
-    pub const OPTIONAL: i32 = 1;
-    pub const REPEATED: i32 = 2;
+    pub const REQUIRED: Self = Self(0);
+    pub const OPTIONAL: Self = Self(1);
+    pub const REPEATED: Self = Self(2);
 
     pub fn value(&self) -> i32 {
         self.0
@@ -1501,15 +1501,15 @@ impl <'i> CompactThriftProtocol<'i> for SchemaElement<'i> {
 pub struct Encoding(i32);
 
 impl Encoding {
-    pub const PLAIN: i32 = 0;
-    pub const PLAIN_DICTIONARY: i32 = 2;
-    pub const RLE: i32 = 3;
-    pub const BIT_PACKED: i32 = 4;
-    pub const DELTA_BINARY_PACKED: i32 = 5;
-    pub const DELTA_LENGTH_BYTE_ARRAY: i32 = 6;
-    pub const DELTA_BYTE_ARRAY: i32 = 7;
-    pub const RLE_DICTIONARY: i32 = 8;
-    pub const BYTE_STREAM_SPLIT: i32 = 9;
+    pub const PLAIN: Self = Self(0);
+    pub const PLAIN_DICTIONARY: Self = Self(2);
+    pub const RLE: Self = Self(3);
+    pub const BIT_PACKED: Self = Self(4);
+    pub const DELTA_BINARY_PACKED: Self = Self(5);
+    pub const DELTA_LENGTH_BYTE_ARRAY: Self = Self(6);
+    pub const DELTA_BYTE_ARRAY: Self = Self(7);
+    pub const RLE_DICTIONARY: Self = Self(8);
+    pub const BYTE_STREAM_SPLIT: Self = Self(9);
 
     pub fn value(&self) -> i32 {
         self.0
@@ -1538,14 +1538,14 @@ impl <'i> CompactThriftProtocol<'i> for Encoding {
 pub struct CompressionCodec(i32);
 
 impl CompressionCodec {
-    pub const UNCOMPRESSED: i32 = 0;
-    pub const SNAPPY: i32 = 1;
-    pub const GZIP: i32 = 2;
-    pub const LZO: i32 = 3;
-    pub const BROTLI: i32 = 4;
-    pub const LZ4: i32 = 5;
-    pub const ZSTD: i32 = 6;
-    pub const LZ4_RAW: i32 = 7;
+    pub const UNCOMPRESSED: Self = Self(0);
+    pub const SNAPPY: Self = Self(1);
+    pub const GZIP: Self = Self(2);
+    pub const LZO: Self = Self(3);
+    pub const BROTLI: Self = Self(4);
+    pub const LZ4: Self = Self(5);
+    pub const ZSTD: Self = Self(6);
+    pub const LZ4_RAW: Self = Self(7);
 
     pub fn value(&self) -> i32 {
         self.0
@@ -1574,10 +1574,10 @@ impl <'i> CompactThriftProtocol<'i> for CompressionCodec {
 pub struct PageType(i32);
 
 impl PageType {
-    pub const DATA_PAGE: i32 = 0;
-    pub const INDEX_PAGE: i32 = 1;
-    pub const DICTIONARY_PAGE: i32 = 2;
-    pub const DATA_PAGE_V2: i32 = 3;
+    pub const DATA_PAGE: Self = Self(0);
+    pub const INDEX_PAGE: Self = Self(1);
+    pub const DICTIONARY_PAGE: Self = Self(2);
+    pub const DATA_PAGE_V2: Self = Self(3);
 
     pub fn value(&self) -> i32 {
         self.0
@@ -1606,9 +1606,9 @@ impl <'i> CompactThriftProtocol<'i> for PageType {
 pub struct BoundaryOrder(i32);
 
 impl BoundaryOrder {
-    pub const UNORDERED: i32 = 0;
-    pub const ASCENDING: i32 = 1;
-    pub const DESCENDING: i32 = 2;
+    pub const UNORDERED: Self = Self(0);
+    pub const ASCENDING: Self = Self(1);
+    pub const DESCENDING: Self = Self(2);
 
     pub fn value(&self) -> i32 {
         self.0
