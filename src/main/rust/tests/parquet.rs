@@ -1,5 +1,5 @@
 #[allow(non_snake_case)]
-// Generated on 2024-05-30T07:53:52.772289861Z
+// Generated on 2024-05-30T08:21:22.613061964Z
 use std::borrow::Cow;
 use std::marker::PhantomData;
 use compact_thrift_rs::*;
@@ -123,14 +123,14 @@ impl <'i> CompactThriftProtocol<'i> for FieldRepetitionType {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct SizeStatistics<'i> {
+pub struct SizeStatistics {
     pub unencoded_byte_array_data_bytes: Option<i64>,
     pub repetition_level_histogram: Option<Vec<i64>>,
     pub definition_level_histogram: Option<Vec<i64>>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for SizeStatistics<'i> {
+impl <'i> CompactThriftProtocol<'i> for SizeStatistics {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -196,7 +196,7 @@ pub struct Statistics<'i> {
     pub min_value: Option<Cow<'i, [u8]>>,
     pub is_max_value_exact: Option<bool>,
     pub is_min_value_exact: Option<bool>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
 impl <'i> CompactThriftProtocol<'i> for Statistics<'i> {
@@ -281,11 +281,11 @@ impl <'i> CompactThriftProtocol<'i> for Statistics<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct StringType<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct StringType {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for StringType<'i> {
+impl <'i> CompactThriftProtocol<'i> for StringType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -327,11 +327,11 @@ impl <'i> CompactThriftProtocol<'i> for StringType<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct UUIDType<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct UUIDType {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for UUIDType<'i> {
+impl <'i> CompactThriftProtocol<'i> for UUIDType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -373,11 +373,11 @@ impl <'i> CompactThriftProtocol<'i> for UUIDType<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct MapType<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct MapType {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for MapType<'i> {
+impl <'i> CompactThriftProtocol<'i> for MapType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -419,11 +419,11 @@ impl <'i> CompactThriftProtocol<'i> for MapType<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct ListType<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct ListType {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for ListType<'i> {
+impl <'i> CompactThriftProtocol<'i> for ListType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -465,11 +465,11 @@ impl <'i> CompactThriftProtocol<'i> for ListType<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct EnumType<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct EnumType {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for EnumType<'i> {
+impl <'i> CompactThriftProtocol<'i> for EnumType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -511,11 +511,11 @@ impl <'i> CompactThriftProtocol<'i> for EnumType<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct DateType<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct DateType {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for DateType<'i> {
+impl <'i> CompactThriftProtocol<'i> for DateType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -557,11 +557,11 @@ impl <'i> CompactThriftProtocol<'i> for DateType<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct Float16Type<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct Float16Type {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for Float16Type<'i> {
+impl <'i> CompactThriftProtocol<'i> for Float16Type {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -603,11 +603,11 @@ impl <'i> CompactThriftProtocol<'i> for Float16Type<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct NullType<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct NullType {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for NullType<'i> {
+impl <'i> CompactThriftProtocol<'i> for NullType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -649,13 +649,13 @@ impl <'i> CompactThriftProtocol<'i> for NullType<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct DecimalType<'i> {
+pub struct DecimalType {
     pub scale: i32,
     pub precision: i32,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for DecimalType<'i> {
+impl <'i> CompactThriftProtocol<'i> for DecimalType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -713,11 +713,11 @@ impl <'i> CompactThriftProtocol<'i> for DecimalType<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct MilliSeconds<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct MilliSeconds {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for MilliSeconds<'i> {
+impl <'i> CompactThriftProtocol<'i> for MilliSeconds {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -759,11 +759,11 @@ impl <'i> CompactThriftProtocol<'i> for MilliSeconds<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct MicroSeconds<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct MicroSeconds {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for MicroSeconds<'i> {
+impl <'i> CompactThriftProtocol<'i> for MicroSeconds {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -805,11 +805,11 @@ impl <'i> CompactThriftProtocol<'i> for MicroSeconds<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct NanoSeconds<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct NanoSeconds {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for NanoSeconds<'i> {
+impl <'i> CompactThriftProtocol<'i> for NanoSeconds {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -851,17 +851,17 @@ impl <'i> CompactThriftProtocol<'i> for NanoSeconds<'i> {
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub enum TimeUnit<'i> {
-    MILLIS(MilliSeconds<'i>),
-    MICROS(MicroSeconds<'i>),
-    NANOS(NanoSeconds<'i>),
+pub enum TimeUnit {
+    MILLIS(MilliSeconds),
+    MICROS(MicroSeconds),
+    NANOS(NanoSeconds),
 }
-impl Default for TimeUnit<'_> {
+impl Default for TimeUnit {
     fn default() -> Self {
         Self::MILLIS(Default::default())
     }
 }
-impl <'i> CompactThriftProtocol<'i> for TimeUnit<'i> {
+impl <'i> CompactThriftProtocol<'i> for TimeUnit {
     const FIELD_TYPE: u8 = 12;
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let field_type = input.read_byte()?;
@@ -922,13 +922,13 @@ impl <'i> CompactThriftProtocol<'i> for TimeUnit<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct TimestampType<'i> {
+pub struct TimestampType {
     pub isAdjustedToUTC: bool,
-    pub unit: TimeUnit<'i>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    pub unit: TimeUnit,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for TimestampType<'i> {
+impl <'i> CompactThriftProtocol<'i> for TimestampType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -986,13 +986,13 @@ impl <'i> CompactThriftProtocol<'i> for TimestampType<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct TimeType<'i> {
+pub struct TimeType {
     pub isAdjustedToUTC: bool,
-    pub unit: TimeUnit<'i>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    pub unit: TimeUnit,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for TimeType<'i> {
+impl <'i> CompactThriftProtocol<'i> for TimeType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -1050,13 +1050,13 @@ impl <'i> CompactThriftProtocol<'i> for TimeType<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct IntType<'i> {
+pub struct IntType {
     pub bitWidth: i8,
     pub isSigned: bool,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for IntType<'i> {
+impl <'i> CompactThriftProtocol<'i> for IntType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -1114,11 +1114,11 @@ impl <'i> CompactThriftProtocol<'i> for IntType<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct JsonType<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct JsonType {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for JsonType<'i> {
+impl <'i> CompactThriftProtocol<'i> for JsonType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -1160,11 +1160,11 @@ impl <'i> CompactThriftProtocol<'i> for JsonType<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct BsonType<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct BsonType {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for BsonType<'i> {
+impl <'i> CompactThriftProtocol<'i> for BsonType {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -1206,28 +1206,28 @@ impl <'i> CompactThriftProtocol<'i> for BsonType<'i> {
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub enum LogicalType<'i> {
-    STRING(StringType<'i>),
-    MAP(MapType<'i>),
-    LIST(ListType<'i>),
-    ENUM(EnumType<'i>),
-    DECIMAL(DecimalType<'i>),
-    DATE(DateType<'i>),
-    TIME(TimeType<'i>),
-    TIMESTAMP(TimestampType<'i>),
-    INTEGER(IntType<'i>),
-    UNKNOWN(NullType<'i>),
-    JSON(JsonType<'i>),
-    BSON(BsonType<'i>),
-    UUID(UUIDType<'i>),
-    FLOAT16(Float16Type<'i>),
+pub enum LogicalType {
+    STRING(StringType),
+    MAP(MapType),
+    LIST(ListType),
+    ENUM(EnumType),
+    DECIMAL(DecimalType),
+    DATE(DateType),
+    TIME(TimeType),
+    TIMESTAMP(TimestampType),
+    INTEGER(IntType),
+    UNKNOWN(NullType),
+    JSON(JsonType),
+    BSON(BsonType),
+    UUID(UUIDType),
+    FLOAT16(Float16Type),
 }
-impl Default for LogicalType<'_> {
+impl Default for LogicalType {
     fn default() -> Self {
         Self::STRING(Default::default())
     }
 }
-impl <'i> CompactThriftProtocol<'i> for LogicalType<'i> {
+impl <'i> CompactThriftProtocol<'i> for LogicalType {
     const FIELD_TYPE: u8 = 12;
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let field_type = input.read_byte()?;
@@ -1397,8 +1397,8 @@ pub struct SchemaElement<'i> {
     pub scale: Option<i32>,
     pub precision: Option<i32>,
     pub field_id: Option<i32>,
-    pub logicalType: Option<LogicalType<'i>>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    pub logicalType: Option<LogicalType>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
 impl <'i> CompactThriftProtocol<'i> for SchemaElement<'i> {
@@ -1640,7 +1640,7 @@ pub struct DataPageHeader<'i> {
     pub definition_level_encoding: Encoding,
     pub repetition_level_encoding: Encoding,
     pub statistics: Option<Statistics<'i>>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
 impl <'i> CompactThriftProtocol<'i> for DataPageHeader<'i> {
@@ -1718,11 +1718,11 @@ impl <'i> CompactThriftProtocol<'i> for DataPageHeader<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct IndexPageHeader<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct IndexPageHeader {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for IndexPageHeader<'i> {
+impl <'i> CompactThriftProtocol<'i> for IndexPageHeader {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -1764,14 +1764,14 @@ impl <'i> CompactThriftProtocol<'i> for IndexPageHeader<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct DictionaryPageHeader<'i> {
+pub struct DictionaryPageHeader {
     pub num_values: i32,
     pub encoding: Encoding,
     pub is_sorted: Option<bool>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for DictionaryPageHeader<'i> {
+impl <'i> CompactThriftProtocol<'i> for DictionaryPageHeader {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -1843,7 +1843,7 @@ pub struct DataPageHeaderV2<'i> {
     pub repetition_levels_byte_length: i32,
     pub is_compressed: Option<bool>,
     pub statistics: Option<Statistics<'i>>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
 impl <'i> CompactThriftProtocol<'i> for DataPageHeaderV2<'i> {
@@ -1938,11 +1938,11 @@ impl <'i> CompactThriftProtocol<'i> for DataPageHeaderV2<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct SplitBlockAlgorithm<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct SplitBlockAlgorithm {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for SplitBlockAlgorithm<'i> {
+impl <'i> CompactThriftProtocol<'i> for SplitBlockAlgorithm {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -1984,15 +1984,15 @@ impl <'i> CompactThriftProtocol<'i> for SplitBlockAlgorithm<'i> {
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub enum BloomFilterAlgorithm<'i> {
-    BLOCK(SplitBlockAlgorithm<'i>),
+pub enum BloomFilterAlgorithm {
+    BLOCK(SplitBlockAlgorithm),
 }
-impl Default for BloomFilterAlgorithm<'_> {
+impl Default for BloomFilterAlgorithm {
     fn default() -> Self {
         Self::BLOCK(Default::default())
     }
 }
-impl <'i> CompactThriftProtocol<'i> for BloomFilterAlgorithm<'i> {
+impl <'i> CompactThriftProtocol<'i> for BloomFilterAlgorithm {
     const FIELD_TYPE: u8 = 12;
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let field_type = input.read_byte()?;
@@ -2035,11 +2035,11 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterAlgorithm<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct XxHash<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct XxHash {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for XxHash<'i> {
+impl <'i> CompactThriftProtocol<'i> for XxHash {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -2081,15 +2081,15 @@ impl <'i> CompactThriftProtocol<'i> for XxHash<'i> {
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub enum BloomFilterHash<'i> {
-    XXHASH(XxHash<'i>),
+pub enum BloomFilterHash {
+    XXHASH(XxHash),
 }
-impl Default for BloomFilterHash<'_> {
+impl Default for BloomFilterHash {
     fn default() -> Self {
         Self::XXHASH(Default::default())
     }
 }
-impl <'i> CompactThriftProtocol<'i> for BloomFilterHash<'i> {
+impl <'i> CompactThriftProtocol<'i> for BloomFilterHash {
     const FIELD_TYPE: u8 = 12;
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let field_type = input.read_byte()?;
@@ -2132,11 +2132,11 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterHash<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct Uncompressed<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct Uncompressed {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for Uncompressed<'i> {
+impl <'i> CompactThriftProtocol<'i> for Uncompressed {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -2178,15 +2178,15 @@ impl <'i> CompactThriftProtocol<'i> for Uncompressed<'i> {
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub enum BloomFilterCompression<'i> {
-    UNCOMPRESSED(Uncompressed<'i>),
+pub enum BloomFilterCompression {
+    UNCOMPRESSED(Uncompressed),
 }
-impl Default for BloomFilterCompression<'_> {
+impl Default for BloomFilterCompression {
     fn default() -> Self {
         Self::UNCOMPRESSED(Default::default())
     }
 }
-impl <'i> CompactThriftProtocol<'i> for BloomFilterCompression<'i> {
+impl <'i> CompactThriftProtocol<'i> for BloomFilterCompression {
     const FIELD_TYPE: u8 = 12;
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let field_type = input.read_byte()?;
@@ -2229,15 +2229,15 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterCompression<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct BloomFilterHeader<'i> {
+pub struct BloomFilterHeader {
     pub numBytes: i32,
-    pub algorithm: BloomFilterAlgorithm<'i>,
-    pub hash: BloomFilterHash<'i>,
-    pub compression: BloomFilterCompression<'i>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    pub algorithm: BloomFilterAlgorithm,
+    pub hash: BloomFilterHash,
+    pub compression: BloomFilterCompression,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for BloomFilterHeader<'i> {
+impl <'i> CompactThriftProtocol<'i> for BloomFilterHeader {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -2313,10 +2313,10 @@ pub struct PageHeader<'i> {
     pub compressed_page_size: i32,
     pub crc: Option<i32>,
     pub data_page_header: Option<DataPageHeader<'i>>,
-    pub index_page_header: Option<IndexPageHeader<'i>>,
-    pub dictionary_page_header: Option<DictionaryPageHeader<'i>>,
+    pub index_page_header: Option<IndexPageHeader>,
+    pub dictionary_page_header: Option<DictionaryPageHeader>,
     pub data_page_header_v2: Option<DataPageHeaderV2<'i>>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
 impl <'i> CompactThriftProtocol<'i> for PageHeader<'i> {
@@ -2411,7 +2411,7 @@ impl <'i> CompactThriftProtocol<'i> for PageHeader<'i> {
 pub struct KeyValue<'i> {
     pub key: Cow<'i, str>,
     pub value: Option<Cow<'i, str>>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
 impl <'i> CompactThriftProtocol<'i> for KeyValue<'i> {
@@ -2471,14 +2471,14 @@ impl <'i> CompactThriftProtocol<'i> for KeyValue<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct SortingColumn<'i> {
+pub struct SortingColumn {
     pub column_idx: i32,
     pub descending: bool,
     pub nulls_first: bool,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for SortingColumn<'i> {
+impl <'i> CompactThriftProtocol<'i> for SortingColumn {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -2542,14 +2542,14 @@ impl <'i> CompactThriftProtocol<'i> for SortingColumn<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct PageEncodingStats<'i> {
+pub struct PageEncodingStats {
     pub page_type: PageType,
     pub encoding: Encoding,
     pub count: i32,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for PageEncodingStats<'i> {
+impl <'i> CompactThriftProtocol<'i> for PageEncodingStats {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -2626,11 +2626,11 @@ pub struct ColumnMetaData<'i> {
     pub index_page_offset: Option<i64>,
     pub dictionary_page_offset: Option<i64>,
     pub statistics: Option<Statistics<'i>>,
-    pub encoding_stats: Option<Vec<PageEncodingStats<'i>>>,
+    pub encoding_stats: Option<Vec<PageEncodingStats>>,
     pub bloom_filter_offset: Option<i64>,
     pub bloom_filter_length: Option<i32>,
-    pub size_statistics: Option<SizeStatistics<'i>>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    pub size_statistics: Option<SizeStatistics>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
 impl <'i> CompactThriftProtocol<'i> for ColumnMetaData<'i> {
@@ -2767,11 +2767,11 @@ impl <'i> CompactThriftProtocol<'i> for ColumnMetaData<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct EncryptionWithFooterKey<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct EncryptionWithFooterKey {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for EncryptionWithFooterKey<'i> {
+impl <'i> CompactThriftProtocol<'i> for EncryptionWithFooterKey {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -2816,7 +2816,7 @@ impl <'i> CompactThriftProtocol<'i> for EncryptionWithFooterKey<'i> {
 pub struct EncryptionWithColumnKey<'i> {
     pub path_in_schema: Vec<Cow<'i, str>>,
     pub key_metadata: Option<Cow<'i, [u8]>>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
 impl <'i> CompactThriftProtocol<'i> for EncryptionWithColumnKey<'i> {
@@ -2877,10 +2877,10 @@ impl <'i> CompactThriftProtocol<'i> for EncryptionWithColumnKey<'i> {
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
 pub enum ColumnCryptoMetaData<'i> {
-    ENCRYPTION_WITH_FOOTER_KEY(EncryptionWithFooterKey<'i>),
+    ENCRYPTION_WITH_FOOTER_KEY(EncryptionWithFooterKey),
     ENCRYPTION_WITH_COLUMN_KEY(EncryptionWithColumnKey<'i>),
 }
-impl Default for ColumnCryptoMetaData<'_> {
+impl<'i> Default for ColumnCryptoMetaData<'i> {
     fn default() -> Self {
         Self::ENCRYPTION_WITH_FOOTER_KEY(Default::default())
     }
@@ -2947,7 +2947,7 @@ pub struct ColumnChunk<'i> {
     pub column_index_length: Option<i32>,
     pub crypto_metadata: Option<ColumnCryptoMetaData<'i>>,
     pub encrypted_column_metadata: Option<Cow<'i, [u8]>>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
 impl <'i> CompactThriftProtocol<'i> for ColumnChunk<'i> {
@@ -3046,11 +3046,11 @@ pub struct RowGroup<'i> {
     pub columns: Vec<ColumnChunk<'i>>,
     pub total_byte_size: i64,
     pub num_rows: i64,
-    pub sorting_columns: Option<Vec<SortingColumn<'i>>>,
+    pub sorting_columns: Option<Vec<SortingColumn>>,
     pub file_offset: Option<i64>,
     pub total_compressed_size: Option<i64>,
     pub ordinal: Option<i16>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
 impl <'i> CompactThriftProtocol<'i> for RowGroup<'i> {
@@ -3137,11 +3137,11 @@ impl <'i> CompactThriftProtocol<'i> for RowGroup<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct TypeDefinedOrder<'i> {
-    __phantom_lifetime: PhantomData<&'i ()>,
+pub struct TypeDefinedOrder {
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for TypeDefinedOrder<'i> {
+impl <'i> CompactThriftProtocol<'i> for TypeDefinedOrder {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -3183,15 +3183,15 @@ impl <'i> CompactThriftProtocol<'i> for TypeDefinedOrder<'i> {
 #[derive(Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub enum ColumnOrder<'i> {
-    TYPE_ORDER(TypeDefinedOrder<'i>),
+pub enum ColumnOrder {
+    TYPE_ORDER(TypeDefinedOrder),
 }
-impl Default for ColumnOrder<'_> {
+impl Default for ColumnOrder {
     fn default() -> Self {
         Self::TYPE_ORDER(Default::default())
     }
 }
-impl <'i> CompactThriftProtocol<'i> for ColumnOrder<'i> {
+impl <'i> CompactThriftProtocol<'i> for ColumnOrder {
     const FIELD_TYPE: u8 = 12;
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let field_type = input.read_byte()?;
@@ -3234,14 +3234,14 @@ impl <'i> CompactThriftProtocol<'i> for ColumnOrder<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct PageLocation<'i> {
+pub struct PageLocation {
     pub offset: i64,
     pub compressed_page_size: i32,
     pub first_row_index: i64,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for PageLocation<'i> {
+impl <'i> CompactThriftProtocol<'i> for PageLocation {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -3305,13 +3305,13 @@ impl <'i> CompactThriftProtocol<'i> for PageLocation<'i> {
 #[derive(Default, Clone, Debug)]
 #[allow(non_camel_case_types)]
 #[allow(non_snake_case)]
-pub struct OffsetIndex<'i> {
-    pub page_locations: Vec<PageLocation<'i>>,
+pub struct OffsetIndex {
+    pub page_locations: Vec<PageLocation>,
     pub unencoded_byte_array_data_bytes: Option<Vec<i64>>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
-impl <'i> CompactThriftProtocol<'i> for OffsetIndex<'i> {
+impl <'i> CompactThriftProtocol<'i> for OffsetIndex {
     const FIELD_TYPE: u8 = 12;
 
     #[inline(never)]
@@ -3376,7 +3376,7 @@ pub struct ColumnIndex<'i> {
     pub null_counts: Option<Vec<i64>>,
     pub repetition_level_histograms: Option<Vec<i64>>,
     pub definition_level_histograms: Option<Vec<i64>>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
 impl <'i> CompactThriftProtocol<'i> for ColumnIndex<'i> {
@@ -3468,7 +3468,7 @@ pub struct AesGcmV1<'i> {
     pub aad_prefix: Option<Cow<'i, [u8]>>,
     pub aad_file_unique: Option<Cow<'i, [u8]>>,
     pub supply_aad_prefix: Option<bool>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
 impl <'i> CompactThriftProtocol<'i> for AesGcmV1<'i> {
@@ -3532,7 +3532,7 @@ pub struct AesGcmCtrV1<'i> {
     pub aad_prefix: Option<Cow<'i, [u8]>>,
     pub aad_file_unique: Option<Cow<'i, [u8]>>,
     pub supply_aad_prefix: Option<bool>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
 impl <'i> CompactThriftProtocol<'i> for AesGcmCtrV1<'i> {
@@ -3596,7 +3596,7 @@ pub enum EncryptionAlgorithm<'i> {
     AES_GCM_V1(AesGcmV1<'i>),
     AES_GCM_CTR_V1(AesGcmCtrV1<'i>),
 }
-impl Default for EncryptionAlgorithm<'_> {
+impl<'i> Default for EncryptionAlgorithm<'i> {
     fn default() -> Self {
         Self::AES_GCM_V1(Default::default())
     }
@@ -3660,10 +3660,10 @@ pub struct FileMetaData<'i> {
     pub row_groups: Vec<RowGroup<'i>>,
     pub key_value_metadata: Option<Vec<KeyValue<'i>>>,
     pub created_by: Option<Cow<'i, str>>,
-    pub column_orders: Option<Vec<ColumnOrder<'i>>>,
+    pub column_orders: Option<Vec<ColumnOrder>>,
     pub encryption_algorithm: Option<EncryptionAlgorithm<'i>>,
     pub footer_signing_key_metadata: Option<Cow<'i, [u8]>>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
 impl <'i> CompactThriftProtocol<'i> for FileMetaData<'i> {
@@ -3764,7 +3764,7 @@ impl <'i> CompactThriftProtocol<'i> for FileMetaData<'i> {
 pub struct FileCryptoMetaData<'i> {
     pub encryption_algorithm: EncryptionAlgorithm<'i>,
     pub key_metadata: Option<Cow<'i, [u8]>>,
-    __phantom_lifetime: PhantomData<&'i ()>,
+    //__phantom_lifetime: PhantomData<&'i ()>,
 }
 
 impl <'i> CompactThriftProtocol<'i> for FileCryptoMetaData<'i> {

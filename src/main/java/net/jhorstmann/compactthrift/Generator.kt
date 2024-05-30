@@ -13,22 +13,46 @@ fun rustIdentifier(identifier: String): String {
     }
 }
 
+fun fieldNeedsLifeTime(document: Document, fieldType: FieldType?): Boolean {
+    return if (fieldType is BaseType) {
+        fieldType.type in listOf(BuiltinType.BINARY, BuiltinType.STRING)
+    } else if (fieldType is NamedType) {
+        definitionNeedsLifeTime(document, document.definitions[fieldType.name])
+    } else if (fieldType is ListType) {
+        fieldNeedsLifeTime(document, fieldType.elementType)
+    } else if (fieldType is SetType) {
+        fieldNeedsLifeTime(document, fieldType.elementType)
+    } else if (fieldType is MapType) {
+        fieldNeedsLifeTime(document, fieldType.keyType) || fieldNeedsLifeTime(document, fieldType.valueType)
+    } else {
+        false
+    }
+}
+fun definitionNeedsLifeTime(document: Document, definition: Definition?): Boolean {
+    val fields = when (definition) {
+        is StructDefinition -> definition.fields.values
+        is UnionDefinition -> definition.fields.values
+        else -> emptyList()
+    }
+    return fields.any {
+        fieldNeedsLifeTime(document, it.type)
+    }
+}
+
+fun lifetimeAnnotation(document: Document, definition: Definition?): String {
+    return if (definition != null && definitionNeedsLifeTime(document, definition)) {
+        "<'i>"
+    } else {
+        ""
+    }
+}
+
 private fun rustConstantValue(value: ConstValue): String {
     return value.visit(RustConstValueVisitor)
 }
 
 class RustFieldTypeVisitor(val document: Document) : FieldTypeVisitor<String> {
-    fun lifetimeAnnotation(name: String): String {
-        val definition = document.definitions[name]
-        return if (definition is StructDefinition) {
-            "<'i>"
-        } else if (definition is UnionDefinition) {
-            "<'i>"
-        } else {
-            ""
-        }
-    }
-    override fun visitNamedType(namedType: NamedType): String = "${namedType.name}${lifetimeAnnotation(namedType.name)}"
+    override fun visitNamedType(namedType: NamedType): String = "${namedType.name}${lifetimeAnnotation(document, document.definitions[namedType.name])}"
 
     override fun visitBaseType(baseType: BaseType): String {
         return when (baseType.type) {
@@ -183,16 +207,17 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
 
     override fun visitStruct(definition: StructDefinition) {
         val identifier = rustIdentifier(definition.identifier)
+        val lifetimeAnnotation = lifetimeAnnotation(document, definition)
         code.appendln("""
             #[derive(Default, Clone, Debug)]
             #[allow(non_camel_case_types)]
             #[allow(non_snake_case)]
-            pub struct $identifier<'i> {${definition.fields.values.map { """
+            pub struct $identifier$lifetimeAnnotation {${definition.fields.values.map { """
                 pub ${rustIdentifier(it.identifier)}: ${rustType(it.type, it.req)},""" }.joinToString("")}
-                __phantom_lifetime: PhantomData<&'i ()>,
+                //__phantom_lifetime: PhantomData<&'i ()>,
             }
             
-            impl <'i> CompactThriftProtocol<'i> for $identifier<'i> {
+            impl <'i> CompactThriftProtocol<'i> for $identifier$lifetimeAnnotation {
                 const FIELD_TYPE: u8 = 12;
                 
                 #[inline(never)]
@@ -246,19 +271,21 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
 
     override fun visitUnion(definition: UnionDefinition) {
         val identifier = definition.identifier
+        val lifetimeAnnotation = lifetimeAnnotation(document, definition)
+
         code.appendln(
             """
             #[derive(Clone, Debug)]
             #[allow(non_camel_case_types)]
             #[allow(non_snake_case)]
-            pub enum $identifier<'i> {${
+            pub enum $identifier$lifetimeAnnotation {${
                 definition.fields.values.map { """
                 ${it.identifier}(${rustType(it.type, FieldReq.REQUIRED)}),"""
                 }.joinToString("")}
             }""".trimIndent())
 
         code.appendln("""
-            impl Default for $identifier<'_> {
+            impl$lifetimeAnnotation Default for $identifier$lifetimeAnnotation {
                 fn default() -> Self {
                     Self::${definition.fields.values.first().identifier}(Default::default())
                 }
@@ -266,7 +293,7 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
             """.trimIndent())
 
         code.appendln("""
-            impl <'i> CompactThriftProtocol<'i> for $identifier<'i> {
+            impl <'i> CompactThriftProtocol<'i> for $identifier$lifetimeAnnotation {
                 const FIELD_TYPE: u8 = 12;
                 fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
                     let field_type = input.read_byte()?;
