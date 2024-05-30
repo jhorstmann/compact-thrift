@@ -1,4 +1,6 @@
 use std::borrow::Cow;
+use std::error::Error;
+use std::fmt::{Debug, Display, Formatter};
 use std::io::{Error as IOError, ErrorKind, Read, Write};
 use std::str::{from_utf8, from_utf8_unchecked};
 
@@ -17,6 +19,16 @@ pub enum ThriftError {
     InvalidType,
     ReserveError,
     IO(ErrorKind)
+}
+
+impl Display for ThriftError {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        <Self as Debug>::fmt(self, f)
+    }
+}
+
+impl Error for ThriftError {
+
 }
 
 impl From<IOError> for ThriftError {
