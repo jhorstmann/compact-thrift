@@ -234,18 +234,9 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
                     let mut ${rustIdentifier(it.identifier)}_set_: bool = false;""" }.joinToString("")}
                     let mut last_field_id = 0_i16;
                     loop {
-                        let field_header = input.read_byte()?;
-            
-                        if field_header == 0 {
+                        let field_type = input.read_field_header(&mut last_field_id)?;
+                        if field_type == 0 {
                             break;
-                        }
-            
-                        let field_type = field_header & 0x0F;
-                        let field_delta = field_header >> 4;
-                        if field_delta != 0 {
-                            last_field_id += field_delta as i16;
-                        } else {
-                            last_field_id = input.read_i16()?;
                         }
                         
                         match last_field_id {${definition.fields.values.map { """

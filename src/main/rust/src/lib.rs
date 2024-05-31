@@ -140,6 +140,23 @@ pub trait CompactThriftInput<'i> {
     fn skip_field(&mut self, field_type: u8) -> Result<(), ThriftError> {
         skip_field(self, field_type)
     }
+    fn read_field_header(&mut self, last_field_id: &mut i16) -> Result<u8, ThriftError> {
+        let field_header = self.read_byte()?;
+
+        if field_header == 0 {
+            return Ok(0)
+        }
+
+        let field_type = field_header & 0x0F;
+        let field_delta = field_header >> 4;
+        if field_delta != 0 {
+            *last_field_id += field_delta as i16;
+        } else {
+            *last_field_id = self.read_i16()?;
+        }
+
+        Ok(field_type)
+    }
 }
 
 #[inline]

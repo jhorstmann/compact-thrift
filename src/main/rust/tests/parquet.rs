@@ -1,5 +1,5 @@
 #[allow(non_snake_case)]
-// Generated on 2024-05-30T20:57:05.810035776Z
+// Generated on 2024-05-31T07:55:53.079073875Z
 use std::borrow::Cow;
 use compact_thrift_rs::*;
 
@@ -148,18 +148,9 @@ impl <'i> CompactThriftProtocol<'i> for SizeStatistics {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -233,18 +224,9 @@ impl <'i> CompactThriftProtocol<'i> for Statistics<'i> {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -327,18 +309,9 @@ impl <'i> CompactThriftProtocol<'i> for StringType {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -381,18 +354,9 @@ impl <'i> CompactThriftProtocol<'i> for UUIDType {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -435,18 +399,9 @@ impl <'i> CompactThriftProtocol<'i> for MapType {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -489,18 +444,9 @@ impl <'i> CompactThriftProtocol<'i> for ListType {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -543,18 +489,9 @@ impl <'i> CompactThriftProtocol<'i> for EnumType {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -597,18 +534,9 @@ impl <'i> CompactThriftProtocol<'i> for DateType {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -651,18 +579,9 @@ impl <'i> CompactThriftProtocol<'i> for Float16Type {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -705,18 +624,9 @@ impl <'i> CompactThriftProtocol<'i> for NullType {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -765,18 +675,9 @@ impl <'i> CompactThriftProtocol<'i> for DecimalType {
         let mut precision_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -833,18 +734,9 @@ impl <'i> CompactThriftProtocol<'i> for MilliSeconds {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -887,18 +779,9 @@ impl <'i> CompactThriftProtocol<'i> for MicroSeconds {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -941,18 +824,9 @@ impl <'i> CompactThriftProtocol<'i> for NanoSeconds {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -1078,18 +952,9 @@ impl <'i> CompactThriftProtocol<'i> for TimestampType {
         let mut unit_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -1152,18 +1017,9 @@ impl <'i> CompactThriftProtocol<'i> for TimeType {
         let mut unit_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -1226,18 +1082,9 @@ impl <'i> CompactThriftProtocol<'i> for IntType {
         let mut isSigned_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -1294,18 +1141,9 @@ impl <'i> CompactThriftProtocol<'i> for JsonType {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -1348,18 +1186,9 @@ impl <'i> CompactThriftProtocol<'i> for BsonType {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -1610,18 +1439,9 @@ impl <'i> CompactThriftProtocol<'i> for SchemaElement<'i> {
         let mut name_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -1868,18 +1688,9 @@ impl <'i> CompactThriftProtocol<'i> for DataPageHeader<'i> {
         let mut repetition_level_encoding_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -1951,18 +1762,9 @@ impl <'i> CompactThriftProtocol<'i> for IndexPageHeader {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -2013,18 +1815,9 @@ impl <'i> CompactThriftProtocol<'i> for DictionaryPageHeader {
         let mut encoding_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -2108,18 +1901,9 @@ impl <'i> CompactThriftProtocol<'i> for DataPageHeaderV2<'i> {
         let mut repetition_levels_byte_length_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -2206,18 +1990,9 @@ impl <'i> CompactThriftProtocol<'i> for SplitBlockAlgorithm {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -2317,18 +2092,9 @@ impl <'i> CompactThriftProtocol<'i> for XxHash {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -2428,18 +2194,9 @@ impl <'i> CompactThriftProtocol<'i> for Uncompressed {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -2551,18 +2308,9 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterHeader {
         let mut compression_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -2648,18 +2396,9 @@ impl <'i> CompactThriftProtocol<'i> for PageHeader<'i> {
         let mut compressed_page_size_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -2751,18 +2490,9 @@ impl <'i> CompactThriftProtocol<'i> for KeyValue<'i> {
         let mut key_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -2828,18 +2558,9 @@ impl <'i> CompactThriftProtocol<'i> for SortingColumn {
         let mut nulls_first_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -2910,18 +2631,9 @@ impl <'i> CompactThriftProtocol<'i> for PageEncodingStats {
         let mut count_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -3023,18 +2735,9 @@ impl <'i> CompactThriftProtocol<'i> for ColumnMetaData<'i> {
         let mut data_page_offset_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -3161,18 +2864,9 @@ impl <'i> CompactThriftProtocol<'i> for EncryptionWithFooterKey {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -3220,18 +2914,9 @@ impl <'i> CompactThriftProtocol<'i> for EncryptionWithColumnKey<'i> {
         let mut path_in_schema_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -3374,18 +3059,9 @@ impl <'i> CompactThriftProtocol<'i> for ColumnChunk<'i> {
         let mut file_offset_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -3494,18 +3170,9 @@ impl <'i> CompactThriftProtocol<'i> for RowGroup<'i> {
         let mut num_rows_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -3587,18 +3254,9 @@ impl <'i> CompactThriftProtocol<'i> for TypeDefinedOrder {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -3707,18 +3365,9 @@ impl <'i> CompactThriftProtocol<'i> for PageLocation {
         let mut first_row_index_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -3785,18 +3434,9 @@ impl <'i> CompactThriftProtocol<'i> for OffsetIndex {
         let mut page_locations_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -3871,18 +3511,9 @@ impl <'i> CompactThriftProtocol<'i> for ColumnIndex<'i> {
         let mut boundary_order_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -3970,18 +3601,9 @@ impl <'i> CompactThriftProtocol<'i> for AesGcmV1<'i> {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -4045,18 +3667,9 @@ impl <'i> CompactThriftProtocol<'i> for AesGcmCtrV1<'i> {
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -4203,18 +3816,9 @@ impl <'i> CompactThriftProtocol<'i> for FileMetaData<'i> {
         let mut row_groups_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
@@ -4311,18 +3915,9 @@ impl <'i> CompactThriftProtocol<'i> for FileCryptoMetaData<'i> {
         let mut encryption_algorithm_set_: bool = false;
         let mut last_field_id = 0_i16;
         loop {
-            let field_header = input.read_byte()?;
-
-            if field_header == 0 {
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type == 0 {
                 break;
-            }
-
-            let field_type = field_header & 0x0F;
-            let field_delta = field_header >> 4;
-            if field_delta != 0 {
-                last_field_id += field_delta as i16;
-            } else {
-                last_field_id = input.read_i16()?;
             }
 
             match last_field_id {
