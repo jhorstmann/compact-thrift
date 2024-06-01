@@ -240,17 +240,11 @@ fn skip_field<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T, field_type:
         }
         12 => {
             // struct | union
+            let mut last_field_id = 0_i16;
             loop {
-                let field_header = input.read_byte()?;
-
-                if field_header == 0 {
+                let field_type = input.read_field_header(&mut last_field_id)?;
+                if field_type == 0 {
                     break;
-                }
-
-                let field_type = field_header & 0x0F;
-                let field_delta = field_header >> 4;
-                if field_delta == 0 {
-                    let _field_id = input.read_i16()?;
                 }
                 skip_field(input, field_type)?;
             }
