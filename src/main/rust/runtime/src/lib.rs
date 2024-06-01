@@ -302,6 +302,7 @@ impl<R: Read + ?Sized> CompactThriftInput<'static> for R {
 
 }
 
+#[derive(Clone)]
 pub struct SliceInput<'a>(&'a [u8]);
 
 impl <'a> SliceInput<'a> {

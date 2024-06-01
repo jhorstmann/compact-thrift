@@ -13,3 +13,10 @@ rust-version = "1.76.0"
 
 [dependencies]
 compact-thrift-rs = { version = "0.1.0", path = "../runtime" }
+
+[dev-dependencies]
+criterion = "0.5.1"
+
+[[bench]]
+name = "filemetadata"
+harness = false
