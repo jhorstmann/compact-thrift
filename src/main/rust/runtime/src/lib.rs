@@ -68,6 +68,12 @@ fn encode_uleb<O: CompactThriftOutput + ?Sized>(output: &mut O, mut value: u64) 
     output.write_byte(value as u8)
 }
 
+#[inline(never)] // full field ids are uncommon and inlining this bloats the code
+fn read_full_field_id<'i, I: CompactThriftInput<'i> + ?Sized>(input: &mut I) -> Result<i16, ThriftError> {
+    let field_id = decode_uleb(input)? as u16;
+    Ok(zigzag_decode16(field_id))
+}
+
 #[inline(always)]
 fn zigzag_decode16(i: u16) -> i16 {
     (i >> 1) as i16 ^ -((i & 1) as i16)
@@ -152,7 +158,7 @@ pub trait CompactThriftInput<'i> {
         if field_delta != 0 {
             *last_field_id += field_delta as i16;
         } else {
-            *last_field_id = self.read_i16()?;
+            *last_field_id = read_full_field_id(self)?;
         }
 
         Ok(field_type)
