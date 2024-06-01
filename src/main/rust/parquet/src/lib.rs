@@ -1,4 +1,3 @@
-#[allow(non_snake_case)]
 // Generated on 2024-05-31T07:55:53.079073875Z
 use std::borrow::Cow;
 use compact_thrift_rs::*;
@@ -3958,4 +3957,3 @@ mod tests {
 
     }
 }
-

@@ -1,0 +1,12 @@
+[package]
+name = "compact-thrift-rs"
+version = "0.1.0"
+license = "Apache 2.0"
+description = "Runtime library for compact-thrift code generator"
+homepage = "https://github.com/jhorstmann/compact-thrift"
+repository = "https://github.com/jhorstmann/compact-thrift"
+authors = ["Jörn Horstmann <git@jhorstmann.net>"]
+keywords = ["thrift", "parquet"]
+readme = "README.md"
+edition = "2021"
+rust-version = "1.76.0"
