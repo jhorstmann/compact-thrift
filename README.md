@@ -23,3 +23,14 @@ The reasons for this choice are:
 
 The runtime support for the generated rust code can be found in the [`src/main/rust`](https://github.com/jhorstmann/compact-thrift/tree/main/src/main/rust) folder.
 
+## How to run
+
+To run this code generator you will need a Java Distribution like
+[Amazon Corretto](https://docs.aws.amazon.com/corretto/latest/corretto-17-ug/downloads-list.html)
+and [Apache Maven](https://maven.apache.org/download.cgi) as a build tool. Once these are installed and
+their `bin` folders added to the `PATH`, the definitions for the included `parquet.thrift` can be generated
+by running:
+
+```
+$ ./generate-parquet.sh
+```
