@@ -167,35 +167,50 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
         val identifier = rustIdentifier(definition.identifier)
         code.appendln(
             """
-            #[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+            #[derive(Default, Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
             #[allow(non_camel_case_types)]
             pub struct $identifier(pub i32);
 
-            impl $identifier {${
-                definition.fields.values.map {
-                    """
+            impl $identifier {${definition.fields.values.map { """
                 pub const ${rustIdentifier(it.identifier)}: Self = Self(${it.value});"""
                 }.joinToString("")}
                 
+                const __NAMES: &'static [&'static str] = &[${definition.fields.values.map { """
+                     "${it.identifier}","""}.joinToString("")}
+                 ];
+                
+                #[inline]
                 pub fn value(&self) -> i32 {
                     self.0
                 }
-            }""")
+            }""".trimIndent())
+
         code.appendln("""
             impl From<i32> for $identifier {
+                #[inline]
                 fn from(value: i32) -> Self {
                     Self(value)
                 }
             }""".trimIndent())
 
         code.appendln("""
+            impl std::fmt::Debug for $identifier {
+                fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
+                    f.write_str(Self::__NAMES.get(self.0 as usize).unwrap_or(&"__UNKNOWN"))
+                }
+            }""".trimIndent())
+
+        code.appendln("""
             impl <'i> CompactThriftProtocol<'i> for $identifier {
                 const FIELD_TYPE: u8 = 5; // i32
+                
+                #[inline]
                 fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
                     self.0 = input.read_i32()?;
                     Ok(())
                 }
 
+                #[inline]
                 fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
                     output.write_i32(self.0)
                 }

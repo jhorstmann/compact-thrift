@@ -1,8 +1,8 @@
-// Generated on 2024-05-31T07:55:53.079073875Z
+#[allow(non_snake_case)]
+// Generated on 2024-06-04T19:43:14.889886820Z
 use std::borrow::Cow;
 use compact_thrift_rs::*;
-
-#[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(Default, Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
 pub struct Type(pub i32);
 
@@ -16,29 +16,49 @@ impl Type {
     pub const BYTE_ARRAY: Self = Self(6);
     pub const FIXED_LEN_BYTE_ARRAY: Self = Self(7);
 
+    const __NAMES: &'static [&'static str] = &[
+        "BOOLEAN",
+        "INT32",
+        "INT64",
+        "INT96",
+        "FLOAT",
+        "DOUBLE",
+        "BYTE_ARRAY",
+        "FIXED_LEN_BYTE_ARRAY",
+    ];
+
+    #[inline]
     pub fn value(&self) -> i32 {
         self.0
     }
 }
 impl From<i32> for Type {
+    #[inline]
     fn from(value: i32) -> Self {
         Self(value)
     }
 }
+impl std::fmt::Debug for Type {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
+        f.write_str(Self::__NAMES.get(self.0 as usize).unwrap_or(&"__UNKNOWN"))
+    }
+}
 impl <'i> CompactThriftProtocol<'i> for Type {
     const FIELD_TYPE: u8 = 5; // i32
+
+    #[inline]
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         self.0 = input.read_i32()?;
         Ok(())
     }
 
+    #[inline]
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_i32(self.0)
     }
 }
 
-
-#[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(Default, Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
 pub struct ConvertedType(pub i32);
 
@@ -66,29 +86,63 @@ impl ConvertedType {
     pub const BSON: Self = Self(20);
     pub const INTERVAL: Self = Self(21);
 
+    const __NAMES: &'static [&'static str] = &[
+        "UTF8",
+        "MAP",
+        "MAP_KEY_VALUE",
+        "LIST",
+        "ENUM",
+        "DECIMAL",
+        "DATE",
+        "TIME_MILLIS",
+        "TIME_MICROS",
+        "TIMESTAMP_MILLIS",
+        "TIMESTAMP_MICROS",
+        "UINT_8",
+        "UINT_16",
+        "UINT_32",
+        "UINT_64",
+        "INT_8",
+        "INT_16",
+        "INT_32",
+        "INT_64",
+        "JSON",
+        "BSON",
+        "INTERVAL",
+    ];
+
+    #[inline]
     pub fn value(&self) -> i32 {
         self.0
     }
 }
 impl From<i32> for ConvertedType {
+    #[inline]
     fn from(value: i32) -> Self {
         Self(value)
     }
 }
+impl std::fmt::Debug for ConvertedType {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
+        f.write_str(Self::__NAMES.get(self.0 as usize).unwrap_or(&"__UNKNOWN"))
+    }
+}
 impl <'i> CompactThriftProtocol<'i> for ConvertedType {
     const FIELD_TYPE: u8 = 5; // i32
+
+    #[inline]
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         self.0 = input.read_i32()?;
         Ok(())
     }
 
+    #[inline]
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_i32(self.0)
     }
 }
 
-
-#[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(Default, Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
 pub struct FieldRepetitionType(pub i32);
 
@@ -97,22 +151,38 @@ impl FieldRepetitionType {
     pub const OPTIONAL: Self = Self(1);
     pub const REPEATED: Self = Self(2);
 
+    const __NAMES: &'static [&'static str] = &[
+        "REQUIRED",
+        "OPTIONAL",
+        "REPEATED",
+    ];
+
+    #[inline]
     pub fn value(&self) -> i32 {
         self.0
     }
 }
 impl From<i32> for FieldRepetitionType {
+    #[inline]
     fn from(value: i32) -> Self {
         Self(value)
     }
 }
+impl std::fmt::Debug for FieldRepetitionType {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
+        f.write_str(Self::__NAMES.get(self.0 as usize).unwrap_or(&"__UNKNOWN"))
+    }
+}
 impl <'i> CompactThriftProtocol<'i> for FieldRepetitionType {
     const FIELD_TYPE: u8 = 5; // i32
+
+    #[inline]
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         self.0 = input.read_i32()?;
         Ok(())
     }
 
+    #[inline]
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_i32(self.0)
     }
@@ -1514,8 +1584,7 @@ impl <'i> CompactThriftProtocol<'i> for SchemaElement<'i> {
         Ok(())
     }
 }
-
-#[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(Default, Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
 pub struct Encoding(pub i32);
 
@@ -1530,29 +1599,50 @@ impl Encoding {
     pub const RLE_DICTIONARY: Self = Self(8);
     pub const BYTE_STREAM_SPLIT: Self = Self(9);
 
+    const __NAMES: &'static [&'static str] = &[
+        "PLAIN",
+        "PLAIN_DICTIONARY",
+        "RLE",
+        "BIT_PACKED",
+        "DELTA_BINARY_PACKED",
+        "DELTA_LENGTH_BYTE_ARRAY",
+        "DELTA_BYTE_ARRAY",
+        "RLE_DICTIONARY",
+        "BYTE_STREAM_SPLIT",
+    ];
+
+    #[inline]
     pub fn value(&self) -> i32 {
         self.0
     }
 }
 impl From<i32> for Encoding {
+    #[inline]
     fn from(value: i32) -> Self {
         Self(value)
     }
 }
+impl std::fmt::Debug for Encoding {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
+        f.write_str(Self::__NAMES.get(self.0 as usize).unwrap_or(&"__UNKNOWN"))
+    }
+}
 impl <'i> CompactThriftProtocol<'i> for Encoding {
     const FIELD_TYPE: u8 = 5; // i32
+
+    #[inline]
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         self.0 = input.read_i32()?;
         Ok(())
     }
 
+    #[inline]
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_i32(self.0)
     }
 }
 
-
-#[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(Default, Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
 pub struct CompressionCodec(pub i32);
 
@@ -1566,29 +1656,49 @@ impl CompressionCodec {
     pub const ZSTD: Self = Self(6);
     pub const LZ4_RAW: Self = Self(7);
 
+    const __NAMES: &'static [&'static str] = &[
+        "UNCOMPRESSED",
+        "SNAPPY",
+        "GZIP",
+        "LZO",
+        "BROTLI",
+        "LZ4",
+        "ZSTD",
+        "LZ4_RAW",
+    ];
+
+    #[inline]
     pub fn value(&self) -> i32 {
         self.0
     }
 }
 impl From<i32> for CompressionCodec {
+    #[inline]
     fn from(value: i32) -> Self {
         Self(value)
     }
 }
+impl std::fmt::Debug for CompressionCodec {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
+        f.write_str(Self::__NAMES.get(self.0 as usize).unwrap_or(&"__UNKNOWN"))
+    }
+}
 impl <'i> CompactThriftProtocol<'i> for CompressionCodec {
     const FIELD_TYPE: u8 = 5; // i32
+
+    #[inline]
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         self.0 = input.read_i32()?;
         Ok(())
     }
 
+    #[inline]
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_i32(self.0)
     }
 }
 
-
-#[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(Default, Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
 pub struct PageType(pub i32);
 
@@ -1598,29 +1708,45 @@ impl PageType {
     pub const DICTIONARY_PAGE: Self = Self(2);
     pub const DATA_PAGE_V2: Self = Self(3);
 
+    const __NAMES: &'static [&'static str] = &[
+        "DATA_PAGE",
+        "INDEX_PAGE",
+        "DICTIONARY_PAGE",
+        "DATA_PAGE_V2",
+    ];
+
+    #[inline]
     pub fn value(&self) -> i32 {
         self.0
     }
 }
 impl From<i32> for PageType {
+    #[inline]
     fn from(value: i32) -> Self {
         Self(value)
     }
 }
+impl std::fmt::Debug for PageType {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
+        f.write_str(Self::__NAMES.get(self.0 as usize).unwrap_or(&"__UNKNOWN"))
+    }
+}
 impl <'i> CompactThriftProtocol<'i> for PageType {
     const FIELD_TYPE: u8 = 5; // i32
+
+    #[inline]
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         self.0 = input.read_i32()?;
         Ok(())
     }
 
+    #[inline]
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_i32(self.0)
     }
 }
 
-
-#[derive(Default, Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(Default, Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
 pub struct BoundaryOrder(pub i32);
 
@@ -1629,22 +1755,38 @@ impl BoundaryOrder {
     pub const ASCENDING: Self = Self(1);
     pub const DESCENDING: Self = Self(2);
 
+    const __NAMES: &'static [&'static str] = &[
+        "UNORDERED",
+        "ASCENDING",
+        "DESCENDING",
+    ];
+
+    #[inline]
     pub fn value(&self) -> i32 {
         self.0
     }
 }
 impl From<i32> for BoundaryOrder {
+    #[inline]
     fn from(value: i32) -> Self {
         Self(value)
     }
 }
+impl std::fmt::Debug for BoundaryOrder {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
+        f.write_str(Self::__NAMES.get(self.0 as usize).unwrap_or(&"__UNKNOWN"))
+    }
+}
 impl <'i> CompactThriftProtocol<'i> for BoundaryOrder {
     const FIELD_TYPE: u8 = 5; // i32
+
+    #[inline]
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         self.0 = input.read_i32()?;
         Ok(())
     }
 
+    #[inline]
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_i32(self.0)
     }
