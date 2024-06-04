@@ -139,7 +139,7 @@ class RustGenerator(val document: Document) : DocumentVisitor {
 }
 
 //@formatter:off
-class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : DefinitionVisitor {
+class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : DefinitionVisitor<Unit> {
     fun rustType(fieldType: FieldType, fieldReq: FieldReq = FieldReq.REQUIRED): String {
         val type = fieldType.visit(RustFieldTypeVisitor(document))
 

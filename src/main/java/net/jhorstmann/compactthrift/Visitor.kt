@@ -8,14 +8,14 @@ interface DocumentVisitor {
     }
 }
 
-interface DefinitionVisitor {
-    fun visitConstant(definition: ConstantDefinition)
-    fun visitTypeDef(definition: TypeDefinition)
-    fun visitEnum(definition: EnumDefinition)
-    fun visitStruct(definition: StructDefinition)
-    fun visitUnion(definition: UnionDefinition)
-    fun visitException(definition: ExceptionDefinition)
-    fun visitService(definition: ServiceDefinition)
+interface DefinitionVisitor<T> {
+    fun visitConstant(definition: ConstantDefinition): T
+    fun visitTypeDef(definition: TypeDefinition): T
+    fun visitEnum(definition: EnumDefinition): T
+    fun visitStruct(definition: StructDefinition): T
+    fun visitUnion(definition: UnionDefinition): T
+    fun visitException(definition: ExceptionDefinition): T
+    fun visitService(definition: ServiceDefinition): T
 }
 
 interface FieldTypeVisitor<T> {

@@ -12,57 +12,40 @@ data class Header(val namespaces: Map<String, String>, val includes: List<String
 
 sealed class Definition {
     abstract val identifier: String
-    abstract fun visit(visitor: DefinitionVisitor)
+    abstract fun <T> visit(visitor: DefinitionVisitor<T>): T
 }
 
 data class ConstantDefinition(override val identifier: String, val fieldType: FieldType, val constValue: ConstValue) : Definition() {
-    override fun visit(visitor: DefinitionVisitor) {
-        visitor.visitConstant(this)
-    }
+    override fun <T> visit(visitor: DefinitionVisitor<T>): T = visitor.visitConstant(this)
 }
 
 data class TypeDefinition(override val identifier: String, val fieldType: FieldType) : Definition() {
-    override fun visit(visitor: DefinitionVisitor) {
-        visitor.visitTypeDef(this)
-    }
+    override fun <T> visit(visitor: DefinitionVisitor<T>): T = visitor.visitTypeDef(this)
 }
 
 data class EnumDefinition(override val identifier: String, val fields: Map<String, EnumField>) : Definition() {
-    override fun visit(visitor: DefinitionVisitor) {
-        visitor.visitEnum(this)
-    }
+    override fun <T> visit(visitor: DefinitionVisitor<T>): T = visitor.visitEnum(this)
 }
 
 data class EnumField(val identifier: String, val value: Int?)
 
 data class StructDefinition(override val identifier: String, val fields: Map<String, Field>) : Definition() {
-    override fun visit(visitor: DefinitionVisitor) {
-        visitor.visitStruct(this)
-    }
-
+    override fun <T> visit(visitor: DefinitionVisitor<T>): T = visitor.visitStruct(this)
     fun hasRequiredFields(): Boolean = fields.values.any { it.required() }
 }
 
 data class UnionDefinition(override val identifier: String, val fields: Map<String, Field>) : Definition() {
-    override fun visit(visitor: DefinitionVisitor) {
-        visitor.visitUnion(this)
-    }
-
+    override fun <T> visit(visitor: DefinitionVisitor<T>): T = visitor.visitUnion(this)
     fun hasRequiredFields(): Boolean = fields.values.any { it.required() }
 }
 
 data class ExceptionDefinition(override val identifier: String, val fields: Map<String, Field>): Definition() {
-    override fun visit(visitor: DefinitionVisitor) {
-        visitor.visitException(this)
-    }
-
+    override fun <T> visit(visitor: DefinitionVisitor<T>): T = visitor.visitException(this)
     fun hasRequiredFields(): Boolean = fields.values.any { it.required() }
 }
 
 data class ServiceDefinition(override val identifier: String, val functions: List<ServiceFunction>): Definition() {
-    override fun visit(visitor: DefinitionVisitor) {
-        visitor.visitService(this)
-    }
+    override fun <T> visit(visitor: DefinitionVisitor<T>): T = visitor.visitService(this)
 }
 
 data class ServiceFunction(val identifier: String)
