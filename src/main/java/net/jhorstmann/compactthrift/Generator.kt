@@ -310,20 +310,14 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
             impl <'i> CompactThriftProtocol<'i> for $identifier$lifetimeAnnotation {
                 const FIELD_TYPE: u8 = 12;
                 fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-                    let field_type = input.read_byte()?;
+                    let mut last_field_id = 0_i16;
+                    let field_type = input.read_field_header(&mut last_field_id)?;
                         
                     if field_type == 0 {
                         return Err(ThriftError::InvalidType);
                     }
                         
-                    let field_delta = (field_type & 0xF0) >> 4;
-                    let field_id = if field_delta != 0 {
-                        field_delta as i16
-                    } else {
-                        input.read_i16()?
-                    };
-
-                    match field_id {${definition.fields.values.map { """
+                    match last_field_id {${definition.fields.values.map { """
                         ${it.id} => {
                             *self = Self::${it.identifier}(Default::default());
                             #[allow(unreachable_patterns)]

@@ -1,5 +1,5 @@
 #[allow(non_snake_case)]
-// Generated on 2024-06-04T19:43:14.889886820Z
+// Generated on 2024-06-05T07:51:30.372804118Z
 use std::borrow::Cow;
 use compact_thrift_rs::*;
 #[derive(Default, Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -931,20 +931,14 @@ impl Default for TimeUnit {
 impl <'i> CompactThriftProtocol<'i> for TimeUnit {
     const FIELD_TYPE: u8 = 12;
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        let field_type = input.read_byte()?;
+        let mut last_field_id = 0_i16;
+        let field_type = input.read_field_header(&mut last_field_id)?;
 
         if field_type == 0 {
             return Err(ThriftError::InvalidType);
         }
 
-        let field_delta = (field_type & 0xF0) >> 4;
-        let field_id = if field_delta != 0 {
-            field_delta as i16
-        } else {
-            input.read_i16()?
-        };
-
-        match field_id {
+        match last_field_id {
             1 => {
                 *self = Self::MILLIS(Default::default());
                 #[allow(unreachable_patterns)]
@@ -1304,20 +1298,14 @@ impl Default for LogicalType {
 impl <'i> CompactThriftProtocol<'i> for LogicalType {
     const FIELD_TYPE: u8 = 12;
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        let field_type = input.read_byte()?;
+        let mut last_field_id = 0_i16;
+        let field_type = input.read_field_header(&mut last_field_id)?;
 
         if field_type == 0 {
             return Err(ThriftError::InvalidType);
         }
 
-        let field_delta = (field_type & 0xF0) >> 4;
-        let field_id = if field_delta != 0 {
-            field_delta as i16
-        } else {
-            input.read_i16()?
-        };
-
-        match field_id {
+        match last_field_id {
             1 => {
                 *self = Self::STRING(Default::default());
                 #[allow(unreachable_patterns)]
@@ -2167,20 +2155,14 @@ impl Default for BloomFilterAlgorithm {
 impl <'i> CompactThriftProtocol<'i> for BloomFilterAlgorithm {
     const FIELD_TYPE: u8 = 12;
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        let field_type = input.read_byte()?;
+        let mut last_field_id = 0_i16;
+        let field_type = input.read_field_header(&mut last_field_id)?;
 
         if field_type == 0 {
             return Err(ThriftError::InvalidType);
         }
 
-        let field_delta = (field_type & 0xF0) >> 4;
-        let field_id = if field_delta != 0 {
-            field_delta as i16
-        } else {
-            input.read_i16()?
-        };
-
-        match field_id {
+        match last_field_id {
             1 => {
                 *self = Self::BLOCK(Default::default());
                 #[allow(unreachable_patterns)]
@@ -2269,20 +2251,14 @@ impl Default for BloomFilterHash {
 impl <'i> CompactThriftProtocol<'i> for BloomFilterHash {
     const FIELD_TYPE: u8 = 12;
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        let field_type = input.read_byte()?;
+        let mut last_field_id = 0_i16;
+        let field_type = input.read_field_header(&mut last_field_id)?;
 
         if field_type == 0 {
             return Err(ThriftError::InvalidType);
         }
 
-        let field_delta = (field_type & 0xF0) >> 4;
-        let field_id = if field_delta != 0 {
-            field_delta as i16
-        } else {
-            input.read_i16()?
-        };
-
-        match field_id {
+        match last_field_id {
             1 => {
                 *self = Self::XXHASH(Default::default());
                 #[allow(unreachable_patterns)]
@@ -2371,20 +2347,14 @@ impl Default for BloomFilterCompression {
 impl <'i> CompactThriftProtocol<'i> for BloomFilterCompression {
     const FIELD_TYPE: u8 = 12;
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        let field_type = input.read_byte()?;
+        let mut last_field_id = 0_i16;
+        let field_type = input.read_field_header(&mut last_field_id)?;
 
         if field_type == 0 {
             return Err(ThriftError::InvalidType);
         }
 
-        let field_delta = (field_type & 0xF0) >> 4;
-        let field_id = if field_delta != 0 {
-            field_delta as i16
-        } else {
-            input.read_i16()?
-        };
-
-        match field_id {
+        match last_field_id {
             1 => {
                 *self = Self::UNCOMPRESSED(Default::default());
                 #[allow(unreachable_patterns)]
@@ -3106,20 +3076,14 @@ impl<'i> Default for ColumnCryptoMetaData<'i> {
 impl <'i> CompactThriftProtocol<'i> for ColumnCryptoMetaData<'i> {
     const FIELD_TYPE: u8 = 12;
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        let field_type = input.read_byte()?;
+        let mut last_field_id = 0_i16;
+        let field_type = input.read_field_header(&mut last_field_id)?;
 
         if field_type == 0 {
             return Err(ThriftError::InvalidType);
         }
 
-        let field_delta = (field_type & 0xF0) >> 4;
-        let field_id = if field_delta != 0 {
-            field_delta as i16
-        } else {
-            input.read_i16()?
-        };
-
-        match field_id {
+        match last_field_id {
             1 => {
                 *self = Self::ENCRYPTION_WITH_FOOTER_KEY(Default::default());
                 #[allow(unreachable_patterns)]
@@ -3431,20 +3395,14 @@ impl Default for ColumnOrder {
 impl <'i> CompactThriftProtocol<'i> for ColumnOrder {
     const FIELD_TYPE: u8 = 12;
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        let field_type = input.read_byte()?;
+        let mut last_field_id = 0_i16;
+        let field_type = input.read_field_header(&mut last_field_id)?;
 
         if field_type == 0 {
             return Err(ThriftError::InvalidType);
         }
 
-        let field_delta = (field_type & 0xF0) >> 4;
-        let field_id = if field_delta != 0 {
-            field_delta as i16
-        } else {
-            input.read_i16()?
-        };
-
-        match field_id {
+        match last_field_id {
             1 => {
                 *self = Self::TYPE_ORDER(Default::default());
                 #[allow(unreachable_patterns)]
@@ -3860,20 +3818,14 @@ impl<'i> Default for EncryptionAlgorithm<'i> {
 impl <'i> CompactThriftProtocol<'i> for EncryptionAlgorithm<'i> {
     const FIELD_TYPE: u8 = 12;
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        let field_type = input.read_byte()?;
+        let mut last_field_id = 0_i16;
+        let field_type = input.read_field_header(&mut last_field_id)?;
 
         if field_type == 0 {
             return Err(ThriftError::InvalidType);
         }
 
-        let field_delta = (field_type & 0xF0) >> 4;
-        let field_id = if field_delta != 0 {
-            field_delta as i16
-        } else {
-            input.read_i16()?
-        };
-
-        match field_id {
+        match last_field_id {
             1 => {
                 *self = Self::AES_GCM_V1(Default::default());
                 #[allow(unreachable_patterns)]
