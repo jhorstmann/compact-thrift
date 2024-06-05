@@ -27,7 +27,7 @@ data class EnumDefinition(override val identifier: String, val fields: Map<Strin
     override fun <T> visit(visitor: DefinitionVisitor<T>): T = visitor.visitEnum(this)
 }
 
-data class EnumField(val identifier: String, val value: Int?)
+data class EnumField(val identifier: String, val value: Int)
 
 data class StructDefinition(override val identifier: String, val fields: Map<String, Field>) : Definition() {
     override fun <T> visit(visitor: DefinitionVisitor<T>): T = visitor.visitStruct(this)

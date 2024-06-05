@@ -175,8 +175,8 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
                 pub const ${rustIdentifier(it.identifier)}: Self = Self(${it.value});"""
                 }.joinToString("")}
                 
-                const __NAMES: &'static [&'static str] = &[${definition.fields.values.map { """
-                     "${it.identifier}","""}.joinToString("")}
+                const __NAMES: &'static [(i32, &'static str)] = &[${definition.fields.values.sortedBy { it.value }.map { """
+                     (${it.value}, "${it.identifier}"),"""}.joinToString("")}
                  ];
                 
                 #[inline]
@@ -196,7 +196,11 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
         code.appendln("""
             impl std::fmt::Debug for $identifier {
                 fn fmt(&self, f: &mut std::fmt::Formatter) -> Result<(), std::fmt::Error> {
-                    f.write_str(Self::__NAMES.get(self.0 as usize).unwrap_or(&"__UNKNOWN"))
+                    let name = match Self::__NAMES.binary_search_by_key(&self.0, |(i, _)| *i) {
+                        Ok(i) => &Self::__NAMES[i].1,
+                        Err(_) => "__UNKNOWN",
+                    };
+                    f.debug_tuple(name).field(&self.0).finish()
                 }
             }""".trimIndent())
 
