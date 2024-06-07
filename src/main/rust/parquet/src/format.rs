@@ -2826,17 +2826,17 @@ pub struct ColumnMetaData<'i> {
     pub data_page_offset: i64,
     pub index_page_offset: Option<i64>,
     pub dictionary_page_offset: Option<i64>,
-    pub statistics: Option<Statistics<'i>>,
+    pub statistics: Option<Box<Statistics<'i>>>,
     pub encoding_stats: Option<Vec<PageEncodingStats>>,
     pub bloom_filter_offset: Option<i64>,
     pub bloom_filter_length: Option<i32>,
-    pub size_statistics: Option<SizeStatistics>,
+    pub size_statistics: Option<Box<SizeStatistics>>,
 }
 
 impl<'i> ColumnMetaData<'i> {
     #[allow(non_camel_case_types)]
     #[allow(non_snake_case)]
-    pub fn new(r#type: impl Into<Type>, encodings: impl Into<Vec<Encoding>>, path_in_schema: impl Into<Vec<Cow<'i, str>>>, codec: impl Into<CompressionCodec>, num_values: impl Into<i64>, total_uncompressed_size: impl Into<i64>, total_compressed_size: impl Into<i64>, key_value_metadata: impl Into<Option<Vec<KeyValue<'i>>>>, data_page_offset: impl Into<i64>, index_page_offset: impl Into<Option<i64>>, dictionary_page_offset: impl Into<Option<i64>>, statistics: impl Into<Option<Statistics<'i>>>, encoding_stats: impl Into<Option<Vec<PageEncodingStats>>>, bloom_filter_offset: impl Into<Option<i64>>, bloom_filter_length: impl Into<Option<i32>>, size_statistics: impl Into<Option<SizeStatistics>>) -> Self {
+    pub fn new(r#type: impl Into<Type>, encodings: impl Into<Vec<Encoding>>, path_in_schema: impl Into<Vec<Cow<'i, str>>>, codec: impl Into<CompressionCodec>, num_values: impl Into<i64>, total_uncompressed_size: impl Into<i64>, total_compressed_size: impl Into<i64>, key_value_metadata: impl Into<Option<Vec<KeyValue<'i>>>>, data_page_offset: impl Into<i64>, index_page_offset: impl Into<Option<i64>>, dictionary_page_offset: impl Into<Option<i64>>, statistics: impl Into<Option<Box<Statistics<'i>>>>, encoding_stats: impl Into<Option<Vec<PageEncodingStats>>>, bloom_filter_offset: impl Into<Option<i64>>, bloom_filter_length: impl Into<Option<i32>>, size_statistics: impl Into<Option<Box<SizeStatistics>>>) -> Self {
         Self {
             r#type: r#type.into(),
             encodings: encodings.into(),
@@ -4074,8 +4074,11 @@ impl <'i> CompactThriftProtocol<'i> for FileCryptoMetaData<'i> {
 }
 #[cfg(test)]
 mod tests {
+    use crate::format::{ColumnMetaData, Statistics};
+
     #[test]
     fn test_compile() {
-
+        dbg!(std::mem::size_of::<Statistics>());
+        dbg!(std::mem::size_of::<ColumnMetaData>());
     }
 }

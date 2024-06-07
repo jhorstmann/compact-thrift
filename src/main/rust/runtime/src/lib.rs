@@ -621,6 +621,7 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
         self.try_reserve(len as usize).map_err(|_| ThriftError::ReserveError)?;
 
         // workaround for unnecessary memcpy calls when using Vec::push(P::default()) with larger structs
+        // https://github.com/rust-lang/rust/issues/125632
 
         struct SetLenOnDrop<'a, T> {
             vec: &'a mut Vec<T>,
@@ -700,6 +701,21 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
     }
 }
 
+impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for Box<P> {
+    const FIELD_TYPE: u8 = P::FIELD_TYPE;
+
+    #[inline]
+    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+        self.as_mut().fill(input)
+    }
+
+    #[inline]
+    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        self.as_ref().write(output)
+    }
+}
+
+
 #[cfg(test)]
 mod tests {
     use crate::{CompactThriftInput, CompactThriftOutput, CompactThriftProtocol, decode_uleb, encode_uleb, SliceInput, ThriftError};
@@ -760,6 +776,21 @@ mod tests {
         let actual = Vec::<bool>::read(&mut data).unwrap();
         let expected = vec![false, true, true, false];
         assert_eq!(&actual, &expected);
+    }
 
+    #[test]
+    fn test_read_box() {
+        let mut data = SliceInput::new(&[0x2]);
+        let actual = Box::<i32>::read(&mut data).unwrap();
+        let expected = Box::new(1);
+        assert_eq!(&actual, &expected);
+    }
+
+    #[test]
+    fn test_read_option_box() {
+        let mut data = SliceInput::new(&[0x2]);
+        let actual = Option::<Box::<i32>>::read(&mut data).unwrap();
+        let expected = Some(Box::new(1));
+        assert_eq!(&actual, &expected);
     }
 }
