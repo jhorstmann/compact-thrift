@@ -655,10 +655,18 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
 
     #[inline]
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
-        if self.len() > MAX_COLLECTION_LEN {
+        let len = self.len();
+        if len > MAX_COLLECTION_LEN {
             return Err(ThriftError::InvalidCollectionLen);
         }
-        output.write_len(self.len())?;
+
+        if len < 15 {
+            let header = P::FIELD_TYPE | ((len as u8) << 4);
+            output.write_byte(header)?;
+        } else {
+            output.write_byte(P::FIELD_TYPE | 0xF0)?;
+            output.write_len(len)?;
+        }
         self.iter().try_for_each(|value| {
             value.write(output)
         })
@@ -793,4 +801,32 @@ mod tests {
         let expected = Some(Box::new(1));
         assert_eq!(&actual, &expected);
     }
+
+    #[test]
+    fn test_empty_vec_roundtrip() {
+        let input = Vec::<i64>::default();
+        let mut buffer = vec![];
+        input.write(&mut buffer).unwrap();
+        let result = Vec::<i64>::read(&mut SliceInput::new(&buffer)).unwrap();
+        assert_eq!(&result, &input);
+    }
+
+    #[test]
+    fn test_vec_bool_roundtrip() {
+        let input = vec![true, false, false, true];
+        let mut buffer = vec![];
+        input.write(&mut buffer).unwrap();
+        let result = Vec::<bool>::read(&mut SliceInput::new(&buffer)).unwrap();
+        assert_eq!(&result, &input);
+    }
+
+    #[test]
+    fn test_vec_integer_roundtrip() {
+        let input = vec![1_i64, i64::MIN, i64::MAX, 9999999];
+        let mut buffer = vec![];
+        input.write(&mut buffer).unwrap();
+        let result = Vec::<i64>::read(&mut SliceInput::new(&buffer)).unwrap();
+        assert_eq!(&result, &input);
+    }
+
 }
