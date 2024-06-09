@@ -60,6 +60,26 @@ fn decode_uleb<'i, I: CompactThriftInput<'i> + ?Sized>(input: &mut I) -> Result<
     }
 }
 
+/// Safety: `input` needs to contains at least 16 bytes
+#[target_feature(enable="sse2")]
+#[inline]
+unsafe fn skip_uleb_sse2(input: &[u8]) -> &[u8] {
+    use std::arch::x86_64::*;
+    let chunk = _mm_loadu_si128(input.as_ptr().cast());
+    let mask = !_mm_movemask_epi8(chunk);
+    let len = (mask << 1).trailing_zeros() as usize;
+    input.get_unchecked(len..)
+}
+
+#[inline(never)]
+fn skip_uleb_fallback(input: &[u8]) -> &[u8] {
+    let mut i = 0_usize;
+    while i < input.len() && (input[i] & 0x80) != 0 {
+        i += 1;
+    }
+    &input[i+1..]
+}
+
 fn encode_uleb<O: CompactThriftOutput + ?Sized>(output: &mut O, mut value: u64) -> Result<(), ThriftError> {
     while value > 0x7F {
         output.write_byte((value as u8) | 0x80)?;
@@ -410,6 +430,18 @@ impl <'i> CompactThriftInput<'i> for SliceInput<'i> {
         let (first, rest) = std::mem::replace(&mut self.0, &mut []).split_at(len);
         self.0 = rest;
         Ok(Cow::Borrowed(first))
+    }
+
+    #[inline]
+    #[cfg(target_feature = "sse2")]
+    fn skip_integer(&mut self) -> Result<(), ThriftError> {
+        if self.0.len() >= 16 {
+            self.0 = unsafe { skip_uleb_sse2(self.0) };
+            Ok(())
+        } else {
+            self.0 = skip_uleb_fallback(self.0);
+            Ok(())
+        }
     }
 
     fn skip_binary(&mut self) -> Result<(), ThriftError> {
@@ -783,7 +815,7 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
 
 #[cfg(test)]
 mod tests {
-    use crate::{CompactThriftInput, CompactThriftOutput, CompactThriftProtocol, decode_uleb, encode_uleb, SliceInput, ThriftError};
+    use crate::{CompactThriftInput, CompactThriftOutput, CompactThriftProtocol, decode_uleb, skip_field, skip_uleb_sse2, SliceInput, ThriftError};
 
     #[test]
     fn test_size_of_error() {
@@ -809,7 +841,26 @@ mod tests {
         decode_uleb(&mut SliceInput::new(&[0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0])).unwrap();
     }
 
-     #[test]
+    #[test]
+    fn test_skip_uleb_sse2() {
+        {
+            let buf = &[0; 16];
+            assert_eq!(unsafe { skip_uleb_sse2(buf) }, &buf[1..]);
+        }
+        {
+            let buf = &mut [0; 16];
+            buf[1] = 0x81;
+            assert_eq!(unsafe { skip_uleb_sse2(buf) }, &buf[1..]);
+        }
+        {
+            let buf = &mut [0; 16];
+            buf[0] = 0x80;
+            buf[1] = 0x01;
+            assert_eq!(unsafe { skip_uleb_sse2(buf) }, &buf[2..]);
+        }
+    }
+
+    #[test]
     fn test_slice_input_read_i32() {
         assert_eq!(SliceInput::new(&[0]).read_i32().unwrap(), 0);
         assert_eq!(SliceInput::new(&[1]).read_i32().unwrap(), -1);
