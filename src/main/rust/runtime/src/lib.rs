@@ -144,7 +144,7 @@ pub trait CompactThriftInput<'i> {
         Ok(())
     }
     fn skip_field(&mut self, field_type: u8) -> Result<(), ThriftError> {
-        skip_field(self, field_type)
+        skip_field(self, field_type, false)
     }
     fn read_field_header(&mut self, last_field_id: &mut i16) -> Result<u8, ThriftError> {
         let field_header = self.read_byte()?;
@@ -202,10 +202,74 @@ fn read_map_len_and_types<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T)
     Ok((len as u32, key_type, val_type))
 }
 
-fn skip_field<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T, field_type: u8) -> Result<(), ThriftError> {
+fn skip_collection<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T) -> Result<(), ThriftError> {
+    let (len, element_type) = read_collection_len_and_type(input)?;
+    match element_type {
+        1..=3 => {
+            // TRUE, FALSE, i8 stored as single byte
+            for _ in 0..len {
+                let _ = input.read_byte()?;
+            }
+        }
+        4..=6 => {
+            // since we do not error on overlong sequences,
+            // skipping for all integer types works the same.
+            for _ in 0..len {
+                input.skip_integer()?;
+            }
+        }
+        7 => {
+            for _ in 0..len {
+                input.read_double()?;
+            }
+        }
+        8 => {
+            // thrift does not distinguish binary and string types in field_type,
+            // consequently there is no utf8 validation for skipped strings.
+            for _ in 0..len {
+                input.skip_binary()?;
+            }
+        }
+        9 | 10 => {
+            // list | set
+            for _ in 0..len {
+                skip_collection(input)?;
+            }
+        }
+        11 => {
+            // map
+            for _ in 0..len {
+                skip_map(input)?;
+            }
+        }
+        12 => {
+            for _ in 0..len {
+                skip_field(input, 12, false)?;
+            }
+        }
+        _ => {
+            return Err(ThriftError::InvalidType)
+        }
+    }
+    Ok(())
+}
+
+fn skip_map<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T) -> Result<(), ThriftError> {
+    let (len, key_type, val_type) = read_map_len_and_types(input)?;
+    for _ in 0..len {
+        skip_field(input, key_type, true)?;
+        skip_field(input, val_type, true)?;
+    }
+    Ok(())
+}
+
+fn skip_field<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T, field_type: u8, inside_collection: bool) -> Result<(), ThriftError> {
     match field_type {
-        0..=2 => {
-            // nothing else to read for STOP, TRUE, FALSE.
+        1..=2 => {
+            // boolean stored inside the field header outside of collections
+            if inside_collection {
+                input.read_byte()?;
+            }
         }
         3 => {
             input.read_byte()?;
@@ -225,18 +289,11 @@ fn skip_field<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T, field_type:
         }
         9 | 10 => {
             // list | set
-            let (len, element_type) = read_collection_len_and_type(input)?;
-            for _ in 0..len {
-                skip_field(input, element_type)?;
-            }
+            skip_collection(input)?;
         }
         11 => {
             // map
-            let (len, key_type, val_type) = read_map_len_and_types(input)?;
-            for _ in 0..len {
-                skip_field(input, key_type)?;
-                skip_field(input, val_type)?;
-            }
+            skip_map(input)?;
         }
         12 => {
             // struct | union
@@ -246,7 +303,7 @@ fn skip_field<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T, field_type:
                 if field_type == 0 {
                     break;
                 }
-                skip_field(input, field_type)?;
+                skip_field(input, field_type, false)?;
             }
         }
         _ => {
@@ -829,4 +886,23 @@ mod tests {
         assert_eq!(&result, &input);
     }
 
+    #[test]
+    fn test_skip_vec_bool() {
+        let input = vec![true, false, false, true];
+        let mut buffer = vec![];
+        input.write(&mut buffer).unwrap();
+        let mut slice = SliceInput::new(&buffer);
+        skip_field(&mut slice, Vec::<bool>::FIELD_TYPE, true).unwrap();
+        assert_eq!(&slice.as_slice(), &[]);
+    }
+
+    #[test]
+    fn test_skip_vec_integer() {
+        let input = vec![1_i64, 999999999999, -1, i64::MAX];
+        let mut buffer = vec![];
+        input.write(&mut buffer).unwrap();
+        let mut slice = SliceInput::new(&buffer);
+        skip_field(&mut slice, Vec::<i64>::FIELD_TYPE, true).unwrap();
+        assert_eq!(&slice.as_slice(), &[]);
+    }
 }
