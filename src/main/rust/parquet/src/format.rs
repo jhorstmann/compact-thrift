@@ -1,5 +1,5 @@
 #[allow(non_snake_case)]
-// Generated on 2024-06-05T15:33:49.514227217Z
+// Generated on 2024-06-10T21:37:58.251558082Z
 use std::borrow::Cow;
 use compact_thrift_rs::*;
 #[derive(Default, Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -17,15 +17,15 @@ impl Type {
     pub const FIXED_LEN_BYTE_ARRAY: Self = Self(7);
 
     const __NAMES: &'static [(i32, &'static str)] = &[
-         (0, "BOOLEAN"),
-         (1, "INT32"),
-         (2, "INT64"),
-         (3, "INT96"),
-         (4, "FLOAT"),
-         (5, "DOUBLE"),
-         (6, "BYTE_ARRAY"),
-         (7, "FIXED_LEN_BYTE_ARRAY"),
-     ];
+        (0, "BOOLEAN"),
+        (1, "INT32"),
+        (2, "INT64"),
+        (3, "INT96"),
+        (4, "FLOAT"),
+        (5, "DOUBLE"),
+        (6, "BYTE_ARRAY"),
+        (7, "FIXED_LEN_BYTE_ARRAY"),
+    ];
 
     #[inline]
     pub fn value(&self) -> i32 {
@@ -91,29 +91,29 @@ impl ConvertedType {
     pub const INTERVAL: Self = Self(21);
 
     const __NAMES: &'static [(i32, &'static str)] = &[
-         (0, "UTF8"),
-         (1, "MAP"),
-         (2, "MAP_KEY_VALUE"),
-         (3, "LIST"),
-         (4, "ENUM"),
-         (5, "DECIMAL"),
-         (6, "DATE"),
-         (7, "TIME_MILLIS"),
-         (8, "TIME_MICROS"),
-         (9, "TIMESTAMP_MILLIS"),
-         (10, "TIMESTAMP_MICROS"),
-         (11, "UINT_8"),
-         (12, "UINT_16"),
-         (13, "UINT_32"),
-         (14, "UINT_64"),
-         (15, "INT_8"),
-         (16, "INT_16"),
-         (17, "INT_32"),
-         (18, "INT_64"),
-         (19, "JSON"),
-         (20, "BSON"),
-         (21, "INTERVAL"),
-     ];
+        (0, "UTF8"),
+        (1, "MAP"),
+        (2, "MAP_KEY_VALUE"),
+        (3, "LIST"),
+        (4, "ENUM"),
+        (5, "DECIMAL"),
+        (6, "DATE"),
+        (7, "TIME_MILLIS"),
+        (8, "TIME_MICROS"),
+        (9, "TIMESTAMP_MILLIS"),
+        (10, "TIMESTAMP_MICROS"),
+        (11, "UINT_8"),
+        (12, "UINT_16"),
+        (13, "UINT_32"),
+        (14, "UINT_64"),
+        (15, "INT_8"),
+        (16, "INT_16"),
+        (17, "INT_32"),
+        (18, "INT_64"),
+        (19, "JSON"),
+        (20, "BSON"),
+        (21, "INTERVAL"),
+    ];
 
     #[inline]
     pub fn value(&self) -> i32 {
@@ -160,10 +160,10 @@ impl FieldRepetitionType {
     pub const REPEATED: Self = Self(2);
 
     const __NAMES: &'static [(i32, &'static str)] = &[
-         (0, "REQUIRED"),
-         (1, "OPTIONAL"),
-         (2, "REPEATED"),
-     ];
+        (0, "REQUIRED"),
+        (1, "OPTIONAL"),
+        (2, "REPEATED"),
+    ];
 
     #[inline]
     pub fn value(&self) -> i32 {
@@ -1600,16 +1600,16 @@ impl Encoding {
     pub const BYTE_STREAM_SPLIT: Self = Self(9);
 
     const __NAMES: &'static [(i32, &'static str)] = &[
-         (0, "PLAIN"),
-         (2, "PLAIN_DICTIONARY"),
-         (3, "RLE"),
-         (4, "BIT_PACKED"),
-         (5, "DELTA_BINARY_PACKED"),
-         (6, "DELTA_LENGTH_BYTE_ARRAY"),
-         (7, "DELTA_BYTE_ARRAY"),
-         (8, "RLE_DICTIONARY"),
-         (9, "BYTE_STREAM_SPLIT"),
-     ];
+        (0, "PLAIN"),
+        (2, "PLAIN_DICTIONARY"),
+        (3, "RLE"),
+        (4, "BIT_PACKED"),
+        (5, "DELTA_BINARY_PACKED"),
+        (6, "DELTA_LENGTH_BYTE_ARRAY"),
+        (7, "DELTA_BYTE_ARRAY"),
+        (8, "RLE_DICTIONARY"),
+        (9, "BYTE_STREAM_SPLIT"),
+    ];
 
     #[inline]
     pub fn value(&self) -> i32 {
@@ -1661,15 +1661,15 @@ impl CompressionCodec {
     pub const LZ4_RAW: Self = Self(7);
 
     const __NAMES: &'static [(i32, &'static str)] = &[
-         (0, "UNCOMPRESSED"),
-         (1, "SNAPPY"),
-         (2, "GZIP"),
-         (3, "LZO"),
-         (4, "BROTLI"),
-         (5, "LZ4"),
-         (6, "ZSTD"),
-         (7, "LZ4_RAW"),
-     ];
+        (0, "UNCOMPRESSED"),
+        (1, "SNAPPY"),
+        (2, "GZIP"),
+        (3, "LZO"),
+        (4, "BROTLI"),
+        (5, "LZ4"),
+        (6, "ZSTD"),
+        (7, "LZ4_RAW"),
+    ];
 
     #[inline]
     pub fn value(&self) -> i32 {
@@ -1717,11 +1717,11 @@ impl PageType {
     pub const DATA_PAGE_V2: Self = Self(3);
 
     const __NAMES: &'static [(i32, &'static str)] = &[
-         (0, "DATA_PAGE"),
-         (1, "INDEX_PAGE"),
-         (2, "DICTIONARY_PAGE"),
-         (3, "DATA_PAGE_V2"),
-     ];
+        (0, "DATA_PAGE"),
+        (1, "INDEX_PAGE"),
+        (2, "DICTIONARY_PAGE"),
+        (3, "DATA_PAGE_V2"),
+    ];
 
     #[inline]
     pub fn value(&self) -> i32 {
@@ -1768,10 +1768,10 @@ impl BoundaryOrder {
     pub const DESCENDING: Self = Self(2);
 
     const __NAMES: &'static [(i32, &'static str)] = &[
-         (0, "UNORDERED"),
-         (1, "ASCENDING"),
-         (2, "DESCENDING"),
-     ];
+        (0, "UNORDERED"),
+        (1, "ASCENDING"),
+        (2, "DESCENDING"),
+    ];
 
     #[inline]
     pub fn value(&self) -> i32 {
@@ -2826,17 +2826,17 @@ pub struct ColumnMetaData<'i> {
     pub data_page_offset: i64,
     pub index_page_offset: Option<i64>,
     pub dictionary_page_offset: Option<i64>,
-    pub statistics: Option<Box<Statistics<'i>>>,
+    pub statistics: Option<Statistics<'i>>,
     pub encoding_stats: Option<Vec<PageEncodingStats>>,
     pub bloom_filter_offset: Option<i64>,
     pub bloom_filter_length: Option<i32>,
-    pub size_statistics: Option<Box<SizeStatistics>>,
+    pub size_statistics: Option<SizeStatistics>,
 }
 
 impl<'i> ColumnMetaData<'i> {
     #[allow(non_camel_case_types)]
     #[allow(non_snake_case)]
-    pub fn new(r#type: impl Into<Type>, encodings: impl Into<Vec<Encoding>>, path_in_schema: impl Into<Vec<Cow<'i, str>>>, codec: impl Into<CompressionCodec>, num_values: impl Into<i64>, total_uncompressed_size: impl Into<i64>, total_compressed_size: impl Into<i64>, key_value_metadata: impl Into<Option<Vec<KeyValue<'i>>>>, data_page_offset: impl Into<i64>, index_page_offset: impl Into<Option<i64>>, dictionary_page_offset: impl Into<Option<i64>>, statistics: impl Into<Option<Box<Statistics<'i>>>>, encoding_stats: impl Into<Option<Vec<PageEncodingStats>>>, bloom_filter_offset: impl Into<Option<i64>>, bloom_filter_length: impl Into<Option<i32>>, size_statistics: impl Into<Option<Box<SizeStatistics>>>) -> Self {
+    pub fn new(r#type: impl Into<Type>, encodings: impl Into<Vec<Encoding>>, path_in_schema: impl Into<Vec<Cow<'i, str>>>, codec: impl Into<CompressionCodec>, num_values: impl Into<i64>, total_uncompressed_size: impl Into<i64>, total_compressed_size: impl Into<i64>, key_value_metadata: impl Into<Option<Vec<KeyValue<'i>>>>, data_page_offset: impl Into<i64>, index_page_offset: impl Into<Option<i64>>, dictionary_page_offset: impl Into<Option<i64>>, statistics: impl Into<Option<Statistics<'i>>>, encoding_stats: impl Into<Option<Vec<PageEncodingStats>>>, bloom_filter_offset: impl Into<Option<i64>>, bloom_filter_length: impl Into<Option<i32>>, size_statistics: impl Into<Option<SizeStatistics>>) -> Self {
         Self {
             r#type: r#type.into(),
             encodings: encodings.into(),
@@ -4074,11 +4074,8 @@ impl <'i> CompactThriftProtocol<'i> for FileCryptoMetaData<'i> {
 }
 #[cfg(test)]
 mod tests {
-    use crate::format::{ColumnMetaData, Statistics};
-
     #[test]
     fn test_compile() {
-        dbg!(std::mem::size_of::<Statistics>());
-        dbg!(std::mem::size_of::<ColumnMetaData>());
+
     }
 }
