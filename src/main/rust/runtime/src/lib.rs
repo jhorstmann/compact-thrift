@@ -778,6 +778,19 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
         Ok(())
     }
 
+    fn fill_field<T: CompactThriftInput<'i>>(&mut self, input: &mut T, field_type: u8) -> Result<(), ThriftError> {
+        if self.is_some() {
+            return Err(ThriftError::DuplicateField);
+        }
+        // Safety: avoid generating drop calls, content is always None because of check above
+        unsafe {
+            std::ptr::write(self as *mut _, Some(P::default()));
+            self.as_mut().unwrap_unchecked().fill_field(input, field_type)?;
+        }
+        Ok(())
+    }
+
+
     #[inline]
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         if let Some(value) = self.as_ref() {
@@ -791,8 +804,7 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
     fn write_field<T: CompactThriftOutput>(&self, output: &mut T, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
         // only write if present
         if let Some(value) = self.as_ref() {
-            write_field_header(output, Self::FIELD_TYPE, field_id, last_field_id)?;
-            value.write(output)?;
+            value.write_field(output, field_id, last_field_id)?;
         }
         Ok(())
     }
