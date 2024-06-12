@@ -92,6 +92,7 @@ fn decode_uleb<'i, I: CompactThriftInput<'i> + ?Sized>(input: &mut I) -> Result<
 #[inline]
 unsafe fn skip_uleb_sse2(input: &[u8]) -> &[u8] {
     use std::arch::x86_64::*;
+    debug_assert!(input.len() >= 16);
     let chunk = _mm_loadu_si128(input.as_ptr().cast());
     let mask = !_mm_movemask_epi8(chunk);
     let len = (mask << 1).trailing_zeros() as usize;
@@ -212,7 +213,6 @@ pub trait CompactThriftInput<'i> {
     }
 }
 
-#[inline]
 fn read_collection_len_and_type<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T) -> Result<(u32, u8), ThriftError> {
     let header = input.read_byte()?;
     let field_type = header & 0x0F;
@@ -231,7 +231,6 @@ fn read_collection_len_and_type<'i, T: CompactThriftInput<'i> + ?Sized>(input: &
     Ok((len as u32, field_type))
 }
 
-#[inline]
 fn read_map_len_and_types<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T) -> Result<(u32, u8, u8), ThriftError> {
     let len = input.read_len()?;
     if len == 0 {
@@ -446,6 +445,7 @@ impl <'i> CompactThriftInput<'i> for SliceInput<'i> {
         Ok(value)
     }
 
+    #[inline]
     fn read_binary(&mut self) -> Result<Cow<'i, [u8]>, ThriftError> {
         let len = self.read_len()?;
         if len > MAX_BINARY_LEN {
