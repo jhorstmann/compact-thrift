@@ -1,5 +1,6 @@
 use std::borrow::Cow;
 use std::error::Error;
+use std::ffi::{c_char, CStr};
 use std::fmt::{Debug, Display, Formatter};
 use std::io::{Error as IOError, ErrorKind, Read, Write};
 use std::str::{from_utf8, from_utf8_unchecked};
@@ -7,19 +8,45 @@ use std::str::{from_utf8, from_utf8_unchecked};
 pub const MAX_BINARY_LEN: usize = 1024*1024;
 pub const MAX_COLLECTION_LEN: usize = 10_000_000;
 
-#[derive(Clone,Copy,Debug)]
+#[derive(Clone,Debug)]
 pub enum ThriftError {
     InvalidNumber,
     InvalidString,
     InvalidBinaryLen,
     InvalidCollectionLen,
-    MissingField,
+    MissingField(FieldName),
     MissingValue,
     MissingStop,
     DuplicateField,
     InvalidType,
     ReserveError,
     IO(ErrorKind)
+}
+
+/// Store static strings used by field names as a single pointer to reduce size of the error enum.
+#[derive(Clone)]
+pub struct FieldName {
+    name: *const c_char,
+}
+
+impl From<&'static CStr> for FieldName {
+    fn from(value: &'static CStr) -> Self {
+        Self {
+            name: value.as_ptr()
+        }
+    }
+}
+
+impl Debug for FieldName {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        unsafe { Debug::fmt(CStr::from_ptr(self.name), f) }
+    }
+}
+
+impl Display for FieldName {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        unsafe { Display::fmt(&CStr::from_ptr(self.name).to_string_lossy(), f) }
+    }
 }
 
 impl Display for ThriftError {
@@ -827,12 +854,18 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
 
 #[cfg(test)]
 mod tests {
-    use crate::{CompactThriftInput, CompactThriftOutput, CompactThriftProtocol, decode_uleb, skip_field, skip_uleb_sse2, SliceInput, ThriftError};
+    use crate::{CompactThriftInput, CompactThriftOutput, CompactThriftProtocol, decode_uleb, FieldName, skip_field, skip_uleb_sse2, SliceInput, ThriftError};
 
     #[test]
     fn test_size_of_error() {
-        assert_eq!(std::mem::size_of::<ThriftError>(), 1);
-        assert_eq!(std::mem::size_of::<Result<(), ThriftError>>(), 1);
+        assert_eq!(std::mem::size_of::<ThriftError>(), 16);
+        assert_eq!(std::mem::size_of::<Result<(), ThriftError>>(), 16);
+    }
+
+    #[test]
+    fn test_field_name() {
+        assert_eq!(std::mem::size_of::<FieldName>(), std::mem::size_of::<usize>());
+        assert_eq!(&FieldName::from(c"foobar").to_string(), "foobar");
     }
 
     #[test]

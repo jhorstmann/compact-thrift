@@ -1,5 +1,5 @@
 #[allow(non_snake_case)]
-// Generated on 2024-06-10T21:37:58.251558082Z
+// Generated on 2024-06-12T18:50:30.035798253Z
 use std::borrow::Cow;
 use compact_thrift_rs::*;
 #[derive(Default, Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -776,8 +776,12 @@ impl <'i> CompactThriftProtocol<'i> for DecimalType {
             }
         }
 
-        if !scale_set_ || !precision_set_ {
-            return Err(ThriftError::MissingField)
+        if !scale_set_ {
+            return Err(ThriftError::MissingField(c"DecimalType::scale".into()))
+        }
+
+        if !precision_set_ {
+            return Err(ThriftError::MissingField(c"DecimalType::precision".into()))
         }
 
 
@@ -976,7 +980,7 @@ impl <'i> CompactThriftProtocol<'i> for TimeUnit {
                 }
             }
             _ => {
-                return Err(ThriftError::MissingField)
+                return Err(ThriftError::MissingField(c"TimeUnit".into()))
             }
         }
         let stop = input.read_byte()?;
@@ -1047,8 +1051,12 @@ impl <'i> CompactThriftProtocol<'i> for TimestampType {
             }
         }
 
-        if !isAdjustedToUTC_set_ || !unit_set_ {
-            return Err(ThriftError::MissingField)
+        if !isAdjustedToUTC_set_ {
+            return Err(ThriftError::MissingField(c"TimestampType::isAdjustedToUTC".into()))
+        }
+
+        if !unit_set_ {
+            return Err(ThriftError::MissingField(c"TimestampType::unit".into()))
         }
 
 
@@ -1112,8 +1120,12 @@ impl <'i> CompactThriftProtocol<'i> for TimeType {
             }
         }
 
-        if !isAdjustedToUTC_set_ || !unit_set_ {
-            return Err(ThriftError::MissingField)
+        if !isAdjustedToUTC_set_ {
+            return Err(ThriftError::MissingField(c"TimeType::isAdjustedToUTC".into()))
+        }
+
+        if !unit_set_ {
+            return Err(ThriftError::MissingField(c"TimeType::unit".into()))
         }
 
 
@@ -1177,8 +1189,12 @@ impl <'i> CompactThriftProtocol<'i> for IntType {
             }
         }
 
-        if !bitWidth_set_ || !isSigned_set_ {
-            return Err(ThriftError::MissingField)
+        if !bitWidth_set_ {
+            return Err(ThriftError::MissingField(c"IntType::bitWidth".into()))
+        }
+
+        if !isSigned_set_ {
+            return Err(ThriftError::MissingField(c"IntType::isSigned".into()))
         }
 
 
@@ -1431,7 +1447,7 @@ impl <'i> CompactThriftProtocol<'i> for LogicalType {
                 }
             }
             _ => {
-                return Err(ThriftError::MissingField)
+                return Err(ThriftError::MissingField(c"LogicalType".into()))
             }
         }
         let stop = input.read_byte()?;
@@ -1561,7 +1577,7 @@ impl <'i> CompactThriftProtocol<'i> for SchemaElement<'i> {
         }
 
         if !name_set_ {
-            return Err(ThriftError::MissingField)
+            return Err(ThriftError::MissingField(c"SchemaElement::name".into()))
         }
 
 
@@ -1877,8 +1893,20 @@ impl <'i> CompactThriftProtocol<'i> for DataPageHeader<'i> {
             }
         }
 
-        if !num_values_set_ || !encoding_set_ || !definition_level_encoding_set_ || !repetition_level_encoding_set_ {
-            return Err(ThriftError::MissingField)
+        if !num_values_set_ {
+            return Err(ThriftError::MissingField(c"DataPageHeader::num_values".into()))
+        }
+
+        if !encoding_set_ {
+            return Err(ThriftError::MissingField(c"DataPageHeader::encoding".into()))
+        }
+
+        if !definition_level_encoding_set_ {
+            return Err(ThriftError::MissingField(c"DataPageHeader::definition_level_encoding".into()))
+        }
+
+        if !repetition_level_encoding_set_ {
+            return Err(ThriftError::MissingField(c"DataPageHeader::repetition_level_encoding".into()))
         }
 
 
@@ -1996,8 +2024,12 @@ impl <'i> CompactThriftProtocol<'i> for DictionaryPageHeader {
             }
         }
 
-        if !num_values_set_ || !encoding_set_ {
-            return Err(ThriftError::MissingField)
+        if !num_values_set_ {
+            return Err(ThriftError::MissingField(c"DictionaryPageHeader::num_values".into()))
+        }
+
+        if !encoding_set_ {
+            return Err(ThriftError::MissingField(c"DictionaryPageHeader::encoding".into()))
         }
 
 
@@ -2102,8 +2134,28 @@ impl <'i> CompactThriftProtocol<'i> for DataPageHeaderV2<'i> {
             }
         }
 
-        if !num_values_set_ || !num_nulls_set_ || !num_rows_set_ || !encoding_set_ || !definition_levels_byte_length_set_ || !repetition_levels_byte_length_set_ {
-            return Err(ThriftError::MissingField)
+        if !num_values_set_ {
+            return Err(ThriftError::MissingField(c"DataPageHeaderV2::num_values".into()))
+        }
+
+        if !num_nulls_set_ {
+            return Err(ThriftError::MissingField(c"DataPageHeaderV2::num_nulls".into()))
+        }
+
+        if !num_rows_set_ {
+            return Err(ThriftError::MissingField(c"DataPageHeaderV2::num_rows".into()))
+        }
+
+        if !encoding_set_ {
+            return Err(ThriftError::MissingField(c"DataPageHeaderV2::encoding".into()))
+        }
+
+        if !definition_levels_byte_length_set_ {
+            return Err(ThriftError::MissingField(c"DataPageHeaderV2::definition_levels_byte_length".into()))
+        }
+
+        if !repetition_levels_byte_length_set_ {
+            return Err(ThriftError::MissingField(c"DataPageHeaderV2::repetition_levels_byte_length".into()))
         }
 
 
@@ -2200,7 +2252,7 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterAlgorithm {
                 }
             }
             _ => {
-                return Err(ThriftError::MissingField)
+                return Err(ThriftError::MissingField(c"BloomFilterAlgorithm".into()))
             }
         }
         let stop = input.read_byte()?;
@@ -2296,7 +2348,7 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterHash {
                 }
             }
             _ => {
-                return Err(ThriftError::MissingField)
+                return Err(ThriftError::MissingField(c"BloomFilterHash".into()))
             }
         }
         let stop = input.read_byte()?;
@@ -2392,7 +2444,7 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterCompression {
                 }
             }
             _ => {
-                return Err(ThriftError::MissingField)
+                return Err(ThriftError::MissingField(c"BloomFilterCompression".into()))
             }
         }
         let stop = input.read_byte()?;
@@ -2475,8 +2527,20 @@ impl <'i> CompactThriftProtocol<'i> for BloomFilterHeader {
             }
         }
 
-        if !numBytes_set_ || !algorithm_set_ || !hash_set_ || !compression_set_ {
-            return Err(ThriftError::MissingField)
+        if !numBytes_set_ {
+            return Err(ThriftError::MissingField(c"BloomFilterHeader::numBytes".into()))
+        }
+
+        if !algorithm_set_ {
+            return Err(ThriftError::MissingField(c"BloomFilterHeader::algorithm".into()))
+        }
+
+        if !hash_set_ {
+            return Err(ThriftError::MissingField(c"BloomFilterHeader::hash".into()))
+        }
+
+        if !compression_set_ {
+            return Err(ThriftError::MissingField(c"BloomFilterHeader::compression".into()))
         }
 
 
@@ -2579,8 +2643,16 @@ impl <'i> CompactThriftProtocol<'i> for PageHeader<'i> {
             }
         }
 
-        if !r#type_set_ || !uncompressed_page_size_set_ || !compressed_page_size_set_ {
-            return Err(ThriftError::MissingField)
+        if !r#type_set_ {
+            return Err(ThriftError::MissingField(c"PageHeader::type".into()))
+        }
+
+        if !uncompressed_page_size_set_ {
+            return Err(ThriftError::MissingField(c"PageHeader::uncompressed_page_size".into()))
+        }
+
+        if !compressed_page_size_set_ {
+            return Err(ThriftError::MissingField(c"PageHeader::compressed_page_size".into()))
         }
 
 
@@ -2650,7 +2722,7 @@ impl <'i> CompactThriftProtocol<'i> for KeyValue<'i> {
         }
 
         if !key_set_ {
-            return Err(ThriftError::MissingField)
+            return Err(ThriftError::MissingField(c"KeyValue::key".into()))
         }
 
 
@@ -2721,8 +2793,16 @@ impl <'i> CompactThriftProtocol<'i> for SortingColumn {
             }
         }
 
-        if !column_idx_set_ || !descending_set_ || !nulls_first_set_ {
-            return Err(ThriftError::MissingField)
+        if !column_idx_set_ {
+            return Err(ThriftError::MissingField(c"SortingColumn::column_idx".into()))
+        }
+
+        if !descending_set_ {
+            return Err(ThriftError::MissingField(c"SortingColumn::descending".into()))
+        }
+
+        if !nulls_first_set_ {
+            return Err(ThriftError::MissingField(c"SortingColumn::nulls_first".into()))
         }
 
 
@@ -2794,8 +2874,16 @@ impl <'i> CompactThriftProtocol<'i> for PageEncodingStats {
             }
         }
 
-        if !page_type_set_ || !encoding_set_ || !count_set_ {
-            return Err(ThriftError::MissingField)
+        if !page_type_set_ {
+            return Err(ThriftError::MissingField(c"PageEncodingStats::page_type".into()))
+        }
+
+        if !encoding_set_ {
+            return Err(ThriftError::MissingField(c"PageEncodingStats::encoding".into()))
+        }
+
+        if !count_set_ {
+            return Err(ThriftError::MissingField(c"PageEncodingStats::count".into()))
         }
 
 
@@ -2950,8 +3038,36 @@ impl <'i> CompactThriftProtocol<'i> for ColumnMetaData<'i> {
             }
         }
 
-        if !r#type_set_ || !encodings_set_ || !path_in_schema_set_ || !codec_set_ || !num_values_set_ || !total_uncompressed_size_set_ || !total_compressed_size_set_ || !data_page_offset_set_ {
-            return Err(ThriftError::MissingField)
+        if !r#type_set_ {
+            return Err(ThriftError::MissingField(c"ColumnMetaData::type".into()))
+        }
+
+        if !encodings_set_ {
+            return Err(ThriftError::MissingField(c"ColumnMetaData::encodings".into()))
+        }
+
+        if !path_in_schema_set_ {
+            return Err(ThriftError::MissingField(c"ColumnMetaData::path_in_schema".into()))
+        }
+
+        if !codec_set_ {
+            return Err(ThriftError::MissingField(c"ColumnMetaData::codec".into()))
+        }
+
+        if !num_values_set_ {
+            return Err(ThriftError::MissingField(c"ColumnMetaData::num_values".into()))
+        }
+
+        if !total_uncompressed_size_set_ {
+            return Err(ThriftError::MissingField(c"ColumnMetaData::total_uncompressed_size".into()))
+        }
+
+        if !total_compressed_size_set_ {
+            return Err(ThriftError::MissingField(c"ColumnMetaData::total_compressed_size".into()))
+        }
+
+        if !data_page_offset_set_ {
+            return Err(ThriftError::MissingField(c"ColumnMetaData::data_page_offset".into()))
         }
 
 
@@ -3074,7 +3190,7 @@ impl <'i> CompactThriftProtocol<'i> for EncryptionWithColumnKey<'i> {
         }
 
         if !path_in_schema_set_ {
-            return Err(ThriftError::MissingField)
+            return Err(ThriftError::MissingField(c"EncryptionWithColumnKey::path_in_schema".into()))
         }
 
 
@@ -3129,7 +3245,7 @@ impl <'i> CompactThriftProtocol<'i> for ColumnCryptoMetaData<'i> {
                 }
             }
             _ => {
-                return Err(ThriftError::MissingField)
+                return Err(ThriftError::MissingField(c"ColumnCryptoMetaData".into()))
             }
         }
         let stop = input.read_byte()?;
@@ -3241,7 +3357,7 @@ impl <'i> CompactThriftProtocol<'i> for ColumnChunk<'i> {
         }
 
         if !file_offset_set_ {
-            return Err(ThriftError::MissingField)
+            return Err(ThriftError::MissingField(c"ColumnChunk::file_offset".into()))
         }
 
 
@@ -3343,8 +3459,16 @@ impl <'i> CompactThriftProtocol<'i> for RowGroup<'i> {
             }
         }
 
-        if !columns_set_ || !total_byte_size_set_ || !num_rows_set_ {
-            return Err(ThriftError::MissingField)
+        if !columns_set_ {
+            return Err(ThriftError::MissingField(c"RowGroup::columns".into()))
+        }
+
+        if !total_byte_size_set_ {
+            return Err(ThriftError::MissingField(c"RowGroup::total_byte_size".into()))
+        }
+
+        if !num_rows_set_ {
+            return Err(ThriftError::MissingField(c"RowGroup::num_rows".into()))
         }
 
 
@@ -3440,7 +3564,7 @@ impl <'i> CompactThriftProtocol<'i> for ColumnOrder {
                 }
             }
             _ => {
-                return Err(ThriftError::MissingField)
+                return Err(ThriftError::MissingField(c"ColumnOrder".into()))
             }
         }
         let stop = input.read_byte()?;
@@ -3516,8 +3640,16 @@ impl <'i> CompactThriftProtocol<'i> for PageLocation {
             }
         }
 
-        if !offset_set_ || !compressed_page_size_set_ || !first_row_index_set_ {
-            return Err(ThriftError::MissingField)
+        if !offset_set_ {
+            return Err(ThriftError::MissingField(c"PageLocation::offset".into()))
+        }
+
+        if !compressed_page_size_set_ {
+            return Err(ThriftError::MissingField(c"PageLocation::compressed_page_size".into()))
+        }
+
+        if !first_row_index_set_ {
+            return Err(ThriftError::MissingField(c"PageLocation::first_row_index".into()))
         }
 
 
@@ -3582,7 +3714,7 @@ impl <'i> CompactThriftProtocol<'i> for OffsetIndex {
         }
 
         if !page_locations_set_ {
-            return Err(ThriftError::MissingField)
+            return Err(ThriftError::MissingField(c"OffsetIndex::page_locations".into()))
         }
 
 
@@ -3678,8 +3810,20 @@ impl <'i> CompactThriftProtocol<'i> for ColumnIndex<'i> {
             }
         }
 
-        if !null_pages_set_ || !min_values_set_ || !max_values_set_ || !boundary_order_set_ {
-            return Err(ThriftError::MissingField)
+        if !null_pages_set_ {
+            return Err(ThriftError::MissingField(c"ColumnIndex::null_pages".into()))
+        }
+
+        if !min_values_set_ {
+            return Err(ThriftError::MissingField(c"ColumnIndex::min_values".into()))
+        }
+
+        if !max_values_set_ {
+            return Err(ThriftError::MissingField(c"ColumnIndex::max_values".into()))
+        }
+
+        if !boundary_order_set_ {
+            return Err(ThriftError::MissingField(c"ColumnIndex::boundary_order".into()))
         }
 
 
@@ -3871,7 +4015,7 @@ impl <'i> CompactThriftProtocol<'i> for EncryptionAlgorithm<'i> {
                 }
             }
             _ => {
-                return Err(ThriftError::MissingField)
+                return Err(ThriftError::MissingField(c"EncryptionAlgorithm".into()))
             }
         }
         let stop = input.read_byte()?;
@@ -3985,8 +4129,20 @@ impl <'i> CompactThriftProtocol<'i> for FileMetaData<'i> {
             }
         }
 
-        if !version_set_ || !schema_set_ || !num_rows_set_ || !row_groups_set_ {
-            return Err(ThriftError::MissingField)
+        if !version_set_ {
+            return Err(ThriftError::MissingField(c"FileMetaData::version".into()))
+        }
+
+        if !schema_set_ {
+            return Err(ThriftError::MissingField(c"FileMetaData::schema".into()))
+        }
+
+        if !num_rows_set_ {
+            return Err(ThriftError::MissingField(c"FileMetaData::num_rows".into()))
+        }
+
+        if !row_groups_set_ {
+            return Err(ThriftError::MissingField(c"FileMetaData::row_groups".into()))
         }
 
 
@@ -4057,7 +4213,7 @@ impl <'i> CompactThriftProtocol<'i> for FileCryptoMetaData<'i> {
         }
 
         if !encryption_algorithm_set_ {
-            return Err(ThriftError::MissingField)
+            return Err(ThriftError::MissingField(c"FileCryptoMetaData::encryption_algorithm".into()))
         }
 
 

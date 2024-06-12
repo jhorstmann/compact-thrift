@@ -268,11 +268,11 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
                             }
                         }
                     }
-                    ${if (definition.hasRequiredFields()) { """
-                    if ${definition.fields.values.filter { it.required() }.map { "!${rustIdentifier(it.identifier)}_set_" }.joinToString(" || ")} {
-                        return Err(ThriftError::MissingField)
+                    ${definition.fields.values.filter { it.required() }.map {"""
+                    if !${rustIdentifier(it.identifier)}_set_ {
+                        return Err(ThriftError::MissingField(c"${definition.identifier}::${it.identifier}".into()))
                     }
-                    """ } else { "" }}
+                    """ }.joinToString("") }
                     
                     Ok(())
                 }
@@ -331,7 +331,7 @@ class RustDefinitionVisitor(val document: Document, val code: StringBuilder) : D
                             }
                         }""" }.joinToString("")}
                         _ => {
-                            return Err(ThriftError::MissingField)
+                            return Err(ThriftError::MissingField(c"${definition.identifier}".into()))
                         }
                     }
                     let stop = input.read_byte()?;
