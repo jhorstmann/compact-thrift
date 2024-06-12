@@ -736,36 +736,15 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
         self.clear();
         self.try_reserve(len as usize).map_err(|_| ThriftError::ReserveError)?;
 
-        // workaround for unnecessary memcpy calls when using Vec::push(P::default()) with larger structs
-        // https://github.com/rust-lang/rust/issues/125632
-
-        struct SetLenOnDrop<'a, T> {
-            vec: &'a mut Vec<T>,
-            len: usize,
-        }
-
-        impl <'a, T> Drop for SetLenOnDrop<'a, T> {
-            fn drop(&mut self) {
-                unsafe {
-                    self.vec.set_len(self.len)
-                }
-            }
-        }
-
-        let mut guard = SetLenOnDrop {
-            vec: self,
-            len: 0,
-        };
-
-        for i in 0..len as usize {
-            // Safety: len was reserved
+        for _ in 0..len as usize {
+            // workaround for unnecessary memcpy calls when using Vec::push(P::default()) with larger structs
+            // https://github.com/rust-lang/rust/issues/125632
+            self.extend((0..1).map(|_| P::default()));
             unsafe {
-                let ptr = guard.vec.as_mut_ptr().add(i);
-                ptr.write(P::default());
-                (*ptr).fill(input)?;
-                guard.len += 1;
+                self.last_mut().unwrap_unchecked().fill(input)?;
             }
         }
+
         Ok(())
     }
 
