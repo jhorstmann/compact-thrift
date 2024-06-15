@@ -25,13 +25,27 @@ pub enum ThriftError {
 /// Store static strings used by field names as a single pointer to reduce size of the error enum.
 #[derive(Clone)]
 pub struct FieldName {
+    /// pointer to null-terminated static bytes
     name: *const c_char,
 }
+
+// Safety: FieldName can only be constructed from static strings
+unsafe impl Send for FieldName {}
+unsafe impl Sync for FieldName {}
 
 impl From<&'static CStr> for FieldName {
     fn from(value: &'static CStr) -> Self {
         Self {
             name: value.as_ptr()
+        }
+    }
+}
+
+impl From<&'static str> for FieldName {
+    fn from(value: &'static str) -> Self {
+        assert!(!value.is_empty() && value.as_bytes()[value.len()-1] == b'\0');
+        Self {
+            name: value.as_ptr().cast::<c_char>()
         }
     }
 }
