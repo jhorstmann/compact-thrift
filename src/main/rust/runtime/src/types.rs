@@ -171,7 +171,6 @@ impl <'i> CompactThriftProtocol<'i> for Cow<'i, str> {
 impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for Vec<P> {
     const FIELD_TYPE: u8 = 9;
 
-    #[inline]
     fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let (len, element_type) = read_collection_len_and_type(input)?;
         if element_type != P::FIELD_TYPE && !(P::FIELD_TYPE == bool::FIELD_TYPE && element_type == 1) {
@@ -192,7 +191,6 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
         Ok(())
     }
 
-    #[inline]
     fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         let len = self.len();
         if len > MAX_COLLECTION_LEN {
@@ -228,6 +226,7 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
         Ok(())
     }
 
+    #[inline]
     fn fill_field<T: CompactThriftInput<'i>>(&mut self, input: &mut T, field_type: u8) -> Result<(), ThriftError> {
         if self.is_some() {
             return Err(ThriftError::DuplicateField);
