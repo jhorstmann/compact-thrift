@@ -16,6 +16,7 @@ compact-thrift-rs = { version = "0.1.0", path = "../runtime" }
 
 [dev-dependencies]
 criterion = "0.5.1"
+jemallocator = "0.5.4"
 
 [[bench]]
 name = "filemetadata"

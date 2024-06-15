@@ -4,6 +4,10 @@ use parquet_format::format::FileMetaData;
 use parquet_format::{get_metadata_chunk, get_page_index_chunk, get_page_index_range, read_page_index};
 use std::fs::File;
 use std::io::Read;
+use jemallocator::Jemalloc;
+
+#[global_allocator]
+static GLOBAL: Jemalloc = Jemalloc;
 
 fn criterion_benchmark(c: &mut Criterion) {
     let mut file = File::open("data/alltypes_tiny_pages.parquet").unwrap();
@@ -15,7 +19,7 @@ fn criterion_benchmark(c: &mut Criterion) {
 
     let fmd = FileMetaData::read(&mut fmd_input.clone()).unwrap();
 
-    let page_index_range = get_page_index_range(&fmd).unwrap();
+    let maybe_page_index_range = get_page_index_range(&fmd);
 
     c.benchmark_group("filemetadata")
         .throughput(Throughput::Bytes(fmd_chunk.len() as u64))
@@ -31,18 +35,19 @@ fn criterion_benchmark(c: &mut Criterion) {
         .bench_function("skip", |b| {
             b.iter(|| fmd_input.clone().skip_field(FileMetaData::FIELD_TYPE).unwrap())
         });
-    c.benchmark_group("pageindex")
-        .throughput(Throughput::Bytes(page_index_range.len() as u64))
-        .bench_function("get_range", |b| {
-            b.iter(|| get_page_index_range(&fmd).unwrap())
-        })
-        .bench_function("read", |b| {
-            let (chunk, range) = get_page_index_chunk(&mut file, &fmd).unwrap().unwrap();
-            assert!(!range.is_empty());
-            assert!(!chunk.is_empty());
-            b.iter(|| read_page_index(&chunk, range.start, &fmd).unwrap())
-        })
-    ;
+    if let Some(page_index_range) = maybe_page_index_range {
+        c.benchmark_group("pageindex")
+            .throughput(Throughput::Bytes(page_index_range.len() as u64))
+            .bench_function("get_range", |b| {
+                b.iter(|| get_page_index_range(&fmd).unwrap())
+            })
+            .bench_function("read", |b| {
+                let (chunk, range) = get_page_index_chunk(&mut file, &fmd).unwrap().unwrap();
+                assert!(!range.is_empty());
+                assert!(!chunk.is_empty());
+                b.iter(|| read_page_index(&chunk, range.start, &fmd).unwrap())
+            });
+    }
 }
 
 criterion_group!(benches, criterion_benchmark);
