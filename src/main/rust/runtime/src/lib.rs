@@ -10,7 +10,7 @@ pub use protocol::*;
 #[cfg(test)]
 mod tests {
     use crate::{CompactThriftInput, CompactThriftOutput, CompactThriftProtocol, FieldName, skip_field, SliceInput, ThriftError};
-    use crate::uleb::{decode_uleb, skip_uleb_sse2};
+    use crate::uleb::decode_uleb;
 
     #[test]
     fn test_size_of_error() {
@@ -45,6 +45,7 @@ mod tests {
     #[test]
     #[cfg(target_feature = "sse2")]
     fn test_skip_uleb_sse2() {
+        use crate::uleb::skip_uleb_sse2;
         {
             let buf = &[0; 16];
             assert_eq!(unsafe { skip_uleb_sse2(buf) }, &buf[1..]);
