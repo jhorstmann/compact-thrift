@@ -1,4 +1,5 @@
 mod error;
+pub mod macros;
 mod protocol;
 mod types;
 mod uleb;

@@ -95,7 +95,7 @@ pub fn get_page_index_chunk<R: Read + Seek>(input: &mut R, file_metadata: &FileM
     }
 }
 
-fn read_page_index_for_column_chunk<'i>(chunk: &'i [u8], chunk_offset: usize, column_chunks: &[ColumnChunk]) -> Result<Vec<Option<(OffsetIndex, ColumnIndex<'i>)>>, ParquetError> {
+fn read_page_index_for_column_chunk<'i>(chunk: &'i [u8], chunk_offset: usize, column_chunks: &[ColumnChunk]) -> Result<Vec<Option<(OffsetIndex, ColumnIndex)>>, ParquetError> {
     column_chunks.iter().map(|cc| {
         let offset_index_range = if let (Some(offset), Some(length)) = (cc.offset_index_offset, cc.offset_index_length) {
             assert!(offset as usize >= chunk_offset);
@@ -128,7 +128,7 @@ fn read_page_index_for_column_chunk<'i>(chunk: &'i [u8], chunk_offset: usize, co
     }).collect()
 }
 
-pub fn read_page_index<'i>(chunk: &'i [u8], chunk_offset: usize, file_metadata: &FileMetaData) -> Result<Vec<Vec<Option<(OffsetIndex, ColumnIndex<'i>)>>>, ParquetError> {
+pub fn read_page_index<'i>(chunk: &'i [u8], chunk_offset: usize, file_metadata: &FileMetaData) -> Result<Vec<Vec<Option<(OffsetIndex, ColumnIndex)>>>, ParquetError> {
     file_metadata.row_groups.iter().map(|rg| {
         read_page_index_for_column_chunk(chunk, chunk_offset, &rg.columns)
     }).collect()
