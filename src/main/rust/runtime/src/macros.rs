@@ -1,5 +1,3 @@
-use std::{stringify, concat};
-
 use crate::{ThriftError};
 use crate::protocol::{ CompactThriftInput, CompactThriftOutput, CompactThriftProtocol};
 
@@ -27,12 +25,20 @@ macro_rules! thrift {
 #[macro_export]
 macro_rules! thrift_struct {
     ($(#[$($def_attrs:tt)*])* struct $identifier:ident { $($(#[$($field_attrs:tt)*])* $field_id:literal : $required_or_optional:ident $field_type:ident $(< $element_type:ident >)? $field_name:ident $(= $default_value:literal)? $(;)?)* }) => {
-        $(#[$($def_attrs)*])*
+        $(#[cfg_attr(not(doctest), $($def_attrs)*)])*
         #[derive(Default, Clone, Debug, PartialEq)]
         #[allow(non_camel_case_types)]
         #[allow(non_snake_case)]
         pub struct $identifier {
-            $($(#[$($field_attrs)*])* pub $field_name: required_or_optional!($required_or_optional field_type!($field_type $($element_type)?))),*
+            $($(#[cfg_attr(not(doctest), $($field_attrs)*)])* pub $field_name: required_or_optional!($required_or_optional field_type!($field_type $($element_type)?))),*
+        }
+
+        impl $identifier {
+            pub fn new($($field_name: impl Into<required_or_optional!($required_or_optional field_type!($field_type $($element_type)?))>),*) -> Self {
+                Self {
+                    $($field_name: $field_name.into(),)*
+                }
+            }
         }
 
         #[allow(non_snake_case)]
@@ -80,12 +86,12 @@ macro_rules! thrift_struct {
 #[macro_export]
 macro_rules! thrift_union {
     ($(#[$($def_attrs:tt)*])* union $identifier:ident { $($(#[$($field_attrss:tt)*])* $field_id:literal : $field_type:ident $(< $element_type:ident >)? $field_name:ident $(;)?)* }) => {
-        $(#[$($def_attrs)*])*
+        $(#[cfg_attr(not(doctest), $($def_attrs)*)])*
         #[derive(Clone, Debug, PartialEq)]
         #[allow(non_camel_case_types)]
         #[allow(non_snake_case)]
         pub enum $identifier {
-            $($(#[$($field_attrss)*])* $field_name(field_type!($field_type $($element_type)?))),*
+            $($(#[cfg_attr(not(doctest), $($field_attrss)*)])* $field_name(field_type!($field_type $($element_type)?))),*
         }
 
         impl Default for $identifier {
@@ -254,16 +260,16 @@ mod tests {
           2: MicroSeconds MICROS
           3: NanoSeconds NANOS
         }
- enum Type {
-  BOOLEAN = 0;
-  INT32 = 1;
-  INT64 = 2;
-  INT96 = 3;  // deprecated, only used by legacy implementations.
-  FLOAT = 4;
-  DOUBLE = 5;
-  BYTE_ARRAY = 6;
-  FIXED_LEN_BYTE_ARRAY = 7;
-}
+        enum Type {
+          BOOLEAN = 0;
+          INT32 = 1;
+          INT64 = 2;
+          INT96 = 3;  // deprecated, only used by legacy implementations.
+          FLOAT = 4;
+          DOUBLE = 5;
+          BYTE_ARRAY = 6;
+          FIXED_LEN_BYTE_ARRAY = 7;
+        }
         enum CompressionCodec {
           UNCOMPRESSED = 0;
           SNAPPY = 1;
@@ -274,5 +280,10 @@ mod tests {
           ZSTD = 6;    // Added in 2.4
           LZ4_RAW = 7; // Added in 2.9
         }
+    }
+
+    #[test]
+    pub fn test_constructor() {
+        let _s = SomeStructure::new(1_i64, 2_i64, Some(vec![3_i64]), Some("foo".into()));
     }
 }
