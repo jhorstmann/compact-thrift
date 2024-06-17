@@ -693,7 +693,7 @@ struct BloomFilterHeader {
 
 struct PageHeader {
   /** the type of the page: indicates which of the *_header fields is set **/
-  1: required PageType type
+  1: required PageType type_
 
   /** Uncompressed page size in bytes (not including this header) **/
   2: required i32 uncompressed_page_size
@@ -771,7 +771,7 @@ struct PageEncodingStats {
  */
 struct ColumnMetaData {
   /** Type of this column **/
-  1: required Type type
+  1: required Type type_
 
   /** Set of all encodings used for this column. The purpose is to validate
    * whether we can decode those pages. **/
