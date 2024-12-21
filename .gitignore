@@ -2,3 +2,7 @@
 target/
 src/main/rust/target/
 src/main/rust/*/Cargo.lock
+
+perf.data
+perf.data.old
+flamegraph.svg
