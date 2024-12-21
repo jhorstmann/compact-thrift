@@ -9,7 +9,7 @@ pub use protocol::*;
 
 #[cfg(test)]
 mod tests {
-    use crate::{CompactThriftInput, CompactThriftOutput, CompactThriftProtocol, FieldName, skip_field, SliceInput, ThriftError};
+    use crate::{CompactThriftInput, CompactThriftOutput, CompactThriftProtocol, FieldName, skip_field, CompactThriftInputSlice, ThriftError};
     use crate::uleb::decode_uleb;
 
     #[test]
@@ -26,20 +26,20 @@ mod tests {
 
     #[test]
     fn test_slice_input_read_byte() {
-        let mut input = SliceInput::new(&[1]);
+        let mut input = CompactThriftInputSlice::new(&[1]);
         assert_eq!(input.read_byte().unwrap(), 1);
     }
 
     #[test]
     fn test_read_uleb() {
-        assert_eq!(decode_uleb(&mut SliceInput::new(&[1])).unwrap(), 1);
-        assert_eq!(decode_uleb(&mut SliceInput::new(&[0b0111_1111])).unwrap(), 0b0111_1111);
-        assert_eq!(decode_uleb(&mut SliceInput::new(&[0b1000_1111, 0b0111_0101])).unwrap(), 0b0011_1010_1000_1111);
+        assert_eq!(decode_uleb(&mut CompactThriftInputSlice::new(&[1])).unwrap(), 1);
+        assert_eq!(decode_uleb(&mut CompactThriftInputSlice::new(&[0b0111_1111])).unwrap(), 0b0111_1111);
+        assert_eq!(decode_uleb(&mut CompactThriftInputSlice::new(&[0b1000_1111, 0b0111_0101])).unwrap(), 0b0011_1010_1000_1111);
     }
 
     #[test]
     fn test_read_uleb_overlong() {
-        decode_uleb(&mut SliceInput::new(&[0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0])).unwrap();
+        decode_uleb(&mut CompactThriftInputSlice::new(&[0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0b1000_0001, 0])).unwrap();
     }
 
     #[test]
@@ -65,33 +65,33 @@ mod tests {
 
     #[test]
     fn test_slice_input_read_i32() {
-        assert_eq!(SliceInput::new(&[0]).read_i32().unwrap(), 0);
-        assert_eq!(SliceInput::new(&[1]).read_i32().unwrap(), -1);
-        assert_eq!(SliceInput::new(&[2]).read_i32().unwrap(), 1);
+        assert_eq!(CompactThriftInputSlice::new(&[0]).read_i32().unwrap(), 0);
+        assert_eq!(CompactThriftInputSlice::new(&[1]).read_i32().unwrap(), -1);
+        assert_eq!(CompactThriftInputSlice::new(&[2]).read_i32().unwrap(), 1);
 
-        assert_eq!(SliceInput::new(&[0b0111_1111]).read_i32().unwrap(), -64);
-        assert_eq!(SliceInput::new(&[0b1000_1111, 0b0111_0101]).read_i32().unwrap(), -7496);
-        assert_eq!(SliceInput::new(&[0b1000_1111, 0b0111_0101, 0, 0]).read_i32().unwrap(), -7496);
-        assert_eq!(SliceInput::new(&[0b1000_1111, 0b0111_0101, 0, 0, 0]).read_i32().unwrap(), -7496);
+        assert_eq!(CompactThriftInputSlice::new(&[0b0111_1111]).read_i32().unwrap(), -64);
+        assert_eq!(CompactThriftInputSlice::new(&[0b1000_1111, 0b0111_0101]).read_i32().unwrap(), -7496);
+        assert_eq!(CompactThriftInputSlice::new(&[0b1000_1111, 0b0111_0101, 0, 0]).read_i32().unwrap(), -7496);
+        assert_eq!(CompactThriftInputSlice::new(&[0b1000_1111, 0b0111_0101, 0, 0, 0]).read_i32().unwrap(), -7496);
     }
 
     #[test]
     fn test_uleb_roundtrip() {
         let mut w = vec![];
         w.write_i64(1234567890).unwrap();
-        let mut r = SliceInput::new(&w);
+        let mut r = CompactThriftInputSlice::new(&w);
         assert_eq!(r.read_i64().unwrap(), 1234567890);
     }
 
     #[test]
     fn test_read_vec_bool() {
-        let mut data = SliceInput::new(&[0x42, 0, 1, 1, 0]);
+        let mut data = CompactThriftInputSlice::new(&[0x42, 0, 1, 1, 0]);
         let actual = Vec::<bool>::read(&mut data).unwrap();
         let expected = vec![false, true, true, false];
         assert_eq!(&actual, &expected);
 
         // also allow element type 1 for boolean
-        let mut data = SliceInput::new(&[0x41, 0, 1, 1, 0]);
+        let mut data = CompactThriftInputSlice::new(&[0x41, 0, 1, 1, 0]);
         let actual = Vec::<bool>::read(&mut data).unwrap();
         let expected = vec![false, true, true, false];
         assert_eq!(&actual, &expected);
@@ -99,7 +99,7 @@ mod tests {
 
     #[test]
     fn test_read_box() {
-        let mut data = SliceInput::new(&[0x2]);
+        let mut data = CompactThriftInputSlice::new(&[0x2]);
         let actual = Box::<i32>::read(&mut data).unwrap();
         let expected = Box::new(1);
         assert_eq!(&actual, &expected);
@@ -107,7 +107,7 @@ mod tests {
 
     #[test]
     fn test_read_option_box() {
-        let mut data = SliceInput::new(&[0x2]);
+        let mut data = CompactThriftInputSlice::new(&[0x2]);
         let actual = Option::<Box::<i32>>::read(&mut data).unwrap();
         let expected = Some(Box::new(1));
         assert_eq!(&actual, &expected);
@@ -118,7 +118,7 @@ mod tests {
         let input = Vec::<i64>::default();
         let mut buffer = vec![];
         input.write(&mut buffer).unwrap();
-        let result = Vec::<i64>::read(&mut SliceInput::new(&buffer)).unwrap();
+        let result = Vec::<i64>::read(&mut CompactThriftInputSlice::new(&buffer)).unwrap();
         assert_eq!(&result, &input);
     }
 
@@ -127,7 +127,7 @@ mod tests {
         let input = vec![true, false, false, true];
         let mut buffer = vec![];
         input.write(&mut buffer).unwrap();
-        let result = Vec::<bool>::read(&mut SliceInput::new(&buffer)).unwrap();
+        let result = Vec::<bool>::read(&mut CompactThriftInputSlice::new(&buffer)).unwrap();
         assert_eq!(&result, &input);
     }
 
@@ -136,7 +136,7 @@ mod tests {
         let input = vec![1_i64, i64::MIN, i64::MAX, 9999999];
         let mut buffer = vec![];
         input.write(&mut buffer).unwrap();
-        let result = Vec::<i64>::read(&mut SliceInput::new(&buffer)).unwrap();
+        let result = Vec::<i64>::read(&mut CompactThriftInputSlice::new(&buffer)).unwrap();
         assert_eq!(&result, &input);
     }
 
@@ -145,7 +145,7 @@ mod tests {
         let input = vec![true, false, false, true];
         let mut buffer = vec![];
         input.write(&mut buffer).unwrap();
-        let mut slice = SliceInput::new(&buffer);
+        let mut slice = CompactThriftInputSlice::new(&buffer);
         skip_field(&mut slice, Vec::<bool>::FIELD_TYPE, true).unwrap();
         assert_eq!(&slice.as_slice(), &[]);
     }
@@ -155,7 +155,7 @@ mod tests {
         let input = vec![1_i64, 999999999999, -1, i64::MAX];
         let mut buffer = vec![];
         input.write(&mut buffer).unwrap();
-        let mut slice = SliceInput::new(&buffer);
+        let mut slice = CompactThriftInputSlice::new(&buffer);
         skip_field(&mut slice, Vec::<i64>::FIELD_TYPE, true).unwrap();
         assert_eq!(&slice.as_slice(), &[]);
     }

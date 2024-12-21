@@ -1,7 +1,7 @@
 use std::hint::unreachable_unchecked;
 use std::io::{Read, Seek, SeekFrom, Error as IOError};
 use std::ops::Range;
-use compact_thrift_rs::{CompactThriftProtocol, SliceInput, ThriftError};
+use compact_thrift_rs::{CompactThriftProtocol, CompactThriftInputSlice, ThriftError};
 use crate::format::{ColumnChunk, ColumnIndex, FileMetaData, OffsetIndex};
 
 #[rustfmt::skip]
@@ -118,8 +118,8 @@ fn read_page_index_for_column_chunk<'i>(chunk: &'i [u8], chunk_offset: usize, co
 
         match &mut res {
             Ok(Some((offset_index, column_index))) => {
-                offset_index.fill(&mut SliceInput::new(&chunk[offset_index_range]))?;
-                column_index.fill(&mut SliceInput::new(&chunk[column_index_range]))?;
+                offset_index.fill(&mut CompactThriftInputSlice::new(&chunk[offset_index_range]))?;
+                column_index.fill(&mut CompactThriftInputSlice::new(&chunk[column_index_range]))?;
             }
             _ => unsafe { unreachable_unchecked() }
         }
@@ -137,7 +137,7 @@ pub fn read_page_index<'i>(chunk: &'i [u8], chunk_offset: usize, file_metadata: 
 #[cfg(test)]
 mod tests {
     use std::fs::File;
-    use compact_thrift_rs::{CompactThriftProtocol, SliceInput};
+    use compact_thrift_rs::{CompactThriftProtocol, CompactThriftInputSlice};
     use crate::format::FileMetaData;
     use crate::get_metadata_chunk;
 
@@ -147,7 +147,7 @@ mod tests {
         let metadata_chunk = get_metadata_chunk(&mut file).unwrap();
         dbg!(metadata_chunk.len());
 
-        let mut input = SliceInput::new(&metadata_chunk);
+        let mut input = CompactThriftInputSlice::new(&metadata_chunk);
         let metadata = FileMetaData::read(&mut input).unwrap();
         dbg!(&metadata);
     }

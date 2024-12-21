@@ -1,4 +1,4 @@
-use compact_thrift_rs::{CompactThriftInput, CompactThriftOutput, CompactThriftProtocol, SliceInput};
+use compact_thrift_rs::{CompactThriftInput, CompactThriftOutput, CompactThriftProtocol, CompactThriftInputSlice};
 use criterion::*;
 use std::fs::File;
 use rand::rngs::StdRng;
@@ -11,7 +11,7 @@ fn criterion_benchmark(c: &mut Criterion) {
     let mut data = Vec::new();
     numbers.write(&mut data).unwrap();
 
-    let mut input = SliceInput::new(&data);
+    let mut input = CompactThriftInputSlice::new(&data);
 
     let result = Vec::<i64>::read(&mut input.clone()).unwrap();
     assert_eq!(&result, &numbers);

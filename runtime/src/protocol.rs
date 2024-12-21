@@ -303,9 +303,9 @@ impl<R: Read + ?Sized> CompactThriftInput<'static> for R {
 }
 
 #[derive(Clone)]
-pub struct SliceInput<'a>(&'a [u8]);
+pub struct CompactThriftInputSlice<'a>(&'a [u8]);
 
-impl <'a> SliceInput<'a> {
+impl <'a> CompactThriftInputSlice<'a> {
     pub fn new(slice: &'a [u8]) -> Self {
         Self(slice)
     }
@@ -315,13 +315,13 @@ impl <'a> SliceInput<'a> {
     }
 }
 
-impl <'a> From<&'a [u8]> for SliceInput<'a> {
+impl <'a> From<&'a [u8]> for CompactThriftInputSlice<'a> {
     fn from(slice: &'a [u8]) -> Self {
         Self(slice)
     }
 }
 
-impl <'i> CompactThriftInput<'i> for SliceInput<'i> {
+impl <'i> CompactThriftInput<'i> for CompactThriftInputSlice<'i> {
     #[inline]
     fn read_byte(&mut self) -> Result<u8, ThriftError> {
         if self.0.len() < 1 {

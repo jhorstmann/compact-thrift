@@ -1,4 +1,4 @@
-use compact_thrift_rs::{CompactThriftInput, CompactThriftProtocol, SliceInput};
+use compact_thrift_rs::{CompactThriftInput, CompactThriftProtocol, CompactThriftInputSlice};
 use criterion::*;
 use parquet_format::format::FileMetaData;
 use parquet_format::{get_metadata_chunk, get_page_index_chunk, get_page_index_range, read_page_index};
@@ -15,7 +15,7 @@ fn criterion_benchmark(c: &mut Criterion) {
     file.read_to_end(&mut data).unwrap();
 
     let fmd_chunk = get_metadata_chunk(&mut file).unwrap();
-    let fmd_input = SliceInput::new(&fmd_chunk);
+    let fmd_input = CompactThriftInputSlice::new(&fmd_chunk);
 
     let fmd = FileMetaData::read(&mut fmd_input.clone()).unwrap();
 
