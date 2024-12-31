@@ -7,7 +7,7 @@ impl <'i> CompactThriftProtocol<'i> for bool {
     const FIELD_TYPE: u8 = 2; // TRUE = 1, FALSE = 2
 
     #[inline]
-    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let byte = input.read_byte()?;
         // according to the spec the bytes in a collection should be FALSE = 0, TRUE = 1,
         // but at least the java implementation writes the same values as for field types
@@ -16,18 +16,18 @@ impl <'i> CompactThriftProtocol<'i> for bool {
     }
 
     #[inline]
-    fn fill_field<T: CompactThriftInput<'i>>(&mut self, _input: &mut T, field_type: u8) -> Result<(), ThriftError> {
+    fn fill_thrift_field<T: CompactThriftInput<'i>>(&mut self, _input: &mut T, field_type: u8) -> Result<(), ThriftError> {
         // no error checking
         *self = field_type == 1;
         Ok(())
     }
 
     #[inline]
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_byte(*self as u8)
     }
 
-    fn write_field<T: CompactThriftOutput>(&self, output: &mut T, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
+    fn write_thrift_field<T: CompactThriftOutput>(&self, output: &mut T, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
         let field_type = 1 + (!*self) as u8;
         write_field_header(output, field_type, field_id, last_field_id)
     }
@@ -37,13 +37,13 @@ impl <'i> CompactThriftProtocol<'i> for i8 {
     const FIELD_TYPE: u8 = 3;
 
     #[inline]
-    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         *self = input.read_byte()? as i8;
         Ok(())
     }
 
     #[inline]
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_byte(*self as u8)
     }
 }
@@ -52,13 +52,13 @@ impl <'i> CompactThriftProtocol<'i> for i16 {
     const FIELD_TYPE: u8 = 4;
 
     #[inline]
-    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         *self = input.read_i16()?;
         Ok(())
     }
 
     #[inline]
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_i16(*self)
     }
 }
@@ -67,13 +67,13 @@ impl <'i> CompactThriftProtocol<'i> for i32 {
     const FIELD_TYPE: u8 = 5;
 
     #[inline]
-    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         *self = input.read_i32()?;
         Ok(())
     }
 
     #[inline]
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_i32(*self)
     }
 }
@@ -82,13 +82,13 @@ impl <'i> CompactThriftProtocol<'i> for i64 {
     const FIELD_TYPE: u8 = 6;
 
     #[inline]
-    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         *self = input.read_i64()?;
         Ok(())
     }
 
     #[inline]
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_i64(*self)
     }
 }
@@ -97,13 +97,13 @@ impl <'i> CompactThriftProtocol<'i> for f64 {
     const FIELD_TYPE: u8 = 7;
 
     #[inline]
-    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         *self = input.read_double()?;
         Ok(())
     }
 
     #[inline]
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_double(*self)
     }
 }
@@ -112,13 +112,13 @@ impl <'i> CompactThriftProtocol<'i> for Vec<u8> {
     const FIELD_TYPE: u8 = 8;
 
     #[inline]
-    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         *self = input.read_binary()?.to_vec();
         Ok(())
     }
 
     #[inline]
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_binary(self.as_slice())
     }
 }
@@ -127,13 +127,13 @@ impl <'i> CompactThriftProtocol<'i> for String {
     const FIELD_TYPE: u8 = 8; // Same type as Binary?
 
     #[inline]
-    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         *self = input.read_string()?.into_owned();
         Ok(())
     }
 
     #[inline]
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_string(self.as_str())
     }
 }
@@ -142,13 +142,13 @@ impl <'i> CompactThriftProtocol<'i> for Cow<'i, [u8]> {
     const FIELD_TYPE: u8 = 8;
 
     #[inline]
-    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         *self = input.read_binary()?;
         Ok(())
     }
 
     #[inline]
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_binary(self.as_ref())
     }
 }
@@ -157,13 +157,13 @@ impl <'i> CompactThriftProtocol<'i> for Cow<'i, str> {
     const FIELD_TYPE: u8 = 8;
 
     #[inline]
-    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         *self = input.read_string()?;
         Ok(())
     }
 
     #[inline]
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_string(self.as_ref())
     }
 }
@@ -171,7 +171,7 @@ impl <'i> CompactThriftProtocol<'i> for Cow<'i, str> {
 impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for Vec<P> {
     const FIELD_TYPE: u8 = 9;
 
-    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let (len, element_type) = read_collection_len_and_type(input)?;
         if element_type != P::FIELD_TYPE && !(P::FIELD_TYPE == bool::FIELD_TYPE && element_type == 1) {
             return Err(ThriftError::InvalidType);
@@ -184,14 +184,14 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
             // https://github.com/rust-lang/rust/issues/125632
             self.extend((0..1).map(|_| P::default()));
             unsafe {
-                self.last_mut().unwrap_unchecked().fill(input)?;
+                self.last_mut().unwrap_unchecked().fill_thrift(input)?;
             }
         }
 
         Ok(())
     }
 
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         let len = self.len();
         if len > MAX_COLLECTION_LEN {
             return Err(ThriftError::InvalidCollectionLen);
@@ -205,7 +205,7 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
             output.write_len(len)?;
         }
         self.iter().try_for_each(|value| {
-            value.write(output)
+            value.write_thrift(output)
         })
     }
 }
@@ -214,46 +214,46 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
     const FIELD_TYPE: u8 = P::FIELD_TYPE;
 
     #[inline]
-    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         if self.is_some() {
             return Err(ThriftError::DuplicateField);
         }
         // Safety: avoid generating drop calls, content is always None because of check above
         unsafe {
             std::ptr::write(self as *mut _, Some(P::default()));
-            self.as_mut().unwrap_unchecked().fill(input)?;
+            self.as_mut().unwrap_unchecked().fill_thrift(input)?;
         }
         Ok(())
     }
 
     #[inline]
-    fn fill_field<T: CompactThriftInput<'i>>(&mut self, input: &mut T, field_type: u8) -> Result<(), ThriftError> {
+    fn fill_thrift_field<T: CompactThriftInput<'i>>(&mut self, input: &mut T, field_type: u8) -> Result<(), ThriftError> {
         if self.is_some() {
             return Err(ThriftError::DuplicateField);
         }
         // Safety: avoid generating drop calls, content is always None because of check above
         unsafe {
             std::ptr::write(self as *mut _, Some(P::default()));
-            self.as_mut().unwrap_unchecked().fill_field(input, field_type)?;
+            self.as_mut().unwrap_unchecked().fill_thrift_field(input, field_type)?;
         }
         Ok(())
     }
 
 
     #[inline]
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         if let Some(value) = self.as_ref() {
-            value.write(output)
+            value.write_thrift(output)
         } else {
             Err(ThriftError::MissingValue)
         }
     }
 
     #[inline]
-    fn write_field<T: CompactThriftOutput>(&self, output: &mut T, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
+    fn write_thrift_field<T: CompactThriftOutput>(&self, output: &mut T, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
         // only write if present
         if let Some(value) = self.as_ref() {
-            value.write_field(output, field_id, last_field_id)?;
+            value.write_thrift_field(output, field_id, last_field_id)?;
         }
         Ok(())
     }
@@ -263,12 +263,12 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
     const FIELD_TYPE: u8 = P::FIELD_TYPE;
 
     #[inline]
-    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        self.as_mut().fill(input)
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+        self.as_mut().fill_thrift(input)
     }
 
     #[inline]
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
-        self.as_ref().write(output)
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        self.as_ref().write_thrift(output)
     }
 }

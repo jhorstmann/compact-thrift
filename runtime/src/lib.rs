@@ -86,13 +86,13 @@ mod tests {
     #[test]
     fn test_read_vec_bool() {
         let mut data = CompactThriftInputSlice::new(&[0x42, 0, 1, 1, 0]);
-        let actual = Vec::<bool>::read(&mut data).unwrap();
+        let actual = Vec::<bool>::read_thrift(&mut data).unwrap();
         let expected = vec![false, true, true, false];
         assert_eq!(&actual, &expected);
 
         // also allow element type 1 for boolean
         let mut data = CompactThriftInputSlice::new(&[0x41, 0, 1, 1, 0]);
-        let actual = Vec::<bool>::read(&mut data).unwrap();
+        let actual = Vec::<bool>::read_thrift(&mut data).unwrap();
         let expected = vec![false, true, true, false];
         assert_eq!(&actual, &expected);
     }
@@ -100,7 +100,7 @@ mod tests {
     #[test]
     fn test_read_box() {
         let mut data = CompactThriftInputSlice::new(&[0x2]);
-        let actual = Box::<i32>::read(&mut data).unwrap();
+        let actual = Box::<i32>::read_thrift(&mut data).unwrap();
         let expected = Box::new(1);
         assert_eq!(&actual, &expected);
     }
@@ -108,7 +108,7 @@ mod tests {
     #[test]
     fn test_read_option_box() {
         let mut data = CompactThriftInputSlice::new(&[0x2]);
-        let actual = Option::<Box::<i32>>::read(&mut data).unwrap();
+        let actual = Option::<Box::<i32>>::read_thrift(&mut data).unwrap();
         let expected = Some(Box::new(1));
         assert_eq!(&actual, &expected);
     }
@@ -117,8 +117,8 @@ mod tests {
     fn test_empty_vec_roundtrip() {
         let input = Vec::<i64>::default();
         let mut buffer = vec![];
-        input.write(&mut buffer).unwrap();
-        let result = Vec::<i64>::read(&mut CompactThriftInputSlice::new(&buffer)).unwrap();
+        input.write_thrift(&mut buffer).unwrap();
+        let result = Vec::<i64>::read_thrift(&mut CompactThriftInputSlice::new(&buffer)).unwrap();
         assert_eq!(&result, &input);
     }
 
@@ -126,8 +126,8 @@ mod tests {
     fn test_vec_bool_roundtrip() {
         let input = vec![true, false, false, true];
         let mut buffer = vec![];
-        input.write(&mut buffer).unwrap();
-        let result = Vec::<bool>::read(&mut CompactThriftInputSlice::new(&buffer)).unwrap();
+        input.write_thrift(&mut buffer).unwrap();
+        let result = Vec::<bool>::read_thrift(&mut CompactThriftInputSlice::new(&buffer)).unwrap();
         assert_eq!(&result, &input);
     }
 
@@ -135,8 +135,8 @@ mod tests {
     fn test_vec_integer_roundtrip() {
         let input = vec![1_i64, i64::MIN, i64::MAX, 9999999];
         let mut buffer = vec![];
-        input.write(&mut buffer).unwrap();
-        let result = Vec::<i64>::read(&mut CompactThriftInputSlice::new(&buffer)).unwrap();
+        input.write_thrift(&mut buffer).unwrap();
+        let result = Vec::<i64>::read_thrift(&mut CompactThriftInputSlice::new(&buffer)).unwrap();
         assert_eq!(&result, &input);
     }
 
@@ -144,7 +144,7 @@ mod tests {
     fn test_skip_vec_bool() {
         let input = vec![true, false, false, true];
         let mut buffer = vec![];
-        input.write(&mut buffer).unwrap();
+        input.write_thrift(&mut buffer).unwrap();
         let mut slice = CompactThriftInputSlice::new(&buffer);
         skip_field(&mut slice, Vec::<bool>::FIELD_TYPE, true).unwrap();
         assert_eq!(&slice.as_slice(), &[]);
@@ -154,7 +154,7 @@ mod tests {
     fn test_skip_vec_integer() {
         let input = vec![1_i64, 999999999999, -1, i64::MAX];
         let mut buffer = vec![];
-        input.write(&mut buffer).unwrap();
+        input.write_thrift(&mut buffer).unwrap();
         let mut slice = CompactThriftInputSlice::new(&buffer);
         skip_field(&mut slice, Vec::<i64>::FIELD_TYPE, true).unwrap();
         assert_eq!(&slice.as_slice(), &[]);

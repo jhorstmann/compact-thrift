@@ -614,7 +614,7 @@ pub fn main() {
     let data = get_metadata_chunk(&mut file).unwrap();
     let mut input = CompactThriftInputSlice::new(&data);
 
-    let fmd = FileMetaData::read(&mut input).unwrap();
+    let fmd = FileMetaData::read_thrift(&mut input).unwrap();
 
     println!("version: {}", fmd.version);
     println!("num of rows: {}", fmd.num_rows);

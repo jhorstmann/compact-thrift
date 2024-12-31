@@ -434,24 +434,24 @@ impl <W: Write> CompactThriftOutput for W {
 pub trait CompactThriftProtocol<'i> {
     const FIELD_TYPE: u8;
 
-    fn read<T: CompactThriftInput<'i>>(input: &mut T) -> Result<Self, ThriftError> where Self: Default{
+    fn read_thrift<T: CompactThriftInput<'i>>(input: &mut T) -> Result<Self, ThriftError> where Self: Default{
         let mut result = Self::default();
-        Self::fill(&mut result, input)?;
+        Self::fill_thrift(&mut result, input)?;
         Ok(result)
     }
-    fn fill<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError>;
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError>;
     #[inline]
-    fn fill_field<T: CompactThriftInput<'i>>(&mut self, input: &mut T, field_type: u8) -> Result<(), ThriftError> {
+    fn fill_thrift_field<T: CompactThriftInput<'i>>(&mut self, input: &mut T, field_type: u8) -> Result<(), ThriftError> {
         if field_type != Self::FIELD_TYPE {
             return Err(ThriftError::InvalidType)
         }
-        self.fill(input)
+        self.fill_thrift(input)
     }
-    fn write<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError>;
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError>;
     #[inline]
-    fn write_field<T: CompactThriftOutput>(&self, output: &mut T, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
+    fn write_thrift_field<T: CompactThriftOutput>(&self, output: &mut T, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
         write_field_header(output, Self::FIELD_TYPE, field_id, last_field_id)?;
-        self.write(output)?;
+        self.write_thrift(output)?;
         Ok(())
     }
 }

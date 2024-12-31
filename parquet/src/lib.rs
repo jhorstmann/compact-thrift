@@ -120,8 +120,8 @@ fn read_page_index_for_column_chunk<'i>(chunk: &'i [u8], chunk_offset: usize, co
 
         match &mut res {
             Ok(Some((offset_index, column_index))) => {
-                offset_index.fill(&mut CompactThriftInputSlice::new(&chunk[offset_index_range]))?;
-                column_index.fill(&mut CompactThriftInputSlice::new(&chunk[column_index_range]))?;
+                offset_index.fill_thrift(&mut CompactThriftInputSlice::new(&chunk[offset_index_range]))?;
+                column_index.fill_thrift(&mut CompactThriftInputSlice::new(&chunk[column_index_range]))?;
             }
             _ => unsafe { unreachable_unchecked() }
         }
@@ -150,7 +150,7 @@ mod tests {
         dbg!(metadata_chunk.len());
 
         let mut input = CompactThriftInputSlice::new(&metadata_chunk);
-        let metadata = FileMetaData::read(&mut input).unwrap();
+        let metadata = FileMetaData::read_thrift(&mut input).unwrap();
         dbg!(&metadata);
     }
 }

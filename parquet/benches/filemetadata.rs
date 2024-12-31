@@ -17,19 +17,19 @@ fn criterion_benchmark(c: &mut Criterion) {
     let fmd_chunk = get_metadata_chunk(&mut file).unwrap();
     let fmd_input = CompactThriftInputSlice::new(&fmd_chunk);
 
-    let fmd = FileMetaData::read(&mut fmd_input.clone()).unwrap();
+    let fmd = FileMetaData::read_thrift(&mut fmd_input.clone()).unwrap();
 
     let maybe_page_index_range = get_page_index_range(&fmd);
 
     c.benchmark_group("filemetadata")
         .throughput(Throughput::Bytes(fmd_chunk.len() as u64))
         .bench_function("read", |b| {
-            b.iter(|| FileMetaData::read(&mut fmd_input.clone()).unwrap())
+            b.iter(|| FileMetaData::read_thrift(&mut fmd_input.clone()).unwrap())
         })
         .bench_function("fill", |b| {
             b.iter(|| {
                 let mut fmd = FileMetaData::default();
-                fmd.fill(&mut fmd_input.clone()).unwrap()
+                fmd.fill_thrift(&mut fmd_input.clone()).unwrap()
             })
         })
         .bench_function("skip", |b| {

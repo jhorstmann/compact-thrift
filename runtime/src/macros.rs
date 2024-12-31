@@ -43,7 +43,7 @@ macro_rules! thrift_struct {
             const FIELD_TYPE: u8 = 12;
 
             #[inline(never)]
-            fn fill<T: $crate::CompactThriftInput<'i>>(&mut self, input: &mut T) -> std::result::Result<(), $crate::ThriftError> {
+            fn fill_thrift<T: $crate::CompactThriftInput<'i>>(&mut self, input: &mut T) -> std::result::Result<(), $crate::ThriftError> {
                 let mut last_field_id = 0_i16;
                 $($crate::required_flag!($required_or_optional $field_name);)*
                 loop {
@@ -55,7 +55,7 @@ macro_rules! thrift_struct {
                     match last_field_id {
                         $($field_id => {
                             $crate::required_set!($required_or_optional $field_name);
-                            self.$field_name.fill_field(input, field_type)?;
+                            self.$field_name.fill_thrift_field(input, field_type)?;
                         }),*
                         _ => {
                             input.skip_field(field_type)?;
@@ -68,11 +68,11 @@ macro_rules! thrift_struct {
                 Ok(())
             }
 
-            fn write<T: $crate::CompactThriftOutput>(&self, output: &mut T) -> std::result::Result<(), $crate::ThriftError> {
+            fn write_thrift<T: $crate::CompactThriftOutput>(&self, output: &mut T) -> std::result::Result<(), $crate::ThriftError> {
                 #[allow(unused_variables)]
                 #[allow(unused_mut)]
                 let mut last_field_id = 0_i16;
-                $(self.$field_name.write_field(output, $field_id, &mut last_field_id)?;)*
+                $(self.$field_name.write_thrift_field(output, $field_id, &mut last_field_id)?;)*
                 output.write_byte(0)?;
                 Ok(())
             }
@@ -102,7 +102,7 @@ macro_rules! thrift_union {
             const FIELD_TYPE: u8 = 12;
 
             #[inline(never)]
-            fn fill<T: $crate::CompactThriftInput<'i>>(&mut self, input: &mut T) -> std::result::Result<(), $crate::ThriftError> {
+            fn fill_thrift<T: $crate::CompactThriftInput<'i>>(&mut self, input: &mut T) -> std::result::Result<(), $crate::ThriftError> {
                 let mut last_field_id = 0_i16;
                 let field_type = input.read_field_header(&mut last_field_id)?;
 
@@ -115,7 +115,7 @@ macro_rules! thrift_union {
                         *self = Self::$field_name(Default::default());
                         #[allow(unreachable_patterns)]
                         match self {
-                            Self::$field_name(inner) => inner.fill(input)?,
+                            Self::$field_name(inner) => inner.fill_thrift(input)?,
                             _ => unsafe { std::hint::unreachable_unchecked() },
                         }
                     }),*
@@ -131,10 +131,10 @@ macro_rules! thrift_union {
                 Ok(())
             }
 
-            fn write<T: $crate::CompactThriftOutput>(&self, output: &mut T) -> std::result::Result<(), $crate::ThriftError> {
+            fn write_thrift<T: $crate::CompactThriftOutput>(&self, output: &mut T) -> std::result::Result<(), $crate::ThriftError> {
                 let mut last_field_id = 0_i16;
                 match self {
-                    $(Self::$field_name(inner) => inner.write_field(output, $field_id, &mut last_field_id)?),*
+                    $(Self::$field_name(inner) => inner.write_thrift_field(output, $field_id, &mut last_field_id)?),*
                 }
                 output.write_byte(0)?;
                 Ok(())
@@ -166,13 +166,13 @@ macro_rules! thrift_enum {
             const FIELD_TYPE: u8 = 5; // i32
 
             #[inline]
-            fn fill<T: $crate::CompactThriftInput<'i>>(&mut self, input: &mut T) -> std::result::Result<(), $crate::ThriftError> {
+            fn fill_thrift<T: $crate::CompactThriftInput<'i>>(&mut self, input: &mut T) -> std::result::Result<(), $crate::ThriftError> {
                 self.0 = input.read_i32()?;
                 Ok(())
             }
 
             #[inline]
-            fn write<T: $crate::CompactThriftOutput>(&self, output: &mut T) -> std::result::Result<(), $crate::ThriftError> {
+            fn write_thrift<T: $crate::CompactThriftOutput>(&self, output: &mut T) -> std::result::Result<(), $crate::ThriftError> {
                 output.write_i32(self.0)
             }
         }
@@ -233,9 +233,8 @@ macro_rules! required_check {
 }
 
 #[cfg(test)]
+#[allow(dead_code)]
 mod tests {
-    use super::*;
-
     thrift! {
         /** doc */
         struct SomeStructure {
