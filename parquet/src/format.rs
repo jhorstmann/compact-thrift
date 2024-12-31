@@ -1,5 +1,5 @@
-use compact_thrift_rs::*;
-use compact_thrift_rs::macros::*;
+#![allow(non_snake_case)]
+use compact_thrift_rs::thrift;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
