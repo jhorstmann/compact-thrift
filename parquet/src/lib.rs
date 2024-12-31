@@ -12,6 +12,8 @@ pub enum ParquetError {
     Thrift(ThriftError),
     InvalidMagic,
     Io(IOError),
+    Schema(&'static str),
+    UnknownType(i32),
 }
 
 impl From<IOError> for ParquetError {
