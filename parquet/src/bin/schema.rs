@@ -448,18 +448,25 @@ fn field_from_schema_element(
             "Missing physical type for SchemaElement without children",
         ))?;
         let physical_type = PhysicalType::try_from_schema_element(type_, element.type_length)?;
-        let logical_type = if let Some(logical_type) = element.logicalType.as_ref() {
-            Some(PrimitiveLogicalType::try_from_logical_type(logical_type)?)
-        } else if let Some(converted_type) = element.converted_type.as_ref() {
-            Some(PrimitiveLogicalType::try_from_converted_type(
-                converted_type,
-                element.precision,
-                element.scale,
-                element.type_length,
-            )?)
-        } else {
-            None
-        };
+
+        let mut logical_type: Option<PrimitiveLogicalType> = None;
+
+        // ignore errors during logical type handling to be forward compatible
+        if let Some(lt) = element.logicalType.as_ref() {
+            logical_type = PrimitiveLogicalType::try_from_logical_type(lt).ok();
+        }
+        if logical_type.is_none() {
+            if let Some(ct) = element.converted_type.as_ref() {
+                logical_type = PrimitiveLogicalType::try_from_converted_type(
+                    ct,
+                    element.precision,
+                    element.scale,
+                    element.type_length,
+                )
+                .ok();
+            }
+        }
+
         let field = PrimitiveField {
             common,
             physical_type,
