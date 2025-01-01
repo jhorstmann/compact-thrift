@@ -1,5 +1,5 @@
 [package]
-name = "compact-thrift-rs"
+name = "compact-thrift-runtime"
 version = "0.1.0"
 license = "Apache 2.0"
 description = "Runtime library for compact-thrift code generator"

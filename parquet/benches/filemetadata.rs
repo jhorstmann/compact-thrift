@@ -1,7 +1,7 @@
-use compact_thrift_rs::{CompactThriftInput, CompactThriftProtocol, CompactThriftInputSlice};
+use compact_thrift_runtime::{CompactThriftInput, CompactThriftProtocol, CompactThriftInputSlice};
 use criterion::*;
-use parquet_format::format::FileMetaData;
-use parquet_format::{get_metadata_chunk, get_page_index_chunk, get_page_index_range, read_page_index};
+use compact_thrift_parquet::format::FileMetaData;
+use compact_thrift_parquet::{get_metadata_chunk, get_page_index_chunk, get_page_index_range, read_page_index};
 use std::fs::File;
 use std::io::Read;
 use jemallocator::Jemalloc;

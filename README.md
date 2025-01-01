@@ -21,7 +21,7 @@ The reasons for this choice are:
  - Kotlins `sealed` and `data` classes are very powerful for modeling domain objects (similar to rust enums).
  - Kotlin has built-in support for string templates, which are checked at compile time.
 
-The runtime support for the generated rust code can be found in the [`src/main/rust`](https://github.com/jhorstmann/compact-thrift/tree/main/src/main/rust) folder.
+The runtime support for the generated rust code can be found in the [`runtime`](https://github.com/jhorstmann/compact-thrift/tree/main/runtime) folder.
 
 ## How to run
 
@@ -32,5 +32,22 @@ their `bin` folders added to the `PATH`, the definitions for the included `parqu
 by running:
 
 ```
-$ ./generate-parquet.sh
+$ cd generator && ./generate-parquet.sh
+```
+
+## Generating rust code using macros
+
+As an alternative to the code generator, the structures correponding to thrift definitions can also be generated with a declarative macro:
+
+```rust
+ thrift! {
+     /** doc */
+     struct SomeStructure {
+         /** doc */
+         1: required i64 offset;
+         2: optional i64 length;
+         3: optional list<i64> numbers;
+         4: optional string data;
+     }
+}
 ```

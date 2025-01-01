@@ -1,5 +1,5 @@
 #![allow(non_snake_case)]
-use compact_thrift_rs::thrift;
+use compact_thrift_runtime::thrift;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

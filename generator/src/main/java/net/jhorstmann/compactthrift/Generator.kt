@@ -130,7 +130,7 @@ class RustGenerator(val document: Document) : DocumentVisitor {
             code.appendln("use crate::$prefix$it;")
         }
         code.appendln("use std::borrow::Cow;")
-        code.appendln("use compact_thrift_rs::*;")
+        code.appendln("use compact_thrift_runtime::*;")
     }
 
     override fun visitDefinition(definition: Definition) {

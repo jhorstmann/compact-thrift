@@ -1,7 +1,7 @@
 use std::fs::File;
-use compact_thrift_rs::*;
-use parquet_format::format::FileMetaData;
-use parquet_format::get_metadata_chunk;
+use compact_thrift_runtime::*;
+use compact_thrift_parquet::format::FileMetaData;
+use compact_thrift_parquet::get_metadata_chunk;
 
 pub fn main() {
     let mut file = File::open("data/alltypes_tiny_pages.parquet").unwrap();

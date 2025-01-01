@@ -1,10 +1,10 @@
-use compact_thrift_rs::{CompactThriftInputSlice, CompactThriftProtocol};
-use parquet_format::format::{
+use compact_thrift_runtime::{CompactThriftInputSlice, CompactThriftProtocol};
+use compact_thrift_parquet::format::{
     ConvertedType, DecimalType, FieldRepetitionType, FileMetaData, IntType, LogicalType,
     MicroSeconds, MilliSeconds, NanoSeconds, SchemaElement, TimeType, TimeUnit, TimestampType,
     Type,
 };
-use parquet_format::{get_metadata_chunk, ParquetError};
+use compact_thrift_parquet::{get_metadata_chunk, ParquetError};
 use std::fmt::{Display, Formatter};
 use std::fs::File;
 

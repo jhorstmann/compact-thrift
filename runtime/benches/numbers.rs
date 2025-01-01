@@ -1,4 +1,4 @@
-use compact_thrift_rs::{CompactThriftInput, CompactThriftProtocol, CompactThriftInputSlice};
+use compact_thrift_runtime::{CompactThriftInput, CompactThriftProtocol, CompactThriftInputSlice};
 use criterion::*;
 use rand::rngs::StdRng;
 use rand::{RngCore, SeedableRng};

@@ -1,7 +1,7 @@
 use std::hint::unreachable_unchecked;
 use std::io::{Read, Seek, SeekFrom, Error as IOError};
 use std::ops::Range;
-use compact_thrift_rs::{CompactThriftProtocol, CompactThriftInputSlice, ThriftError};
+use compact_thrift_runtime::{CompactThriftProtocol, CompactThriftInputSlice, ThriftError};
 use crate::format::{ColumnChunk, ColumnIndex, FileMetaData, OffsetIndex};
 
 #[rustfmt::skip]
@@ -143,7 +143,7 @@ pub fn read_page_index(chunk: &[u8], chunk_offset: usize, file_metadata: &FileMe
 #[cfg(test)]
 mod tests {
     use std::fs::File;
-    use compact_thrift_rs::{CompactThriftProtocol, CompactThriftInputSlice};
+    use compact_thrift_runtime::{CompactThriftProtocol, CompactThriftInputSlice};
     use crate::format::FileMetaData;
     use crate::get_metadata_chunk;
 
