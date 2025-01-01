@@ -19,7 +19,7 @@ fn criterion_benchmark(c: &mut Criterion) {
 
     let fmd = FileMetaData::read_thrift(&mut fmd_input.clone()).unwrap();
 
-    let maybe_page_index_range = get_page_index_range(&fmd);
+    let maybe_page_index_range = get_page_index_range(&fmd).unwrap();
 
     c.benchmark_group("filemetadata")
         .throughput(Throughput::Bytes(fmd_chunk.len() as u64))

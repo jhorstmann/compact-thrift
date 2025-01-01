@@ -12,6 +12,7 @@ pub enum ParquetError {
     Thrift(ThriftError),
     InvalidMagic,
     Io(IOError),
+    InvalidOffset,
     Schema(&'static str),
     UnknownType(i32),
 }
@@ -52,33 +53,37 @@ pub fn get_metadata_chunk<R: Read + Seek>(input: &mut R) -> Result<Vec<u8>, Parq
     Ok(buf)
 }
 
-pub fn get_page_index_range(file_metadata: &FileMetaData) -> Option<Range<usize>> {
-    let mut min = i64::MAX;
-    let mut max = i64::MIN;
+pub fn get_page_index_range(file_metadata: &FileMetaData) -> Result<Option<Range<usize>>, ParquetError> {
+    let mut min = usize::MAX;
+    let mut max = 0_usize;
 
     for rg in &file_metadata.row_groups {
         for c in &rg.columns {
             if let (Some(oo), Some(ol), Some(co), Some(cl)) = (c.offset_index_offset, c.offset_index_length, c.column_index_offset, c.column_index_length) {
-                min = min.min(oo);
-                max = max.max(oo + ol as i64);
+                if oo < 0 || ol < 0 || co < 0 || cl < 0 {
+                    return Err(ParquetError::InvalidOffset);
+                }
 
-                min = min.min(co);
-                max = max.max(co + cl as i64);
+                min = min.min(oo as usize);
+                max = max.max(oo as usize + ol as usize);
+
+                min = min.min(co as usize);
+                max = max.max(co as usize + cl as usize);
             }
         }
     }
 
-    if min >= 0 && min < i64::MAX && min < max {
-        Some(min as usize..max as usize)
+    if min < max {
+        Ok(Some(min..max))
     } else {
-        None
+        Ok(None)
     }
 }
 
 #[expect(clippy::uninit_vec)]
 #[expect(clippy::type_complexity)]
 pub fn get_page_index_chunk<R: Read + Seek>(input: &mut R, file_metadata: &FileMetaData) -> Result<Option<(Vec<u8>, Range<usize>)>, ParquetError> {
-    if let Some(range) = get_page_index_range(file_metadata) {
+    if let Some(range) = get_page_index_range(file_metadata)? {
         input.seek(SeekFrom::Start(range.start as u64))?;
 
         let mut buf = Vec::with_capacity(range.len());
