@@ -30,6 +30,7 @@ impl From<ThriftError> for ParquetError {
 
 const PARQUET_MAGIC: [u8; 4] = [b'P', b'A', b'R', b'1'];
 
+#[expect(clippy::uninit_vec)]
 pub fn get_metadata_chunk<R: Read + Seek>(input: &mut R) -> Result<Vec<u8>, ParquetError> {
     let _pos = input.seek(SeekFrom::End(-8))?;
     let mut footer = [0_u8; 8];
@@ -57,17 +58,12 @@ pub fn get_page_index_range(file_metadata: &FileMetaData) -> Option<Range<usize>
 
     for rg in &file_metadata.row_groups {
         for c in &rg.columns {
-            match (c.offset_index_offset, c.offset_index_length, c.column_index_offset, c.column_index_length) {
-                (Some(oo), Some(ol), Some(co), Some(cl)) => {
-                    min = min.min(oo);
-                    max = max.max(oo + ol as i64);
+            if let (Some(oo), Some(ol), Some(co), Some(cl)) = (c.offset_index_offset, c.offset_index_length, c.column_index_offset, c.column_index_length) {
+                min = min.min(oo);
+                max = max.max(oo + ol as i64);
 
-                    min = min.min(co);
-                    max = max.max(co + cl as i64);
-                }
-                _ => {
-
-                }
+                min = min.min(co);
+                max = max.max(co + cl as i64);
             }
         }
     }
@@ -79,6 +75,8 @@ pub fn get_page_index_range(file_metadata: &FileMetaData) -> Option<Range<usize>
     }
 }
 
+#[expect(clippy::uninit_vec)]
+#[expect(clippy::type_complexity)]
 pub fn get_page_index_chunk<R: Read + Seek>(input: &mut R, file_metadata: &FileMetaData) -> Result<Option<(Vec<u8>, Range<usize>)>, ParquetError> {
     if let Some(range) = get_page_index_range(file_metadata) {
         input.seek(SeekFrom::Start(range.start as u64))?;
@@ -97,12 +95,12 @@ pub fn get_page_index_chunk<R: Read + Seek>(input: &mut R, file_metadata: &FileM
     }
 }
 
-fn read_page_index_for_column_chunk<'i>(chunk: &'i [u8], chunk_offset: usize, column_chunks: &[ColumnChunk]) -> Result<Vec<Option<(OffsetIndex, ColumnIndex)>>, ParquetError> {
+fn read_page_index_for_column_chunk(chunk: &[u8], chunk_offset: usize, column_chunks: &[ColumnChunk]) -> Result<Vec<Option<(OffsetIndex, ColumnIndex)>>, ParquetError> {
     column_chunks.iter().map(|cc| {
         let offset_index_range = if let (Some(offset), Some(length)) = (cc.offset_index_offset, cc.offset_index_length) {
             assert!(offset as usize >= chunk_offset);
             assert!(length > 0);
-            let start = (offset as usize - chunk_offset) as usize;
+            let start = offset as usize - chunk_offset;
             start..start+length as usize
         } else {
             return Ok(None)
@@ -110,7 +108,7 @@ fn read_page_index_for_column_chunk<'i>(chunk: &'i [u8], chunk_offset: usize, co
         let column_index_range = if let (Some(offset), Some(length)) = (cc.column_index_offset, cc.column_index_length) {
             assert!(offset as usize >= chunk_offset);
             assert!(length > 0);
-            let start = (offset as usize - chunk_offset) as usize;
+            let start = offset as usize - chunk_offset;
             start..start+length as usize
         } else {
             return Ok(None)
@@ -130,7 +128,8 @@ fn read_page_index_for_column_chunk<'i>(chunk: &'i [u8], chunk_offset: usize, co
     }).collect()
 }
 
-pub fn read_page_index<'i>(chunk: &'i [u8], chunk_offset: usize, file_metadata: &FileMetaData) -> Result<Vec<Vec<Option<(OffsetIndex, ColumnIndex)>>>, ParquetError> {
+#[expect(clippy::type_complexity)]
+pub fn read_page_index(chunk: &[u8], chunk_offset: usize, file_metadata: &FileMetaData) -> Result<Vec<Vec<Option<(OffsetIndex, ColumnIndex)>>>, ParquetError> {
     file_metadata.row_groups.iter().map(|rg| {
         read_page_index_for_column_chunk(chunk, chunk_offset, &rg.columns)
     }).collect()

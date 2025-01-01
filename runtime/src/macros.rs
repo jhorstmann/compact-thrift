@@ -31,6 +31,7 @@ macro_rules! thrift_struct {
         }
 
         impl $identifier {
+            #[allow(clippy::too_many_arguments)]
             pub fn new($($field_name: impl Into<$crate::required_or_optional!($required_or_optional $crate::field_type!($field_type $($element_type)?))>),*) -> Self {
                 Self {
                     $($field_name: $field_name.into(),)*

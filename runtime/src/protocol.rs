@@ -285,6 +285,7 @@ impl<R: Read + ?Sized> CompactThriftInput<'static> for R {
         Ok(f64::from_le_bytes(buf))
     }
 
+    #[expect(clippy::uninit_vec)]
     fn read_binary(&mut self) -> Result<Cow<'static, [u8]>, ThriftError> {
         let len = self.read_len()?;
         if len > MAX_BINARY_LEN {
@@ -324,12 +325,12 @@ impl <'a> From<&'a [u8]> for CompactThriftInputSlice<'a> {
 impl <'i> CompactThriftInput<'i> for CompactThriftInputSlice<'i> {
     #[inline]
     fn read_byte(&mut self) -> Result<u8, ThriftError> {
-        if self.0.len() < 1 {
-            return Err(ThriftError::from(ErrorKind::UnexpectedEof))
+        if let [first, rest @ ..] = self.0 {
+            self.0 = rest;
+            Ok(*first)
+        } else {
+            Err(ThriftError::from(ErrorKind::UnexpectedEof))
         }
-        let first = self.0[0];
-        self.0 = &self.0[1..];
-        Ok(first)
     }
 
     #[inline]
@@ -351,7 +352,7 @@ impl <'i> CompactThriftInput<'i> for CompactThriftInputSlice<'i> {
         if self.0.len() < len {
             return Err(ThriftError::from(ErrorKind::UnexpectedEof))
         }
-        let (first, rest) = std::mem::replace(&mut self.0, &mut []).split_at(len);
+        let (first, rest) = std::mem::take(&mut self.0).split_at(len);
         self.0 = rest;
         Ok(Cow::Borrowed(first))
     }
@@ -396,7 +397,7 @@ pub trait CompactThriftOutput {
 
 impl <W: Write> CompactThriftOutput for W {
     fn write_byte(&mut self, value: u8) -> Result<(), ThriftError> {
-        self.write(&[value])?;
+        self.write_all(&[value])?;
         Ok(())
     }
 
@@ -417,7 +418,7 @@ impl <W: Write> CompactThriftOutput for W {
     }
 
     fn write_double(&mut self, value: f64) -> Result<(), ThriftError> {
-        self.write(&value.to_le_bytes())?;
+        self.write_all(&value.to_le_bytes())?;
         Ok(())
     }
 
@@ -426,7 +427,7 @@ impl <W: Write> CompactThriftOutput for W {
             return Err(ThriftError::InvalidBinaryLen);
         }
         self.write_len(value.len())?;
-        self.write(value)?;
+        self.write_all(value)?;
         Ok(())
     }
 }
