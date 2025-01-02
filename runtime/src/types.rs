@@ -113,7 +113,7 @@ impl <'i> CompactThriftProtocol<'i> for Vec<u8> {
 
     #[inline]
     fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        *self = input.read_binary()?.to_vec();
+        *self = input.read_binary()?.into_owned();
         Ok(())
     }
 
