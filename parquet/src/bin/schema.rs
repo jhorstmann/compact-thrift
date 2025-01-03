@@ -5,7 +5,7 @@ use compact_thrift_parquet::format::{
     Type,
 };
 use compact_thrift_parquet::{get_metadata_chunk, ParquetError};
-use std::fmt::{Display, Formatter};
+use std::fmt::{Debug, Display, Formatter};
 use std::fs::File;
 
 #[derive(Debug, Clone, Copy)]
@@ -129,10 +129,17 @@ impl TryFrom<&DecimalType> for DecimalOptions {
         Self::try_new(decimal_type.precision, decimal_type.scale)
     }
 }
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq)]
 pub struct IntegerOptions {
     bitwidth: u8,
     is_signed: bool,
+}
+
+impl Debug for IntegerOptions {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        let signed = if self.is_signed { 'i' } else { 'u' };
+        f.write_fmt(format_args!("{}{}", signed, self.bitwidth))
+    }
 }
 
 impl TryFrom<&IntType> for IntegerOptions {
@@ -299,6 +306,32 @@ impl TryFrom<&LogicalType> for PrimitiveLogicalType {
 pub enum GroupLogicalType {
     List,
     Map,
+    MapKeyValue,
+}
+
+impl TryFrom<&LogicalType> for GroupLogicalType {
+    type Error = ParquetError;
+
+    fn try_from(value: &LogicalType) -> Result<Self, Self::Error> {
+        match value {
+            LogicalType::MAP(_) => Ok(GroupLogicalType::Map),
+            LogicalType::LIST(_) => Ok(GroupLogicalType::List),
+            _ => Err(ParquetError::Schema("Unsupported logical type for group")),
+        }
+    }
+}
+
+impl TryFrom<&ConvertedType> for GroupLogicalType {
+    type Error = ParquetError;
+
+    fn try_from(value: &ConvertedType) -> Result<Self, Self::Error> {
+        match *value {
+            ConvertedType::MAP => Ok(GroupLogicalType::Map),
+            ConvertedType::LIST => Ok(GroupLogicalType::List),
+            ConvertedType::MAP_KEY_VALUE => Ok(GroupLogicalType::MapKeyValue),
+            _ => Err(ParquetError::Schema("Unsupported converted type for group")),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -449,9 +482,8 @@ fn field_from_schema_element(
         ))?;
         let physical_type = PhysicalType::try_from_schema_element(type_, element.type_length)?;
 
-        let mut logical_type: Option<PrimitiveLogicalType> = None;
-
         // ignore errors during logical type handling to be forward compatible
+        let mut logical_type: Option<PrimitiveLogicalType> = None;
         if let Some(lt) = element.logicalType.as_ref() {
             logical_type = PrimitiveLogicalType::try_from_logical_type(lt).ok();
         }
@@ -478,26 +510,17 @@ fn field_from_schema_element(
     } else if num_children < 0 || num_children as usize > remaining_elements {
         return Err(ParquetError::Schema("Invalid number of children"));
     } else {
-        let logical_type = if let Some(logical_type) = element.logicalType.as_ref() {
-            match logical_type {
-                LogicalType::MAP(_) => Some(GroupLogicalType::Map),
-                LogicalType::LIST(_) => Some(GroupLogicalType::List),
-                _ => return Err(ParquetError::Schema("Invalid logical type for group type")),
+        // ignore errors during logical type handling to be forward compatible
+        let mut logical_type: Option<GroupLogicalType> = None;
+        if let Some(lt) = element.logicalType.as_ref() {
+            logical_type = GroupLogicalType::try_from(lt).ok();
+        }
+        if logical_type.is_none() {
+            if let Some(ct) = element.converted_type.as_ref() {
+                logical_type = GroupLogicalType::try_from(ct).ok();
             }
-        } else if let Some(converted_type) = element.converted_type.as_ref() {
-            match *converted_type {
-                ConvertedType::MAP => Some(GroupLogicalType::Map),
-                ConvertedType::LIST => Some(GroupLogicalType::List),
-                ConvertedType::MAP_KEY_VALUE => Some(GroupLogicalType::Map), // should this be a separate type?
-                _ => {
-                    return Err(ParquetError::Schema(
-                        "Invalid converted type for group type",
-                    ))
-                }
-            }
-        } else {
-            None
-        };
+        }
+
         let children = Vec::with_capacity(num_children as usize);
         let field = GroupField {
             common,
