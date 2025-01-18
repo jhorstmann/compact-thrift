@@ -18,7 +18,7 @@ pub(crate) fn decode_uleb<'i, I: CompactThriftInput<'i> + ?Sized>(input: &mut I)
     }
 }
 
-/// Safety: `input` needs to contains at least 16 bytes
+/// Safety: `input` needs to contain at least 16 bytes
 #[cfg(target_feature = "sse2")]
 #[inline]
 pub(crate) unsafe fn skip_uleb_sse2(input: &[u8]) -> &[u8] {
