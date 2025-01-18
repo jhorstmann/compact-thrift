@@ -279,7 +279,7 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
 
     #[inline]
     fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        Rc::get_mut(self).ok_or_else(|| ThriftError::DuplicateField)?.fill_thrift(input)
+        Rc::get_mut(self).ok_or(ThriftError::DuplicateField)?.fill_thrift(input)
     }
 
     #[inline]
@@ -293,7 +293,7 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
 
     #[inline]
     fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        Arc::get_mut(self).ok_or_else(|| ThriftError::DuplicateField)?.fill_thrift(input)
+        Arc::get_mut(self).ok_or(ThriftError::DuplicateField)?.fill_thrift(input)
     }
 
     #[inline]
