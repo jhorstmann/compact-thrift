@@ -1,7 +1,7 @@
 [package]
 name = "compact-thrift-parquet"
 version = "0.1.0"
-license = "Apache 2.0"
+license = "Apache-2.0"
 description = "Parquet metadata structures generated from thrift definitions"
 homepage = "https://github.com/jhorstmann/compact-thrift"
 repository = "https://github.com/jhorstmann/compact-thrift"
