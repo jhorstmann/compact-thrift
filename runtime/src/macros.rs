@@ -193,12 +193,16 @@ macro_rules! union_default {
 
 #[doc(hidden)]
 #[macro_export]
+
 macro_rules! field_type {
-    (list $element_type:ident) => { Vec< $crate::field_type!($element_type) > };
-    (set $element_type:ident) => { Vec< $crate::field_type!($element_type) > };
-    (binary) => { Vec<u8> };
-    (string) => { String };
-    ($field_type:ident) => { $field_type };
+    (list $element_type:ident) => { std::vec::Vec< $crate::field_type!($element_type) > };
+    (set $element_type:ident) => { std::vec::Vec< $crate::field_type!($element_type) > };
+    (binary) => { std::vec::Vec<u8> };
+    (string) => { std::string::String };
+    ($field_type:ty) => { $field_type };
+    (Box $element_type:ident) => { std::boxed::Box< $crate::field_type!($element_type) > };
+    (Rc $element_type:ident) => { std::rc::Rc< $crate::field_type!($element_type) > };
+    (Arc $element_type:ident) => { std::sync::Arc< $crate::field_type!($element_type) > };
 }
 
 #[doc(hidden)]
@@ -279,8 +283,18 @@ mod tests {
         }
     }
 
+    thrift! {
+        struct ReferenceCounted {
+            1: required Rc<String> rc_string;
+            2: required Arc<String> arc_string;
+            3: required Rc<str> rc_str;
+            4: required Arc<str> arc_str;
+        }
+    }
+
     #[test]
     pub fn test_constructor() {
         let _s = SomeStructure::new(1_i64, 2_i64, Some(vec![3_i64]), Some("foo".into()));
+        let _r = ReferenceCounted::default();
     }
 }

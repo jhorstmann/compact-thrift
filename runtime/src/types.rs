@@ -1,5 +1,6 @@
 use std::borrow::Cow;
-
+use std::rc::Rc;
+use std::sync::Arc;
 use crate::protocol::*;
 use crate::ThriftError;
 
@@ -264,11 +265,90 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
 
     #[inline]
     fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        self.as_mut().fill_thrift(input)
+        Box::as_mut(self).fill_thrift(input)
     }
 
     #[inline]
     fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
-        self.as_ref().write_thrift(output)
+        Box::as_ref(self).write_thrift(output)
+    }
+}
+
+impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for Rc<P> {
+    const FIELD_TYPE: u8 = P::FIELD_TYPE;
+
+    #[inline]
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+        Rc::get_mut(self).ok_or_else(|| ThriftError::DuplicateField)?.fill_thrift(input)
+    }
+
+    #[inline]
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        Rc::as_ref(self).write_thrift(output)
+    }
+}
+
+impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for Arc<P> {
+    const FIELD_TYPE: u8 = P::FIELD_TYPE;
+
+    #[inline]
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+        Arc::get_mut(self).ok_or_else(|| ThriftError::DuplicateField)?.fill_thrift(input)
+    }
+
+    #[inline]
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        Arc::as_ref(self).write_thrift(output)
+    }
+}
+
+impl <'i> CompactThriftProtocol<'i> for Box<str> {
+    const FIELD_TYPE: u8 = String::FIELD_TYPE;
+
+    #[inline]
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+        *self = input.read_string()?.into_owned().into_boxed_str();
+        Ok(())
+    }
+
+    #[inline]
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        output.write_string(self.as_ref())
+    }
+}
+
+impl <'i> CompactThriftProtocol<'i> for Rc<str> {
+    const FIELD_TYPE: u8 = String::FIELD_TYPE;
+
+    #[inline]
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+        *self = match input.read_string()? {
+            Cow::Borrowed(s) => Rc::from(s),
+            Cow::Owned(s) => Rc::from(s),
+        };
+        Ok(())
+    }
+
+    #[inline]
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        output.write_string(self.as_ref())
+    }
+}
+
+impl <'i> CompactThriftProtocol<'i> for Arc<str> {
+    const FIELD_TYPE: u8 = String::FIELD_TYPE;
+
+    #[inline]
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+        *self = match input.read_string()? {
+            Cow::Borrowed(s) => Arc::from(s),
+            Cow::Owned(s) => Arc::from(s),
+        };
+        Ok(())
+    }
+
+    #[inline]
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        output.write_string(self.as_ref())
     }
 }
