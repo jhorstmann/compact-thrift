@@ -27,12 +27,12 @@ macro_rules! thrift_struct {
         #[allow(non_camel_case_types)]
         #[allow(non_snake_case)]
         pub struct $identifier {
-            $($(#[cfg_attr(not(doctest), $($field_attrs)*)])* pub $field_name: $crate::required_or_optional!($required_or_optional $crate::field_type!($field_type $($element_type)?))),*
+            $($(#[cfg_attr(not(doctest), $($field_attrs)*)])* pub $field_name: $crate::__thrift_required_or_optional!($required_or_optional $crate::__thrift_field_type!($field_type $($element_type)?))),*
         }
 
         impl $identifier {
             #[allow(clippy::too_many_arguments)]
-            pub fn new($($field_name: impl Into<$crate::required_or_optional!($required_or_optional $crate::field_type!($field_type $($element_type)?))>),*) -> Self {
+            pub fn new($($field_name: impl Into<$crate::__thrift_required_or_optional!($required_or_optional $crate::__thrift_field_type!($field_type $($element_type)?))>),*) -> Self {
                 Self {
                     $($field_name: $field_name.into(),)*
                 }
@@ -46,7 +46,7 @@ macro_rules! thrift_struct {
             #[inline(never)]
             fn fill_thrift<T: $crate::CompactThriftInput<'i>>(&mut self, input: &mut T) -> std::result::Result<(), $crate::ThriftError> {
                 let mut last_field_id = 0_i16;
-                $($crate::required_flag!($required_or_optional $field_name);)*
+                $($crate::__thrift_required_flag!($required_or_optional $field_name);)*
                 loop {
                     let field_type = input.read_field_header(&mut last_field_id)?;
                     if field_type == 0 {
@@ -55,7 +55,7 @@ macro_rules! thrift_struct {
 
                     match last_field_id {
                         $($field_id => {
-                            $crate::required_set!($required_or_optional $field_name);
+                            $crate::__thrift_required_set!($required_or_optional $field_name);
                             self.$field_name.fill_thrift_field(input, field_type)?;
                         }),*
                         _ => {
@@ -64,7 +64,7 @@ macro_rules! thrift_struct {
                     }
                 }
 
-                $($crate::required_check!($required_or_optional $identifier $field_name);)*
+                $($crate::__thrift_required_check!($required_or_optional $identifier $field_name);)*
 
                 Ok(())
             }
@@ -83,18 +83,18 @@ macro_rules! thrift_struct {
 
 #[macro_export]
 macro_rules! thrift_union {
-    ($(#[$($def_attrs:tt)*])* union $identifier:ident { $($(#[$($field_attrss:tt)*])* $field_id:literal : $field_type:ident $(< $element_type:ident >)? $field_name:ident $(;)?)* }) => {
+    ($(#[$($def_attrs:tt)*])* union $identifier:ident { $($(#[$($field_attrs:tt)*])* $field_id:literal : $field_type:ident $(< $element_type:ident >)? $field_name:ident $(;)?)* }) => {
         $(#[cfg_attr(not(doctest), $($def_attrs)*)])*
         #[derive(Clone, Debug, PartialEq)]
         #[allow(non_camel_case_types)]
         #[allow(non_snake_case)]
         pub enum $identifier {
-            $($(#[cfg_attr(not(doctest), $($field_attrss)*)])* $field_name($crate::field_type!($field_type $($element_type)?))),*
+            $($(#[cfg_attr(not(doctest), $($field_attrs)*)])* $field_name($crate::__thrift_field_type!($field_type $($element_type)?))),*
         }
 
         impl Default for $identifier {
             fn default() -> Self {
-                $crate::union_default!($($field_name;)*)
+                $crate::__thrift_union_default!($($field_name;)*)
             }
         }
 
@@ -146,7 +146,7 @@ macro_rules! thrift_union {
 
 #[macro_export]
 macro_rules! thrift_enum {
-    ($(#[$($def_attrs:tt)*])* enum $identifier:ident { $($(#[$($field_attrss:tt)*])* $field_name:ident = $field_value:literal;)* }) => {
+    ($(#[$($def_attrs:tt)*])* enum $identifier:ident { $($(#[$($field_attrs:tt)*])* $field_name:ident = $field_value:literal;)* }) => {
         $(#[$($def_attrs)*])*
         #[derive(Default, Debug, Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
         #[allow(non_camel_case_types)]
@@ -182,7 +182,7 @@ macro_rules! thrift_enum {
 
 #[doc(hidden)]
 #[macro_export]
-macro_rules! union_default {
+macro_rules! __thrift_union_default {
     ($head:ident; $($tail:ident;)*) => {
         Self::$head(Default::default())
     };
@@ -193,42 +193,41 @@ macro_rules! union_default {
 
 #[doc(hidden)]
 #[macro_export]
-
-macro_rules! field_type {
-    (list $element_type:ident) => { std::vec::Vec< $crate::field_type!($element_type) > };
-    (set $element_type:ident) => { std::vec::Vec< $crate::field_type!($element_type) > };
-    (binary) => { std::vec::Vec<u8> };
-    (string) => { std::string::String };
+macro_rules! __thrift_field_type {
+    (list $element_type:ident) => { Vec< $crate::__thrift_field_type!($element_type) > };
+    (set $element_type:ident) => { Vec< $crate::__thrift_field_type!($element_type) > };
+    (binary) => { Vec<u8> };
+    (string) => { String };
     ($field_type:ty) => { $field_type };
     (Box $element_type:ident) => { std::boxed::Box< $crate::field_type!($element_type) > };
-    (Rc $element_type:ident) => { std::rc::Rc< $crate::field_type!($element_type) > };
-    (Arc $element_type:ident) => { std::sync::Arc< $crate::field_type!($element_type) > };
+    (Rc $element_type:ident) => { std::rc::Rc< $crate::__thrift_field_type!($element_type) > };
+    (Arc $element_type:ident) => { std::sync::Arc< $crate::__thrift_field_type!($element_type) > };
 }
 
 #[doc(hidden)]
 #[macro_export]
-macro_rules! required_or_optional {
+macro_rules! __thrift_required_or_optional {
     (required $field_type:ty) => { $field_type };
     (optional $field_type:ty) => { Option<$field_type> };
 }
 
 #[doc(hidden)]
 #[macro_export]
-macro_rules! required_flag {
+macro_rules! __thrift_required_flag {
     (required $field_name:ident) => { let mut $field_name = false; };
     (optional $field_name:ident) => {};
 }
 
 #[doc(hidden)]
 #[macro_export]
-macro_rules! required_set {
+macro_rules! __thrift_required_set {
     (required $field_name:ident) => { $field_name = true; };
     (optional $field_name:ident) => {};
 }
 
 #[doc(hidden)]
 #[macro_export]
-macro_rules! required_check {
+macro_rules! __thrift_required_check {
     (required $struct_name:ident $field_name:ident) => {
         if !$field_name {
             return Err($crate::ThriftError::MissingField(concat!(stringify!($struct_name), "::", stringify!($field_name), "\0").into()))
