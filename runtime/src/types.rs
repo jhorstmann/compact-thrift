@@ -4,28 +4,43 @@ use std::sync::Arc;
 use crate::protocol::*;
 use crate::ThriftError;
 
+/// For structs, the following field-types can be encoded:
+///
+///  - BOOLEAN_TRUE, encoded as 1
+///  - BOOLEAN_FALSE, encoded as 2
+///
+/// For lists and sets the following element-types are used (see note 1 below):
+///
+///  - BOOL, encoded as 1 or 2 (see note below)
+///
+/// The only valid value in the original spec was 2, but due to an widespread implementation
+/// bug the defacto standard across large parts of the library became 1 instead.
+/// As a result, both values are now allowed.
+///
+/// Element values of type bool are sent as an int8; true as 1 and false as 2.
+///
+/// Previous versions of the spec said true is 1 and false is 0,
+/// so we are a bit more lenient and support both when reading.
 impl <'i> CompactThriftProtocol<'i> for bool {
     const FIELD_TYPE: u8 = 2; // TRUE = 1, FALSE = 2
 
     #[inline]
     fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let byte = input.read_byte()?;
-        // according to the spec the bytes in a collection should be FALSE = 0, TRUE = 1,
-        // but at least the java implementation writes the same values as for field types
         *self = byte == 1;
         Ok(())
     }
 
     #[inline]
     fn fill_thrift_field<T: CompactThriftInput<'i>>(&mut self, _input: &mut T, field_type: u8) -> Result<(), ThriftError> {
-        // no error checking
         *self = field_type == 1;
         Ok(())
     }
 
     #[inline]
     fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
-        output.write_byte(*self as u8)
+        let value = 1 + (!*self) as u8;
+        output.write_byte(value)
     }
 
     fn write_thrift_field<T: CompactThriftOutput>(&self, output: &mut T, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
@@ -174,6 +189,9 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
 
     fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let (len, element_type) = read_collection_len_and_type(input)?;
+        // Special case for boolean elements:
+        // The only valid value in the original spec was 2, but due to an widespread implementation
+        // bug the defacto standard across large parts of the library became 1 instead.
         if element_type != P::FIELD_TYPE && !(P::FIELD_TYPE == bool::FIELD_TYPE && element_type == 1) {
             return Err(ThriftError::InvalidType);
         }
@@ -350,5 +368,30 @@ impl <'i> CompactThriftProtocol<'i> for Arc<str> {
     #[inline]
     fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_string(self.as_ref())
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use crate::{CompactThriftInputSlice, CompactThriftProtocol};
+
+    #[test]
+    fn test_encode_boolean_list() {
+        let mut output = vec![];
+        vec![false, true, true].write_thrift(&mut output).unwrap();
+        assert_eq!(&output, &[0b0011_0010, 2, 1, 1]);
+    }
+    #[test]
+    fn test_decode_boolean_list_tag1() {
+        let input = vec![0b0011_0001_u8, 2, 1, 0];
+        let values = Vec::<bool>::read_thrift(&mut CompactThriftInputSlice::new(&input)).unwrap();
+        assert_eq!(&values, &[false, true, false]);
+    }
+    #[test]
+    fn test_decode_boolean_list_tag2() {
+        let input = vec![0b0011_0010_u8, 2, 1, 0];
+        let values = Vec::<bool>::read_thrift(&mut CompactThriftInputSlice::new(&input)).unwrap();
+        assert_eq!(&values, &[false, true, false]);
     }
 }
