@@ -433,6 +433,9 @@ impl <W: Write> CompactThriftOutput for W {
 }
 
 pub trait CompactThriftProtocol<'i> {
+    // In the compact protocol the tags for field and element types are currently the same.
+    // The documentation states "there is _no guarantee_ that this will
+    // remain true after new types are added".
     const FIELD_TYPE: u8;
 
     fn read_thrift<T: CompactThriftInput<'i>>(input: &mut T) -> Result<Self, ThriftError> where Self: Default{

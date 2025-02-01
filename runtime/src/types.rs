@@ -140,7 +140,8 @@ impl <'i> CompactThriftProtocol<'i> for Vec<u8> {
 }
 
 impl <'i> CompactThriftProtocol<'i> for String {
-    const FIELD_TYPE: u8 = 8; // Same type as Binary?
+    // Same type as for Binary.
+    const FIELD_TYPE: u8 = 8;
 
     #[inline]
     fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
@@ -190,7 +191,7 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
     fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let (len, element_type) = read_collection_len_and_type(input)?;
         // Special case for boolean elements:
-        // The only valid value in the original spec was 2, but due to an widespread implementation
+        // The only valid value in the original spec was 2, but due to a widespread implementation
         // bug the defacto standard across large parts of the library became 1 instead.
         if element_type != P::FIELD_TYPE && !(P::FIELD_TYPE == bool::FIELD_TYPE && element_type == 1) {
             return Err(ThriftError::InvalidType);
@@ -202,6 +203,7 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
             // workaround for unnecessary memcpy calls when using Vec::push(P::default()) with larger structs
             // https://github.com/rust-lang/rust/issues/125632
             self.extend((0..1).map(|_| P::default()));
+            // Safety: we just pushed an element
             unsafe {
                 self.last_mut().unwrap_unchecked().fill_thrift(input)?;
             }
