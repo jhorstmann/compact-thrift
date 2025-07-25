@@ -198,7 +198,9 @@ macro_rules! __thrift_field_type {
     (set $element_type:ident) => { Vec< $crate::__thrift_field_type!($element_type) > };
     (binary) => { Vec<u8> };
     (string) => { String };
-    ($field_type:ty) => { $field_type };
+    (byte) => { u8 };
+    (double) => { f64 };
+    ($field_type:ty) => { $field_type }; // this covers bool | i8 | i16 | i32 | i64
     (Box $element_type:ident) => { std::boxed::Box< $crate::field_type!($element_type) > };
     (Rc $element_type:ident) => { std::rc::Rc< $crate::__thrift_field_type!($element_type) > };
     (Arc $element_type:ident) => { std::sync::Arc< $crate::__thrift_field_type!($element_type) > };
@@ -247,6 +249,8 @@ mod tests {
             2: optional i64 length;
             3: optional list<i64> foobar;
             4: optional string data;
+            5: optional bool flag;
+            6: optional double value;
         }
         struct AnotherStructure {
             1: required i64 foobar;
@@ -293,7 +297,7 @@ mod tests {
 
     #[test]
     pub fn test_constructor() {
-        let _s = SomeStructure::new(1_i64, 2_i64, Some(vec![3_i64]), Some("foo".into()));
+        let _s = SomeStructure::new(1_i64, 2_i64, Some(vec![3_i64]), Some("foo".into()), true, 1.0);
         let _r = ReferenceCounted::default();
     }
 }

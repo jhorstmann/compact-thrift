@@ -1,6 +1,6 @@
 [package]
 name = "compact-thrift-runtime"
-version = "0.1.1"
+version = "0.1.2"
 license = "Apache-2.0"
 description = "Runtime library for compact-thrift code generator"
 homepage = "https://github.com/jhorstmann/compact-thrift"
