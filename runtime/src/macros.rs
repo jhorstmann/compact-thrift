@@ -89,12 +89,14 @@ macro_rules! thrift_union {
         #[allow(non_camel_case_types)]
         #[allow(non_snake_case)]
         pub enum $identifier {
-            $($(#[cfg_attr(not(doctest), $($field_attrs)*)])* $field_name($crate::__thrift_field_type!($field_type $($element_type)?))),*
+            $($(#[cfg_attr(not(doctest), $($field_attrs)*)])* $field_name($crate::__thrift_field_type!($field_type $($element_type)?)),)*
+            __UNKNOWN__{ field_id: i16 },
         }
 
         impl Default for $identifier {
             fn default() -> Self {
-                $crate::__thrift_union_default!($($field_name;)*)
+                //$crate::__thrift_union_default!($($field_name;)*)
+                Self::__UNKNOWN__ { field_id: 0 }
             }
         }
 
@@ -119,9 +121,11 @@ macro_rules! thrift_union {
                             Self::$field_name(inner) => inner.fill_thrift(input)?,
                             _ => unsafe { std::hint::unreachable_unchecked() },
                         }
-                    }),*
+                    },)*
                     _ => {
-                        return Err($crate::ThriftError::MissingField(concat!(stringify!($struct_name), "\0").into()))
+                        //return Err($crate::ThriftError::MissingField(concat!(stringify!($struct_name), "\0").into()))
+                        *self = Self::__UNKNOWN__ { field_id: last_field_id };
+                        input.skip_field(field_type)?;
                     }
                 }
                 let stop = input.read_byte()?;
@@ -135,7 +139,8 @@ macro_rules! thrift_union {
             fn write_thrift<T: $crate::CompactThriftOutput>(&self, output: &mut T) -> std::result::Result<(), $crate::ThriftError> {
                 let mut last_field_id = 0_i16;
                 match self {
-                    $(Self::$field_name(inner) => inner.write_thrift_field(output, $field_id, &mut last_field_id)?),*
+                    $(Self::$field_name(inner) => inner.write_thrift_field(output, $field_id, &mut last_field_id)?,)*
+                    __UNKNOWN__ => {}
                 }
                 output.write_byte(0)?;
                 Ok(())

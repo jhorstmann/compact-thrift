@@ -144,8 +144,50 @@ pub fn read_page_index(chunk: &[u8], chunk_offset: usize, file_metadata: &FileMe
 mod tests {
     use std::fs::File;
     use compact_thrift_runtime::{CompactThriftProtocol, CompactThriftInputSlice};
-    use crate::format::FileMetaData;
-    use crate::get_metadata_chunk;
+    use crate::format::{DataPageHeader, DataPageHeaderV2, DictionaryPageHeader, Encoding, FileMetaData, PageHeader, Statistics};
+    use crate::{get_metadata_chunk, ParquetError};
+
+    compact_thrift_runtime::thrift!(
+    struct DataPageHeaderWithoutStatistics {
+        /** Number of values, including NULLs, in this data page. **/
+        1: required i32 num_values
+
+        /** Encoding used for this data page **/
+        2: required Encoding encoding
+
+        /** Encoding used for definition levels **/
+        3: required Encoding definition_level_encoding;
+
+        /** Encoding used for repetition levels **/
+        4: required Encoding repetition_level_encoding;
+    }
+    );
+
+
+    compact_thrift_runtime::thrift!(
+    union ColumnOrder {
+
+
+        1: TypeDefinedOrder TYPE_ORDER;
+    }
+        );
+
+
+
+    #[test]
+    fn test_size_of_error() {
+        assert_eq!(size_of::<ParquetError>(), 24);
+    }
+
+    #[test]
+    fn test_size_page_header() {
+        assert_eq!(size_of::<PageHeader>(), 360);
+        assert_eq!(size_of::<DataPageHeader>(), 152);
+        assert_eq!(size_of::<DataPageHeaderV2>(), 168);
+        assert_eq!(size_of::<DictionaryPageHeader>(), 12);
+        assert_eq!(size_of::<DataPageHeaderWithoutStatistics>(), 16);
+        assert_eq!(size_of::<Statistics>(), 136);
+    }
 
     #[test]
     fn test_read_metadata() {
