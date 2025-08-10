@@ -1,18 +1,33 @@
+/// Parse several thrift struct / union / enum / namespace definitions and generate the
+/// corresponding Rust types and code to read and write those types.
+///
+/// Implementation notes:
+///
+/// This uses the [incremental tt muncher](https://lukaswirth.dev/tlborm/decl-macros/patterns/tt-muncher.html)
+/// pattern to process the first thrift definition and then recursively calls itself to process the
+/// remainder.
+///
+/// Field definitions are handled as token trees in this macro, the more specific `thrift_struct`,
+/// `thrift_union` and `thrift_enum` macros destructure those trees.
+///
+/// The `$(#[$($def_attrs:meta)*])*` pattern matches any number of attributes on those structures.
+/// The rust compiler internally treats doc comments as `#[doc = ""]` attributes,
+/// this pattern allows to keep comments in the generated code.
 #[macro_export]
 macro_rules! thrift {
-    ($(#[$($def_attrs:tt)*])* struct $identifier:ident { $($definitions:tt)* } $($remainder:tt)*) => {
+    ($(#[$($def_attrs:meta)*])* struct $identifier:ident { $($definitions:tt)* } $($remainder:tt)*) => {
         $crate::thrift_struct!($(#[$($def_attrs)*])* struct $identifier { $($definitions)* });
         $crate::thrift!($($remainder)*);
     };
-    ($(#[$($def_attrs:tt)*])* union $identifier:ident { $($definitions:tt)* } $($remainder:tt)*) => {
+    ($(#[$($def_attrs:meta)*])* union $identifier:ident { $($definitions:tt)* } $($remainder:tt)*) => {
         $crate::thrift_union!($(#[$($def_attrs)*])* union $identifier { $($definitions)* });
         $crate::thrift!($($remainder)*);
     };
-    ($(#[$($def_attrs:tt)*])* enum $identifier:ident { $($definitions:tt)* } $($remainder:tt)*) => {
+    ($(#[$($def_attrs:meta)*])* enum $identifier:ident { $($definitions:tt)* } $($remainder:tt)*) => {
         $crate::thrift_enum!($(#[$($def_attrs)*])* enum $identifier { $($definitions)* });
         $crate::thrift!($($remainder)*);
     };
-    ($(#[$($def_attrs:tt)*])* namespace $identifier:ident $namespace:ident $($remainder:tt)*) => {
+    ($(#[$($def_attrs:meta)*])* namespace $identifier:ident $namespace:ident $($remainder:tt)*) => {
         $crate::thrift!($($remainder)*);
     };
 
@@ -21,7 +36,7 @@ macro_rules! thrift {
 
 #[macro_export]
 macro_rules! thrift_struct {
-    ($(#[$($def_attrs:tt)*])* struct $identifier:ident { $($(#[$($field_attrs:tt)*])* $field_id:literal : $required_or_optional:ident $field_type:ident $(< $element_type:ident >)? $field_name:ident $(= $default_value:literal)? $(;)?)* }) => {
+    ($(#[$($def_attrs:meta)*])* struct $identifier:ident { $($(#[$($field_attrs:meta)*])* $field_id:literal : $required_or_optional:ident $field_type:ident $(< $element_type:ident >)? $field_name:ident $(= $default_value:literal)? $(;)?)* }) => {
         $(#[cfg_attr(not(doctest), $($def_attrs)*)])*
         #[derive(Default, Clone, Debug, PartialEq)]
         #[allow(non_camel_case_types)]
@@ -83,7 +98,7 @@ macro_rules! thrift_struct {
 
 #[macro_export]
 macro_rules! thrift_union {
-    ($(#[$($def_attrs:tt)*])* union $identifier:ident { $($(#[$($field_attrs:tt)*])* $field_id:literal : $field_type:ident $(< $element_type:ident >)? $field_name:ident $(;)?)* }) => {
+    ($(#[$($def_attrs:meta)*])* union $identifier:ident { $($(#[$($field_attrs:meta)*])* $field_id:literal : $field_type:ident $(< $element_type:ident >)? $field_name:ident $(;)?)* }) => {
         $(#[cfg_attr(not(doctest), $($def_attrs)*)])*
         #[derive(Clone, Debug, PartialEq)]
         #[allow(non_camel_case_types)]
@@ -146,7 +161,7 @@ macro_rules! thrift_union {
 
 #[macro_export]
 macro_rules! thrift_enum {
-    ($(#[$($def_attrs:tt)*])* enum $identifier:ident { $($(#[$($field_attrs:tt)*])* $field_name:ident = $field_value:literal;)* }) => {
+    ($(#[$($def_attrs:meta)*])* enum $identifier:ident { $($(#[$($field_attrs:meta)*])* $field_name:ident = $field_value:literal;)* }) => {
         $(#[$($def_attrs)*])*
         #[derive(Default, Debug, Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
         #[allow(non_camel_case_types)]
@@ -242,6 +257,8 @@ macro_rules! __thrift_required_check {
 #[allow(dead_code)]
 mod tests {
     thrift! {
+        /// doc
+        namespace rust test
         /** doc */
         struct SomeStructure {
             /** doc */
@@ -255,7 +272,9 @@ mod tests {
         struct AnotherStructure {
             1: required i64 foobar;
         }
+    }
 
+    thrift! {
         struct MilliSeconds {}
         struct MicroSeconds {}
         struct NanoSeconds {}
@@ -264,6 +283,9 @@ mod tests {
           2: MicroSeconds MICROS
           3: NanoSeconds NANOS
         }
+    }
+
+    thrift!{
         enum Type {
           BOOLEAN = 0;
           INT32 = 1;
