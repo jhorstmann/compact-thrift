@@ -1,9 +1,5 @@
 use compact_thrift_runtime::{CompactThriftInputSlice, CompactThriftProtocol};
-use compact_thrift_parquet::format::{
-    ConvertedType, DecimalType, FieldRepetitionType, FileMetaData, IntType, LogicalType,
-    MicroSeconds, MilliSeconds, NanoSeconds, SchemaElement, TimeType, TimeUnit, TimestampType,
-    Type,
-};
+use compact_thrift_parquet::format::{ConvertedType, DecimalType, FieldRepetitionType, FileMetaData, GeographyType, GeometryType, IntType, LogicalType, MicroSeconds, MilliSeconds, NanoSeconds, SchemaElement, TimeType, TimeUnit, TimestampType, Type, VariantType};
 use compact_thrift_parquet::{get_metadata_chunk, ParquetError};
 use std::fmt::{Debug, Display, Formatter};
 use std::fs::File;
@@ -172,6 +168,8 @@ pub enum PrimitiveLogicalType {
     Bson,
     UUID,
     Float16,
+    Geometry,
+    Geography,
 }
 
 impl PrimitiveLogicalType {
@@ -295,8 +293,13 @@ impl TryFrom<&LogicalType> for PrimitiveLogicalType {
             LogicalType::BSON(_) => Ok(PrimitiveLogicalType::Bson),
             LogicalType::UUID(_) => Ok(PrimitiveLogicalType::UUID),
             LogicalType::FLOAT16(_) => Ok(PrimitiveLogicalType::Float16),
+            LogicalType::GEOMETRY(GeometryType { crs: _ }) => Ok(PrimitiveLogicalType::Geometry),
+            LogicalType::GEOGRAPHY(GeographyType { crs: _, algorithm: _ }) => Ok(PrimitiveLogicalType::Geography),
             LogicalType::MAP(_) | LogicalType::LIST(_) => Err(ParquetError::Schema(
                 "Unsupported map or list logical type for primitive",
+            )),
+            LogicalType::VARIANT(_) => Err(ParquetError::Schema(
+                "Unsupported variant logical type for primitive",
             )),
         }
     }
@@ -307,6 +310,9 @@ pub enum GroupLogicalType {
     List,
     Map,
     MapKeyValue,
+    Variant {
+        specification_version: Option<i8>,
+    },
 }
 
 impl TryFrom<&LogicalType> for GroupLogicalType {
@@ -316,6 +322,7 @@ impl TryFrom<&LogicalType> for GroupLogicalType {
         match value {
             LogicalType::MAP(_) => Ok(GroupLogicalType::Map),
             LogicalType::LIST(_) => Ok(GroupLogicalType::List),
+            LogicalType::VARIANT(VariantType { specification_version }) => Ok(GroupLogicalType::Variant{ specification_version: *specification_version }),
             _ => Err(ParquetError::Schema("Unsupported logical type for group")),
         }
     }
@@ -508,7 +515,7 @@ fn field_from_schema_element(
         *index += 1;
         Ok(SchemaField::Primitive(field))
     } else if num_children < 0 || num_children as usize > remaining_elements {
-        return Err(ParquetError::Schema("Invalid number of children"));
+        Err(ParquetError::Schema("Invalid number of children"))
     } else {
         // ignore errors during logical type handling to be forward compatible
         let mut logical_type: Option<GroupLogicalType> = None;
