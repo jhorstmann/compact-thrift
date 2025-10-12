@@ -255,7 +255,7 @@ macro_rules! __thrift_field_type {
     (byte) => { u8 };
     (double) => { f64 };
     ($field_type:ty) => { $field_type }; // this covers bool | i8 | i16 | i32 | i64
-    (Box $element_type:ident) => { std::boxed::Box< $crate::field_type!($element_type) > };
+    (Box $element_type:ident) => { std::boxed::Box< $crate::__thrift_field_type!($element_type) > };
     (Rc $element_type:ident) => { std::rc::Rc< $crate::__thrift_field_type!($element_type) > };
     (Arc $element_type:ident) => { std::sync::Arc< $crate::__thrift_field_type!($element_type) > };
 }
