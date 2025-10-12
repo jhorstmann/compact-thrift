@@ -879,8 +879,9 @@ struct ColumnMetaData {
     * whether we can decode those pages. **/
   2: required EncodingSet encodings
 
-  /** Path in schema **/
-  3: required list<string> path_in_schema
+  // /** Path in schema **/
+  // redundant and causes unnecessary allocations
+  // 3: required list<string> path_in_schema
 
   /** Compression codec **/
   4: required CompressionCodec codec
@@ -901,8 +902,9 @@ struct ColumnMetaData {
   /** Byte offset from beginning of file to first data page **/
   9: required i64 data_page_offset
 
-  /** Byte offset from beginning of file to root index page **/
-  10: optional i64 index_page_offset
+  // /** Byte offset from beginning of file to root index page **/
+  // not used for anything
+  // 10: optional i64 index_page_offset
 
   /** Byte offset from the beginning of file to first (only) dictionary page **/
   11: optional i64 dictionary_page_offset
