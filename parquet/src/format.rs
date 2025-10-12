@@ -1,5 +1,6 @@
 #![allow(non_snake_case)]
 use compact_thrift_runtime::thrift;
+use crate::encodings::EncodingSet;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -876,7 +877,7 @@ struct ColumnMetaData {
 
   /** Set of all encodings used for this column. The purpose is to validate
     * whether we can decode those pages. **/
-  2: required list<Encoding> encodings
+  2: required EncodingSet encodings
 
   /** Path in schema **/
   3: required list<string> path_in_schema

@@ -6,6 +6,9 @@ use crate::format::{ColumnChunk, ColumnIndex, FileMetaData, OffsetIndex};
 
 #[rustfmt::skip]
 pub mod format;
+mod encodings;
+
+pub use encodings::EncodingSet;
 
 #[derive(Debug)]
 pub enum ParquetError {
