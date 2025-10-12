@@ -937,7 +937,7 @@ struct ColumnMetaData {
   16: optional SizeStatistics size_statistics;
 
   /** Optional statistics specific for Geometry and Geography logical types */
-  17: optional GeospatialStatistics geospatial_statistics;
+  17: optional Box<GeospatialStatistics> geospatial_statistics;
 }
 
 struct EncryptionWithFooterKey {
@@ -993,7 +993,7 @@ struct ColumnChunk {
   7: optional i32 column_index_length
 
   /** Crypto metadata of encrypted columns **/
-  8: optional ColumnCryptoMetaData crypto_metadata
+  8: optional Box<ColumnCryptoMetaData> crypto_metadata
 
   /** Encrypted column metadata for this chunk **/
   9: optional binary encrypted_column_metadata
