@@ -1,9 +1,9 @@
-use std::fmt::{Debug, Formatter};
 use crate::format::Encoding;
 use compact_thrift_runtime::{
     read_collection_len_and_type, CompactThriftInput, CompactThriftOutput, CompactThriftProtocol,
     ThriftError,
 };
+use std::fmt::{Debug, Formatter};
 
 #[derive(Default, Clone, Copy, PartialEq)]
 pub struct EncodingSet(u32);
@@ -43,7 +43,7 @@ impl<'i> CompactThriftProtocol<'i> for EncodingSet {
     #[inline]
     fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
         let (len, element_type) = read_collection_len_and_type(input)?;
-        if element_type != 5 {
+        if element_type != i32::FIELD_TYPE {
             return Err(ThriftError::InvalidType);
         }
 
@@ -62,6 +62,14 @@ impl<'i> CompactThriftProtocol<'i> for EncodingSet {
 
     #[inline]
     fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        let len = self.len();
+        if len < 15 {
+            let header = i32::FIELD_TYPE | ((len as u8) << 4);
+            output.write_byte(header)?;
+        } else {
+            output.write_byte(i32::FIELD_TYPE | 0xF0)?;
+            output.write_len(len)?;
+        }
         for item in self.iter() {
             output.write_i32(item.0)?;
         }
@@ -80,6 +88,11 @@ mod tests {
         encodings.write_thrift(&mut buf).unwrap();
         let set = EncodingSet::read_thrift(&mut CompactThriftInputSlice::new(&buf)).unwrap();
         let vec = set.iter().collect::<Vec<_>>();
+        assert_eq!(vec, encodings);
+
+        let mut buf = vec![];
+        set.write_thrift(&mut buf).unwrap();
+        let vec = Vec::<Encoding>::read_thrift(&mut CompactThriftInputSlice::new(&buf)).unwrap();
         assert_eq!(vec, encodings);
     }
 
