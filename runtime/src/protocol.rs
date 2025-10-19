@@ -10,7 +10,7 @@ use std::str::from_utf8;
 use crate::ThriftError;
 use crate::uleb::*;
 
-pub const MAX_BINARY_LEN: usize = 1024*1024;
+pub const MAX_BINARY_LEN: usize = 16*1024*1024;
 pub const MAX_COLLECTION_LEN: usize = 10_000_000;
 
 #[inline(never)] // full field ids are uncommon and inlining this bloats the code
@@ -289,7 +289,7 @@ impl<R: Read + ?Sized> CompactThriftInput<'static> for R {
     fn read_binary(&mut self) -> Result<Cow<'static, [u8]>, ThriftError> {
         let len = self.read_len()?;
         if len > MAX_BINARY_LEN {
-            return Err(ThriftError::InvalidBinaryLen);
+            return Err(ThriftError::InvalidBinaryLen(len));
         }
         let mut buf = Vec::with_capacity(len);
         // Safety: we trust the Read implementation to only write into buf,
@@ -347,7 +347,7 @@ impl <'i> CompactThriftInput<'i> for CompactThriftInputSlice<'i> {
     fn read_binary(&mut self) -> Result<Cow<'i, [u8]>, ThriftError> {
         let len = self.read_len()?;
         if len > MAX_BINARY_LEN {
-            return Err(ThriftError::InvalidBinaryLen);
+            return Err(ThriftError::InvalidBinaryLen(len));
         }
         if self.0.len() < len {
             return Err(ThriftError::from(ErrorKind::UnexpectedEof))
@@ -372,7 +372,7 @@ impl <'i> CompactThriftInput<'i> for CompactThriftInputSlice<'i> {
     fn skip_binary(&mut self) -> Result<(), ThriftError> {
         let len = self.read_len()?;
         if len > MAX_BINARY_LEN {
-            return Err(ThriftError::InvalidBinaryLen);
+            return Err(ThriftError::InvalidBinaryLen(len));
         }
         if self.0.len() < len {
             return Err(ThriftError::from(ErrorKind::UnexpectedEof))
@@ -424,7 +424,7 @@ impl <W: Write> CompactThriftOutput for W {
 
     fn write_binary(&mut self, value: &[u8]) -> Result<(), ThriftError> {
         if value.len() > MAX_BINARY_LEN {
-            return Err(ThriftError::InvalidBinaryLen);
+            return Err(ThriftError::InvalidBinaryLen(value.len()));
         }
         self.write_len(value.len())?;
         self.write_all(value)?;

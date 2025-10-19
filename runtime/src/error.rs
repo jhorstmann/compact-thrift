@@ -11,7 +11,7 @@ use std::io::Error as IOError;
 pub enum ThriftError {
     InvalidNumber,
     InvalidString,
-    InvalidBinaryLen,
+    InvalidBinaryLen(usize),
     InvalidCollectionLen,
     MissingField(FieldName),
     MissingValue,
