@@ -1,6 +1,6 @@
 [package]
 name = "compact-thrift-parquet"
-version = "0.3.0"
+version = "0.3.1"
 license = "Apache-2.0"
 description = "Parquet metadata structures generated from thrift definitions"
 homepage = "https://github.com/jhorstmann/compact-thrift"
@@ -12,7 +12,7 @@ edition = "2021"
 rust-version = "1.76.0"
 
 [dependencies]
-compact-thrift-runtime = { version = "0.1.3", path = "../runtime" }
+compact-thrift-runtime = { version = "0.2.0", path = "../runtime" }
 
 [dev-dependencies]
 criterion = "0.5.1"
