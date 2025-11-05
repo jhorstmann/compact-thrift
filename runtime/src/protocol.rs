@@ -3,7 +3,9 @@ use std::borrow::Cow;
 use std::io::ErrorKind;
 use std::io::Read;
 use std::io::Write;
-
+use std::marker::PhantomData;
+use std::ops::Range;
+use std::slice::from_raw_parts;
 use std::str::from_utf8_unchecked;
 use std::str::from_utf8;
 
@@ -304,42 +306,55 @@ impl<R: Read + ?Sized> CompactThriftInput<'static> for R {
 }
 
 #[derive(Clone)]
-pub struct CompactThriftInputSlice<'a>(&'a [u8]);
+pub struct CompactThriftInputSlice<'a> {
+    range: Range<*const u8>,
+    phantom: PhantomData<&'a [u8]>,
+}
 
 impl <'a> CompactThriftInputSlice<'a> {
+    #[inline]
     pub fn new(slice: &'a [u8]) -> Self {
-        Self(slice)
+        Self {range: slice.as_ptr_range(), phantom: PhantomData}
     }
 
+    #[inline]
     pub fn as_slice(&self) -> &'a [u8] {
-        self.0
+        // See from_ptr_range
+        unsafe { from_raw_parts(self.range.start, self.range.end.offset_from_unsigned(self.range.start)) }
+    }
+
+    #[inline]
+    fn len(&self) -> usize {
+        unsafe { self.range.end.offset_from_unsigned(self.range.start) }
     }
 }
 
 impl <'a> From<&'a [u8]> for CompactThriftInputSlice<'a> {
     fn from(slice: &'a [u8]) -> Self {
-        Self(slice)
+        Self::new(slice)
     }
 }
 
 impl <'i> CompactThriftInput<'i> for CompactThriftInputSlice<'i> {
     #[inline]
     fn read_byte(&mut self) -> Result<u8, ThriftError> {
-        if let [first, rest @ ..] = self.0 {
-            self.0 = rest;
-            Ok(*first)
-        } else {
+        if self.range.is_empty() {
             Err(ThriftError::from(ErrorKind::UnexpectedEof))
+        } else {
+            // Safety: Range is not exhausted
+            let byte = unsafe { self.range.start.read() };
+            self.range.start = unsafe { self.range.start.add(1) };
+            Ok(byte)
         }
     }
 
     #[inline]
     fn read_double(&mut self) -> Result<f64, ThriftError> {
-        if self.0.len() < 8 {
+        if self.len() < 8 {
             return Err(ThriftError::from(ErrorKind::UnexpectedEof))
         }
-        let value = f64::from_le_bytes(self.0[..8].try_into().unwrap());
-        self.0 = &self.0[8..];
+        let value = unsafe { self.range.start.cast::<f64>().read_unaligned() };
+        self.range.start = unsafe { self.range.start.add(8) };
         Ok(value)
     }
 
@@ -349,24 +364,12 @@ impl <'i> CompactThriftInput<'i> for CompactThriftInputSlice<'i> {
         if len > MAX_BINARY_LEN {
             return Err(ThriftError::InvalidBinaryLen(len));
         }
-        if self.0.len() < len {
+        if self.len() < len {
             return Err(ThriftError::from(ErrorKind::UnexpectedEof))
         }
-        let (first, rest) = std::mem::take(&mut self.0).split_at(len);
-        self.0 = rest;
-        Ok(Cow::Borrowed(first))
-    }
-
-    #[inline]
-    #[cfg(target_feature = "sse2")]
-    fn skip_integer(&mut self) -> Result<(), ThriftError> {
-        if self.0.len() >= 16 {
-            self.0 = unsafe { skip_uleb_sse2(self.0) };
-            Ok(())
-        } else {
-            self.0 = skip_uleb_fallback(self.0);
-            Ok(())
-        }
+        let slice = unsafe { from_raw_parts(self.range.start, len) };
+        self.range.start = unsafe { self.range.start.add(len) };
+        Ok(Cow::Borrowed(slice))
     }
 
     fn skip_binary(&mut self) -> Result<(), ThriftError> {
@@ -374,10 +377,10 @@ impl <'i> CompactThriftInput<'i> for CompactThriftInputSlice<'i> {
         if len > MAX_BINARY_LEN {
             return Err(ThriftError::InvalidBinaryLen(len));
         }
-        if self.0.len() < len {
+        if self.len() < len {
             return Err(ThriftError::from(ErrorKind::UnexpectedEof))
         }
-        self.0 = &self.0[len..];
+        self.range.start = unsafe { self.range.start.add(len) };
         Ok(())
     }
 }

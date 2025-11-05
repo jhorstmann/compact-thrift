@@ -43,27 +43,6 @@ mod tests {
     }
 
     #[test]
-    #[cfg(target_feature = "sse2")]
-    fn test_skip_uleb_sse2() {
-        use crate::uleb::skip_uleb_sse2;
-        {
-            let buf = &[0; 16];
-            assert_eq!(unsafe { skip_uleb_sse2(buf) }, &buf[1..]);
-        }
-        {
-            let buf = &mut [0; 16];
-            buf[1] = 0x81;
-            assert_eq!(unsafe { skip_uleb_sse2(buf) }, &buf[1..]);
-        }
-        {
-            let buf = &mut [0; 16];
-            buf[0] = 0x80;
-            buf[1] = 0x01;
-            assert_eq!(unsafe { skip_uleb_sse2(buf) }, &buf[2..]);
-        }
-    }
-
-    #[test]
     fn test_slice_input_read_i32() {
         assert_eq!(CompactThriftInputSlice::new(&[0]).read_i32().unwrap(), 0);
         assert_eq!(CompactThriftInputSlice::new(&[1]).read_i32().unwrap(), -1);

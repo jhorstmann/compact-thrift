@@ -18,27 +18,6 @@ pub(crate) fn decode_uleb<'i, I: CompactThriftInput<'i> + ?Sized>(input: &mut I)
     }
 }
 
-/// Safety: `input` needs to contain at least 16 bytes
-#[cfg(target_feature = "sse2")]
-#[inline]
-pub(crate) unsafe fn skip_uleb_sse2(input: &[u8]) -> &[u8] {
-    use std::arch::x86_64::*;
-    debug_assert!(input.len() >= 16);
-    let chunk = _mm_loadu_si128(input.as_ptr().cast());
-    let mask = !_mm_movemask_epi8(chunk);
-    let len = (mask << 1).trailing_zeros() as usize;
-    input.get_unchecked(len..)
-}
-
-#[inline(never)]
-pub(crate) fn skip_uleb_fallback(input: &[u8]) -> &[u8] {
-    let mut i = 0_usize;
-    while i < input.len() && (input[i] & 0x80) != 0 {
-        i += 1;
-    }
-    &input[i+1..]
-}
-
 pub(crate) fn encode_uleb<O: CompactThriftOutput + ?Sized>(output: &mut O, mut value: u64) -> Result<(), ThriftError> {
     while value > 0x7F {
         output.write_byte((value as u8) | 0x80)?;
