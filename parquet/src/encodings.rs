@@ -37,6 +37,11 @@ impl Debug for EncodingSet {
     }
 }
 
+#[inline(always)]
+fn zigzag_decode8(i: u8) -> i8 {
+    (i >> 1) as i8 ^ -((i & 1) as i8)
+}
+
 impl<'i> CompactThriftProtocol<'i> for EncodingSet {
     const FIELD_TYPE: u8 = 9;
 
@@ -49,8 +54,8 @@ impl<'i> CompactThriftProtocol<'i> for EncodingSet {
 
         let mut mask = 0_u32;
         for _ in 0..len as usize {
-            let value = input.read_i32()?;
-            if value < 0 || value >= 31 {
+            let value = zigzag_decode8(input.read_byte()?);
+            if value < 0 || value > 31 {
                 return Err(ThriftError::InvalidNumber);
             }
             mask |= 1 << value;
@@ -71,7 +76,7 @@ impl<'i> CompactThriftProtocol<'i> for EncodingSet {
             output.write_len(len)?;
         }
         for item in self.iter() {
-            output.write_i32(item.0)?;
+            output.write_i32(item.0 as _)?;
         }
         Ok(())
     }
