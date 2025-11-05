@@ -14,9 +14,9 @@ pub const MAX_BINARY_LEN: usize = 16*1024*1024;
 pub const MAX_COLLECTION_LEN: usize = 10_000_000;
 
 #[inline(never)] // full field ids are uncommon and inlining this bloats the code
+#[cold]
 fn read_full_field_id<'i, I: CompactThriftInput<'i> + ?Sized>(input: &mut I) -> Result<i16, ThriftError> {
-    let field_id = decode_uleb(input)? as u16;
-    Ok(zigzag_decode16(field_id))
+    input.read_i16()
 }
 
 #[inline(always)]
