@@ -372,6 +372,7 @@ impl <'i> CompactThriftInput<'i> for CompactThriftInputSlice<'i> {
         Ok(Cow::Borrowed(slice))
     }
 
+    #[inline]
     fn skip_binary(&mut self) -> Result<(), ThriftError> {
         let len = self.read_len()?;
         if len > MAX_BINARY_LEN {
