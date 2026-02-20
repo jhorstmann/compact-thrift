@@ -94,7 +94,7 @@ macro_rules! thrift_struct {
                     }
                 }
 
-                $($crate::__thrift_required_check!($required_or_optional $identifier $field_name);)*
+                $($crate::__thrift_required_check!($required_or_optional $identifier $field_name $field_id);)*
 
                 Ok(())
             }
@@ -146,6 +146,8 @@ macro_rules! thrift_union {
 
             #[inline(never)]
             fn fill_thrift<T: $crate::CompactThriftInput<'i>>(&mut self, input: &mut T) -> std::result::Result<(), $crate::ThriftError> {
+                const UNION_NAME: $crate::FieldName = $crate::FieldName::from_str(concat!(stringify!($identifier), "\0"));
+
                 let mut last_field_id = 0_i16;
                 let field_type = input.read_field_header(&mut last_field_id)?;
 
@@ -163,7 +165,7 @@ macro_rules! thrift_union {
                         }
                     }),*
                     _ => {
-                        return Err($crate::ThriftError::MissingField(concat!(stringify!($struct_name), "\0").into()))
+                        return Err($crate::ThriftError::UnknownVariant(UNION_NAME, last_field_id))
                     }
                 }
                 let stop = input.read_byte()?;
@@ -289,12 +291,13 @@ macro_rules! __thrift_required_set {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __thrift_required_check {
-    (required $struct_name:ident $field_name:ident) => {
+    (required $struct_name:ident $field_name:ident $field_id:literal) => {
         if !$field_name {
-            return Err($crate::ThriftError::MissingField(concat!(stringify!($struct_name), "::", stringify!($field_name), "\0").into()))
+            const FIELD_NAME: $crate::FieldName = $crate::FieldName::from_str(concat!(stringify!($struct_name), "::", stringify!($field_name), "\0"));
+            return Err($crate::ThriftError::MissingField(FIELD_NAME))
         }
     };
-    (optional $struct_name:ident $field_name:ident) => {};
+    (optional $struct_name:ident $field_name:ident $field_id:literal) => {};
 }
 
 #[cfg(test)]

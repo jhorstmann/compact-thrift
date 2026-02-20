@@ -14,6 +14,7 @@ pub enum ThriftError {
     InvalidBinaryLen(usize),
     InvalidCollectionLen,
     MissingField(FieldName),
+    UnknownVariant(FieldName, i16),
     MissingValue,
     MissingStop,
     DuplicateField,
@@ -33,6 +34,15 @@ pub struct FieldName {
 unsafe impl Send for FieldName {}
 unsafe impl Sync for FieldName {}
 
+impl FieldName {
+    pub const fn from_str(value: &'static str) -> FieldName {
+        assert!(!value.is_empty() && value.as_bytes()[value.len()-1] == b'\0');
+        Self {
+            name: value.as_ptr().cast::<c_char>()
+        }
+    }
+}
+
 impl From<&'static CStr> for FieldName {
     fn from(value: &'static CStr) -> Self {
         Self {
@@ -43,10 +53,7 @@ impl From<&'static CStr> for FieldName {
 
 impl From<&'static str> for FieldName {
     fn from(value: &'static str) -> Self {
-        assert!(!value.is_empty() && value.as_bytes()[value.len()-1] == b'\0');
-        Self {
-            name: value.as_ptr().cast::<c_char>()
-        }
+        Self::from_str(value)
     }
 }
 
