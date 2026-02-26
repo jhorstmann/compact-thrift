@@ -1,7 +1,7 @@
 #![allow(non_snake_case)]
 use compact_thrift_runtime::thrift;
 use crate::encodings::EncodingSet;
-
+use crate::path_in_schema::PathInSchema;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -879,9 +879,9 @@ struct ColumnMetaData {
     * whether we can decode those pages. **/
   2: required EncodingSet encodings
 
-  // /** Path in schema **/
-  // redundant and causes unnecessary allocations
-  // 3: required list<string> path_in_schema
+  /** Path in schema.
+    * Redundant and thus skipped during reading. **/
+  3: required PathInSchema path_in_schema
 
   /** Compression codec **/
   4: required CompressionCodec codec

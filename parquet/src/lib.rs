@@ -7,8 +7,10 @@ use crate::format::{ColumnChunk, ColumnIndex, FileMetaData, OffsetIndex};
 #[rustfmt::skip]
 pub mod format;
 mod encodings;
+mod path_in_schema;
 
 pub use encodings::EncodingSet;
+pub use path_in_schema::PathInSchema;
 
 #[derive(Debug)]
 pub enum ParquetError {
