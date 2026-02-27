@@ -31,6 +31,19 @@ impl EncodingSet {
     }
 }
 
+impl FromIterator<Encoding> for EncodingSet {
+    fn from_iter<T: IntoIterator<Item=Encoding>>(iter: T) -> Self {
+        let mask = iter.into_iter().fold(0_u32, |mask, encoding| {
+            if encoding.0 < 32 {
+                mask | 1 << encoding.0
+            } else {
+                mask
+            }
+        });
+        Self(mask)
+    }
+}
+
 impl Debug for EncodingSet {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         f.debug_list().entries(self.iter()).finish()
@@ -98,6 +111,11 @@ mod tests {
         let mut buf = vec![];
         set.write_thrift(&mut buf).unwrap();
         let vec = Vec::<Encoding>::read_thrift(&mut CompactThriftInputSlice::new(&buf)).unwrap();
+        assert_eq!(vec, encodings);
+
+        let set = encodings.iter().copied().collect::<EncodingSet>();
+        let vec = set.iter().collect::<Vec<_>>();
+
         assert_eq!(vec, encodings);
     }
 
