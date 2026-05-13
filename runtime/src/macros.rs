@@ -131,12 +131,13 @@ macro_rules! thrift_union {
         #[allow(non_camel_case_types)]
         #[allow(non_snake_case)]
         pub enum $identifier {
+            __UNKNOWN__(i16),
             $($(#[cfg_attr(not(doctest), $($field_attrs)*)])* $field_name($crate::__thrift_field_type!($field_type $($element_type)?))),*
         }
 
         impl Default for $identifier {
             fn default() -> Self {
-                $crate::__thrift_union_default!($($field_name;)*)
+                Self::__UNKNOWN__(0)
             }
         }
 
@@ -165,7 +166,9 @@ macro_rules! thrift_union {
                         }
                     }),*
                     _ => {
-                        return Err($crate::ThriftError::UnknownVariant(UNION_NAME, last_field_id))
+                        // return Err($crate::ThriftError::UnknownVariant(UNION_NAME, last_field_id))
+                        *self = Self::__UNKNOWN__(last_field_id);
+                        input.skip_field(field_type)?;
                     }
                 }
                 let stop = input.read_byte()?;
@@ -179,6 +182,7 @@ macro_rules! thrift_union {
             fn write_thrift<T: $crate::CompactThriftOutput>(&self, output: &mut T) -> std::result::Result<(), $crate::ThriftError> {
                 let mut last_field_id = 0_i16;
                 match self {
+                    Self::__UNKNOWN__(id) => {},
                     $(Self::$field_name(inner) => inner.write_thrift_field(output, $field_id, &mut last_field_id)?),*
                 }
                 output.write_byte(0)?;

@@ -53,12 +53,15 @@ pub enum SchemaTimeUnit {
     Nanos,
 }
 
-impl From<TimeUnit> for SchemaTimeUnit {
-    fn from(time_unit: TimeUnit) -> Self {
+impl TryFrom<TimeUnit> for SchemaTimeUnit {
+    type Error = ParquetError;
+
+    fn try_from(time_unit: TimeUnit) -> Result<Self, Self::Error> {
         match time_unit {
-            TimeUnit::MILLIS(_) => SchemaTimeUnit::Millis,
-            TimeUnit::MICROS(_) => SchemaTimeUnit::Micros,
-            TimeUnit::NANOS(_) => SchemaTimeUnit::Nanos,
+            TimeUnit::MILLIS(_) => Ok(SchemaTimeUnit::Millis),
+            TimeUnit::MICROS(_) => Ok(SchemaTimeUnit::Micros),
+            TimeUnit::NANOS(_) => Ok(SchemaTimeUnit::Nanos),
+            TimeUnit::__UNKNOWN__(_) => Err(ParquetError::Schema("Unknown TimeUnit"))
         }
     }
 }
@@ -79,21 +82,26 @@ pub struct TimeOptions {
     time_unit: SchemaTimeUnit,
 }
 
-impl From<&TimeType> for TimeOptions {
-    fn from(time_type: &TimeType) -> Self {
-        Self {
+impl TryFrom<&TimeType> for TimeOptions {
+    type Error = ParquetError;
+    fn try_from(time_type: &TimeType) -> Result<Self, Self::Error> {
+        let time_unit = time_type.unit.clone().try_into()?;
+        Ok(Self {
             is_adjusted_to_utc: time_type.isAdjustedToUTC,
-            time_unit: time_type.unit.clone().into(),
-        }
+            time_unit,
+        })
     }
 }
 
-impl From<&TimestampType> for TimeOptions {
-    fn from(timestamp_type: &TimestampType) -> Self {
-        Self {
+impl TryFrom<&TimestampType> for TimeOptions {
+    type Error = ParquetError;
+
+    fn try_from(timestamp_type: &TimestampType) -> Result<Self, Self::Error> {
+        let time_unit = timestamp_type.unit.clone().try_into()?;
+        Ok(Self {
             is_adjusted_to_utc: timestamp_type.isAdjustedToUTC,
-            time_unit: timestamp_type.unit.clone().into(),
-        }
+            time_unit,
+        })
     }
 }
 
@@ -163,7 +171,7 @@ pub enum PrimitiveLogicalType {
     Timestamp(TimeOptions),
     Interval,
     Integer(IntegerOptions),
-    Unknown,
+    Unknown(i16),
     Json,
     Bson,
     UUID,
@@ -281,14 +289,14 @@ impl TryFrom<&LogicalType> for PrimitiveLogicalType {
                 DecimalOptions::try_from(decimal_type)?,
             )),
             LogicalType::DATE(_) => Ok(PrimitiveLogicalType::Date),
-            LogicalType::TIME(time_type) => Ok(PrimitiveLogicalType::Time(time_type.into())),
+            LogicalType::TIME(time_type) => Ok(PrimitiveLogicalType::Time(time_type.try_into()?)),
             LogicalType::TIMESTAMP(timestamp_type) => {
-                Ok(PrimitiveLogicalType::Timestamp(timestamp_type.into()))
+                Ok(PrimitiveLogicalType::Timestamp(timestamp_type.try_into()?))
             }
             LogicalType::INTEGER(int_type) => Ok(PrimitiveLogicalType::Integer(
                 IntegerOptions::try_from(int_type)?,
             )),
-            LogicalType::UNKNOWN(_) => Ok(PrimitiveLogicalType::Unknown),
+            LogicalType::UNKNOWN(_) => Ok(PrimitiveLogicalType::Unknown(11)),
             LogicalType::JSON(_) => Ok(PrimitiveLogicalType::Json),
             LogicalType::BSON(_) => Ok(PrimitiveLogicalType::Bson),
             LogicalType::UUID(_) => Ok(PrimitiveLogicalType::UUID),
@@ -301,6 +309,7 @@ impl TryFrom<&LogicalType> for PrimitiveLogicalType {
             LogicalType::VARIANT(_) => Err(ParquetError::Schema(
                 "Unsupported variant logical type for primitive",
             )),
+            LogicalType::__UNKNOWN__(id) => Ok(PrimitiveLogicalType::Unknown(*id)),
         }
     }
 }
