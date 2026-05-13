@@ -11,6 +11,10 @@ readme = "README.md"
 edition = "2021"
 rust-version = "1.76.0"
 
+[dependencies]
+futures-io = { version = "0.3" }
+futures-util = { version = "0.3", features = ["io"] }
+
 [dev-dependencies]
 criterion = "0.5.1"
 rand = "0.8.5"

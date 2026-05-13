@@ -1,3 +1,4 @@
+pub mod async_buffer;
 mod error;
 pub mod macros;
 mod protocol;
