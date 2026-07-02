@@ -1,3 +1,4 @@
+use std::env;
 use compact_thrift_runtime::{CompactThriftInputSlice, CompactThriftProtocol};
 use compact_thrift_parquet::format::{ConvertedType, DecimalType, FieldRepetitionType, FileMetaData, GeographyType, GeometryType, IntType, LogicalType, MicroSeconds, MilliSeconds, NanoSeconds, SchemaElement, TimeType, TimeUnit, TimestampType, Type, VariantType};
 use compact_thrift_parquet::{get_metadata_chunk, ParquetError};
@@ -647,7 +648,11 @@ fn pretty_print_schema(field: &SchemaField, indent: usize) {
 }
 
 pub fn main() {
-    let mut file = File::open("parquet/data/alltypes_tiny_pages.parquet").unwrap();
+    let Some(path) = env::args_os().nth(1) else {
+        eprintln!("Usage: schema <path>");
+        std::process::exit(1);
+    };
+    let mut file = File::open(path).unwrap();
     let data = get_metadata_chunk(&mut file).unwrap();
     let mut input = CompactThriftInputSlice::new(&data);
 
