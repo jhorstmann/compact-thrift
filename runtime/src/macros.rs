@@ -57,12 +57,12 @@ macro_rules! thrift_struct {
         #[allow(non_camel_case_types)]
         #[allow(non_snake_case)]
         pub struct $identifier {
-            $($(#[cfg_attr(not(doctest), $($field_attrs)*)])* pub $field_name: $crate::__thrift_required_or_optional!($required_or_optional $crate::__thrift_field_type!($field_type $($element_type)?))),*
+            $($(#[cfg_attr(not(doctest), $($field_attrs)*)])* pub $field_name: $crate::__thrift_required_or_optional!($required_or_optional $crate::__thrift_field_type!($field_type $(< $element_type >)?))),*
         }
 
         impl $identifier {
             #[allow(clippy::too_many_arguments)]
-            pub fn new($($field_name: impl Into<$crate::__thrift_required_or_optional!($required_or_optional $crate::__thrift_field_type!($field_type $($element_type)?))>),*) -> Self {
+            pub fn new($($field_name: impl Into<$crate::__thrift_required_or_optional!($required_or_optional $crate::__thrift_field_type!($field_type $(< $element_type >)?))>),*) -> Self {
                 Self {
                     $($field_name: $field_name.into(),)*
                 }
@@ -125,13 +125,13 @@ macro_rules! thrift_struct {
 /// ```
 #[macro_export]
 macro_rules! thrift_union {
-    ($(#[$($def_attrs:meta)*])* union $identifier:ident { $($(#[$($field_attrs:meta)*])* $field_id:literal : $field_type:ident $(< $element_type:ident >)? $field_name:ident $(;)?)* }) => {
+    ($(#[$($def_attrs:meta)*])* union $identifier:ident { $($(#[$($field_attrs:meta)*])* $field_id:literal : $field_type:ident $(< $element_type:ty >)? $field_name:ident $(;)?)* }) => {
         $(#[cfg_attr(not(doctest), $($def_attrs)*)])*
         #[derive(Clone, Debug, PartialEq)]
         #[allow(non_camel_case_types)]
         #[allow(non_snake_case)]
         pub enum $identifier {
-            $($(#[cfg_attr(not(doctest), $($field_attrs)*)])* $field_name($crate::__thrift_field_type!($field_type $($element_type)?))),*
+            $($(#[cfg_attr(not(doctest), $($field_attrs)*)])* $field_name($crate::__thrift_field_type!($field_type $(< $element_type >)?))),*
         }
 
         impl Default for $identifier {
@@ -250,16 +250,13 @@ macro_rules! __thrift_union_default {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __thrift_field_type {
-    (list $element_type:ident) => { Vec< $crate::__thrift_field_type!($element_type) > };
-    (set $element_type:ident) => { Vec< $crate::__thrift_field_type!($element_type) > };
+    (list < $element_type:ident >) => { std::vec::Vec< $crate::__thrift_field_type!($element_type) > };
+    (set < $element_type:ident >) => { std::vec::Vec< $crate::__thrift_field_type!($element_type) > };
     (binary) => { Vec<u8> };
     (string) => { String };
     (byte) => { u8 };
     (double) => { f64 };
-    ($field_type:ty) => { $field_type }; // this covers bool | i8 | i16 | i32 | i64
-    (Box $element_type:ident) => { std::boxed::Box< $crate::__thrift_field_type!($element_type) > };
-    (Rc $element_type:ident) => { std::rc::Rc< $crate::__thrift_field_type!($element_type) > };
-    (Arc $element_type:ident) => { std::sync::Arc< $crate::__thrift_field_type!($element_type) > };
+    ($field_type:ty) => { $field_type }; // this covers the thrift types bool, i8, i16, i32, i64, and any other rust types
 }
 
 /// Wraps an `optional` thrift field in a rust `Option`.
@@ -303,6 +300,10 @@ macro_rules! __thrift_required_check {
 #[cfg(test)]
 #[allow(dead_code)]
 mod tests {
+    use std::rc::Rc;
+    use std::sync::Arc;
+    use crate::{CompactThriftInputSlice, CompactThriftProtocol};
+
     thrift! {
         /// doc
         namespace rust test
@@ -318,6 +319,7 @@ mod tests {
         }
         struct AnotherStructure {
             1: required i64 foobar;
+            2: required list<binary> list_of_binary;
         }
     }
 
@@ -356,17 +358,54 @@ mod tests {
     }
 
     thrift! {
-        struct ReferenceCounted {
+        struct GenericTypes {
             1: required Rc<String> rc_string;
             2: required Arc<String> arc_string;
             3: required Rc<str> rc_str;
             4: required Arc<str> arc_str;
+            5: required Box<str> box_str;
+        }
+    }
+
+
+    thrift! {
+        union UnionV1 {
+            1: string STRING;
+            2: i64 INTEGER;
+        }
+        struct WrapperV1 {
+            1: optional UnionV1 value;
+        }
+        union UnionV2 {
+            1: string STRING;
+            2: i64 INTEGER;
+            3: f64 FLOAT;
+        }
+        struct WrapperV2 {
+            1: optional UnionV2 value;
         }
     }
 
     #[test]
     pub fn test_constructor() {
         let _s = SomeStructure::new(1_i64, 2_i64, Some(vec![3_i64]), Some("foo".into()), true, 1.0);
-        let _r = ReferenceCounted::default();
+        let _r = GenericTypes::default();
+    }
+
+    #[test]
+    fn test_forward_compatibility() {
+        let mut buffer = vec![];
+        let v2 = WrapperV2 {
+            value: Some(UnionV2::FLOAT(1.0))
+        };
+        v2.write_thrift(&mut buffer).unwrap();
+
+        let mut input = CompactThriftInputSlice::new(&buffer);
+        let v1 = WrapperV1::read_thrift(&mut input).unwrap();
+        assert!(matches!(v1.value, None));
+
+        let mut input = CompactThriftInputSlice::new(&buffer);
+        let v2 = WrapperV2::read_thrift(&mut input).unwrap();
+        assert_eq!(v2.value, Some(UnionV2::FLOAT(1.0)));
     }
 }

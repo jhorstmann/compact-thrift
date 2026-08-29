@@ -21,7 +21,7 @@ mod tests {
     #[test]
     fn test_field_name() {
         assert_eq!(std::mem::size_of::<FieldName>(), std::mem::size_of::<usize>());
-        assert_eq!(&FieldName::from(c"foobar").to_string(), "foobar");
+        assert_eq!(FieldName::from("foobar\0").as_str(), "foobar");
     }
 
     #[test]

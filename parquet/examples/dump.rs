@@ -4,7 +4,7 @@ use compact_thrift_parquet::format::FileMetaData;
 use compact_thrift_parquet::get_metadata_chunk;
 
 pub fn main() {
-    let mut file = File::open("data/alltypes_tiny_pages.parquet").unwrap();
+    let mut file = File::open("parquet/data/alltypes_tiny_pages.parquet").unwrap();
     let data = get_metadata_chunk(&mut file).unwrap();
     let mut input = CompactThriftInputSlice::new(&data);
 

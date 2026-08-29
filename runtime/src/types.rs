@@ -231,33 +231,51 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
     }
 }
 
+#[cold]
+fn drop_option<T>(value: &mut Option<T>) {
+    let _ = value.take();
+}
+
+#[inline]
+fn init_once_default<T: Default>(value: &mut Option<T>) -> Result<&mut T, ThriftError> {
+    if value.is_some() {
+        return Err(ThriftError::DuplicateField);
+    }
+    // Safety: avoid generating drop calls, content is always None because of check above
+    unsafe {
+        std::ptr::write(value as *mut _, Some(T::default()));
+        Ok(value.as_mut().unwrap_unchecked())
+    }
+}
+
 impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for Option<P> {
     const FIELD_TYPE: u8 = P::FIELD_TYPE;
 
     #[inline]
     fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        if self.is_some() {
-            return Err(ThriftError::DuplicateField);
+        let value = init_once_default(self)?;
+        match value.fill_thrift(input) {
+            Err(ThriftError::UnknownVariant(_, _)) => {
+                drop_option(self);
+                Ok(())
+            }
+            r => r,
         }
-        // Safety: avoid generating drop calls, content is always None because of check above
-        unsafe {
-            std::ptr::write(self as *mut _, Some(P::default()));
-            self.as_mut().unwrap_unchecked().fill_thrift(input)?;
-        }
-        Ok(())
     }
 
     #[inline]
     fn fill_thrift_field<T: CompactThriftInput<'i>>(&mut self, input: &mut T, field_type: u8) -> Result<(), ThriftError> {
-        if self.is_some() {
-            return Err(ThriftError::DuplicateField);
+        if field_type != Self::FIELD_TYPE {
+            return Err(ThriftError::InvalidType)
         }
-        // Safety: avoid generating drop calls, content is always None because of check above
-        unsafe {
-            std::ptr::write(self as *mut _, Some(P::default()));
-            self.as_mut().unwrap_unchecked().fill_thrift_field(input, field_type)?;
+        let value = init_once_default(self)?;
+        match value.fill_thrift_field(input, field_type) {
+            Err(ThriftError::UnknownVariant(_, _)) => {
+                drop_option(self);
+                Ok(())
+            }
+            r => r,
         }
-        Ok(())
     }
 
 

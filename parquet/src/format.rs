@@ -1,7 +1,16 @@
 #![allow(non_snake_case)]
 use compact_thrift_runtime::thrift;
+use crate::column_order::ColumnOrder;
 use crate::encodings::EncodingSet;
 use crate::path_in_schema::PathInSchema;
+
+// #[expect(non_camel_case_types)]
+// type binary = Vec<u8>;
+
+// #[expect(non_camel_case_types)]
+// type string = String;
+
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -1043,7 +1052,7 @@ struct TypeDefinedOrder {}
  * If the reader does not support the value of this union, min and max stats
  * for this column should be ignored.
  */
-union ColumnOrder {
+union _ColumnOrder {
 
   /**
    * The sort orders for logical types are:

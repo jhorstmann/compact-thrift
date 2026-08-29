@@ -8,6 +8,7 @@ use crate::format::{ColumnChunk, ColumnIndex, FileMetaData, OffsetIndex};
 pub mod format;
 mod encodings;
 mod path_in_schema;
+mod column_order;
 
 pub use encodings::EncodingSet;
 pub use path_in_schema::PathInSchema;

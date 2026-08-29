@@ -41,12 +41,12 @@ impl FieldName {
             name: value.as_ptr().cast::<c_char>()
         }
     }
-}
 
-impl From<&'static CStr> for FieldName {
-    fn from(value: &'static CStr) -> Self {
-        Self {
-            name: value.as_ptr()
+    pub fn as_str(&self) -> &str {
+        // Safety: FieldName can only be constructed from valid strings
+        unsafe {
+            let bytes = CStr::from_ptr(self.name).to_bytes();
+            std::str::from_utf8_unchecked(bytes)
         }
     }
 }
@@ -59,15 +59,28 @@ impl From<&'static str> for FieldName {
 
 impl Debug for FieldName {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        unsafe { Debug::fmt(CStr::from_ptr(self.name), f) }
+        Debug::fmt(self.as_str(), f)
     }
 }
 
 impl Display for FieldName {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        unsafe { Display::fmt(&CStr::from_ptr(self.name).to_string_lossy(), f) }
+        Display::fmt(self.as_str(), f)
     }
 }
+
+impl PartialEq for FieldName {
+    fn eq(&self, other: &Self) -> bool {
+        self.as_str() == other.as_str()
+    }
+}
+
+impl PartialEq<str> for FieldName {
+    fn eq(&self, other: &str) -> bool {
+        self.as_str() == other
+    }
+}
+
 
 impl Display for ThriftError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
