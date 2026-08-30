@@ -2,7 +2,7 @@ use compact_thrift_parquet::format::{
     ColumnChunk, ColumnMetaData, CompressionCodec, DataPageHeader, DictionaryPageHeader, Encoding,
     FieldRepetitionType, FileMetaData, PageHeader, PageType, RowGroup, SchemaElement, Type,
 };
-use compact_thrift_parquet::{EncodingSet, PathInSchema};
+use compact_thrift_parquet::EncodingSet;
 use compact_thrift_runtime::CompactThriftProtocol;
 use std::fs::File;
 use std::io::Write;
@@ -68,7 +68,6 @@ pub fn main() {
                     Encoding::PLAIN_DICTIONARY,
                     Encoding::RLE_DICTIONARY,
                 ]),
-                path_in_schema: PathInSchema::from(vec!["column".into()]),
                 codec: CompressionCodec::UNCOMPRESSED,
                 num_values: 1,
                 total_compressed_size: column_data_len as i64,

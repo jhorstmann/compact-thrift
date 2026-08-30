@@ -3,42 +3,9 @@ use compact_thrift_runtime::{
     ThriftError,
 };
 
-/// Skip reading the redundant `path_in_schema` field while still allowing to write it.
-#[allow(clippy::box_collection)] // minimize heap size
+/// Skip reading the redundant `path_in_schema` field and write it as a single empty string.
 #[derive(Default, Clone, Debug, PartialEq)]
-pub struct PathInSchema(Option<Vec<String>>);
-
-impl PathInSchema {
-    pub fn len(&self) -> usize {
-        match &self.0 {
-            None => 0,
-            Some(b) => b.len(),
-        }
-    }
-
-    pub fn as_slice(&self) -> &[String] {
-        match &self.0 {
-            None => &[],
-            Some(b) => b.as_slice(),
-        }
-    }
-
-    pub fn into_vec(self) -> Vec<String> {
-        self.0.unwrap_or_else(|| vec![])
-    }
-}
-
-impl From<Vec<String>> for PathInSchema {
-    fn from(v: Vec<String>) -> Self {
-        Self(Some(v))
-    }
-}
-
-impl From<String> for PathInSchema {
-    fn from(s: String) -> Self {
-        Self::from(vec![s])
-    }
-}
+pub struct PathInSchema;
 
 impl<'i> CompactThriftProtocol<'i> for PathInSchema {
     const FIELD_TYPE: u8 = <Vec<String> as CompactThriftProtocol>::FIELD_TYPE;
@@ -52,7 +19,8 @@ impl<'i> CompactThriftProtocol<'i> for PathInSchema {
     }
 
     fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
-        self.0.write_thrift(output)
+        output.write_byte(String::FIELD_TYPE | (1 << 4))?;
+        output.write_binary(&[])
     }
 }
 
@@ -63,23 +31,29 @@ mod tests {
 
     #[test]
     fn path_in_schema_size() {
-        assert_eq!(size_of::<PathInSchema>(), 24);
-        assert_eq!(size_of::<Option<PathInSchema>>(), 24);
+        assert_eq!(size_of::<PathInSchema>(), 0);
+        assert_eq!(size_of::<Option<PathInSchema>>(), 1);
     }
 
     #[test]
-    fn path_in_schema_roundtrip() {
+    fn path_in_schema_read() {
         let mut buf = vec![];
-        let write_path = PathInSchema::from(vec!["a".into(), "b".into()]);
+        let write_path = vec!["a".to_owned(), "b".to_owned()];
         write_path.write_thrift(&mut buf).unwrap();
 
         let mut input = CompactThriftInputSlice::new(&buf);
-        let read_path = PathInSchema::read_thrift(&mut input).unwrap();
-        assert_eq!(read_path.len(), 0);
+        let _read_path = PathInSchema::read_thrift(&mut input).unwrap();
+        assert_eq!(input.as_slice(), &[]);
+    }
+
+    #[test]
+    fn path_in_schema_write() {
+        let mut buf = vec![];
+        PathInSchema.write_thrift(&mut buf).unwrap();
 
         let mut input = CompactThriftInputSlice::new(&buf);
-        let read_path_as_vec = Vec::<String>::read_thrift(&mut input).unwrap();
-
-        assert_eq!(&read_path_as_vec, write_path.as_slice());
+        let read_path = Vec::<String>::read_thrift(&mut input).unwrap();
+        assert_eq!(read_path.as_slice(), &["".to_owned()]);
+        assert_eq!(input.as_slice(), &[]);
     }
 }
