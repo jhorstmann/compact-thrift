@@ -28,28 +28,6 @@ impl Default for ColumnOrder {
 
 const COLUMN_ORDER_CONTENT: FieldName = const { FieldName::from_str("ColumnOrder::Content\0") };
 
-#[derive(Debug,Default,Clone)]
-struct EmptyStruct {}
-
-impl<'i> CompactThriftProtocol<'i> for EmptyStruct {
-    const FIELD_TYPE: u8 = 12;
-
-    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        let mut last_field_id = 0_i16;
-        let field_type = input.read_field_header(&mut last_field_id)?;
-        if field_type != 0 {
-            Err(ThriftError::UnknownVariant(COLUMN_ORDER_CONTENT, field_type as _))
-        } else {
-            Ok(())
-        }
-    }
-
-    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
-        output.write_byte(0)?;
-        Ok(())
-    }
-}
-
 impl<'i> CompactThriftProtocol<'i> for ColumnOrder {
     const FIELD_TYPE: u8 = 12;
 
@@ -61,7 +39,14 @@ impl<'i> CompactThriftProtocol<'i> for ColumnOrder {
             return Err(ThriftError::MissingField(COLUMN_ORDER_CONTENT));
         }
 
-        EmptyStruct::default().fill_thrift(input)?;
+        {
+            let mut last_field_id = 0_i16;
+            let field_type = input.read_field_header(&mut last_field_id)?;
+            if field_type != 0 {
+                return Err(ThriftError::UnknownVariant(COLUMN_ORDER_CONTENT, field_type as _))
+            }
+        }
+
         self.0 = last_field_id;
 
         let stop = input.read_byte()?;
@@ -74,7 +59,41 @@ impl<'i> CompactThriftProtocol<'i> for ColumnOrder {
 
     fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         let mut last_field_id = 0_i16;
-        EmptyStruct::default().write_thrift_field(output, self.0, &mut last_field_id)?;
+        output.write_field_header(Self::FIELD_TYPE, self.0, &mut last_field_id)?;
+        output.write_byte(0)?;
+        output.write_byte(0)?;
         Ok(())
     }
+}
+
+#[cfg(test)]
+mod tests {
+    use compact_thrift_runtime::{CompactThriftInputSlice, CompactThriftProtocol};
+    use crate::column_order::ColumnOrder;
+    use crate::format::{TypeDefinedOrder, _ColumnOrder};
+
+    #[test]
+    fn column_order_read() {
+        let mut buffer = vec![];
+        _ColumnOrder::TYPE_ORDER(TypeDefinedOrder {}).write_thrift(&mut buffer).unwrap();
+
+        let mut input = CompactThriftInputSlice::new(&buffer);
+        let roundtrip = ColumnOrder::read_thrift(&mut input).unwrap();
+
+        assert_eq!(roundtrip.0, 1);
+        assert_eq!(input.as_slice(), &[]);
+    }
+
+    #[test]
+    fn column_order_write() {
+        let mut buffer = vec![];
+        ColumnOrder::TYPE_ORDER.write_thrift(&mut buffer).unwrap();
+
+        let mut input = CompactThriftInputSlice::new(&buffer);
+        let roundtrip = _ColumnOrder::read_thrift(&mut input).unwrap();
+
+        assert_eq!(roundtrip, _ColumnOrder::TYPE_ORDER(TypeDefinedOrder {}));
+        assert_eq!(input.as_slice(), &[]);
+    }
+
 }

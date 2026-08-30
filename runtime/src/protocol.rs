@@ -258,21 +258,6 @@ pub(crate) fn skip_field<'i, T: CompactThriftInput<'i> + ?Sized>(input: &mut T, 
     Ok(())
 }
 
-#[inline]
-pub(crate) fn write_field_header<T: CompactThriftOutput>(output: &mut T, field_type: u8, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
-    let field_delta = field_id.wrapping_sub(*last_field_id);
-
-    if field_delta > 15 {
-        output.write_byte(field_type)?;
-        output.write_i16(field_delta)?
-    } else {
-        output.write_byte(field_type | ((field_delta as u8) << 4))?;
-    }
-    *last_field_id = field_id;
-    Ok(())
-}
-
-
 impl<R: Read + ?Sized> CompactThriftInput<'static> for R {
     #[inline]
     fn read_byte(&mut self) -> Result<u8, ThriftError> {
@@ -397,6 +382,19 @@ pub trait CompactThriftOutput {
     fn write_string(&mut self, value: &str) -> Result<(), ThriftError> {
         self.write_binary(value.as_bytes())
     }
+    fn write_field_header(&mut self, field_type: u8, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
+        let field_delta = field_id.wrapping_sub(*last_field_id);
+
+        if field_delta > 15 {
+            self.write_byte(field_type)?;
+            self.write_i16(field_delta)?
+        } else {
+            self.write_byte(field_type | ((field_delta as u8) << 4))?;
+        }
+        *last_field_id = field_id;
+        Ok(())
+    }
+
 }
 
 impl <W: Write> CompactThriftOutput for W {
@@ -458,7 +456,7 @@ pub trait CompactThriftProtocol<'i> {
     fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError>;
     #[inline]
     fn write_thrift_field<T: CompactThriftOutput>(&self, output: &mut T, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
-        write_field_header(output, Self::FIELD_TYPE, field_id, last_field_id)?;
+        output.write_field_header(Self::FIELD_TYPE, field_id, last_field_id)?;
         self.write_thrift(output)?;
         Ok(())
     }

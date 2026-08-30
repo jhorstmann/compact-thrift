@@ -45,7 +45,7 @@ impl <'i> CompactThriftProtocol<'i> for bool {
 
     fn write_thrift_field<T: CompactThriftOutput>(&self, output: &mut T, field_id: i16, last_field_id: &mut i16) -> Result<(), ThriftError> {
         let field_type = 1 + (!*self) as u8;
-        write_field_header(output, field_type, field_id, last_field_id)
+        output.write_field_header(field_type, field_id, last_field_id)
     }
 }
 
