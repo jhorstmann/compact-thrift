@@ -11,7 +11,10 @@ impl<'i> CompactThriftProtocol<'i> for PathInSchema {
     const FIELD_TYPE: u8 = <Vec<String> as CompactThriftProtocol>::FIELD_TYPE;
 
     fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
-        let (len, _) = read_collection_len_and_type(input)?;
+        let (len, element_type) = read_collection_len_and_type(input)?;
+        if element_type != String::FIELD_TYPE {
+            return Err(ThriftError::InvalidType);
+        }
         for _ in 0..len {
             input.skip_binary()?
         }
@@ -20,7 +23,7 @@ impl<'i> CompactThriftProtocol<'i> for PathInSchema {
 
     fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
         output.write_byte(String::FIELD_TYPE | (1 << 4))?;
-        output.write_binary(&[])
+        output.write_binary(b"")
     }
 }
 
