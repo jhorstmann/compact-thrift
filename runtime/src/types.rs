@@ -1,4 +1,5 @@
 use std::borrow::Cow;
+use std::collections::HashMap;
 use std::rc::Rc;
 use std::sync::Arc;
 use crate::protocol::*;
@@ -392,9 +393,39 @@ impl <'i> CompactThriftProtocol<'i> for Arc<str> {
 }
 
 
+impl<'i, K: CompactThriftProtocol<'i> + Default + Eq + std::hash::Hash, V: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for HashMap<K, V> {
+    const FIELD_TYPE: u8 = 11;
+
+    #[inline]
+    fn fill_thrift<T: CompactThriftInput<'i>>(&mut self, input: &mut T) -> Result<(), ThriftError> {
+        let (len, key_type, val_type) = read_map_len_and_types(input)?;
+        if key_type != K::FIELD_TYPE || val_type != V::FIELD_TYPE {
+            return Err(ThriftError::InvalidType)
+        }
+        for _ in 0..len {
+            let key = K::read_thrift(input)?;
+            let val = V::read_thrift(input)?;
+            self.insert(key, val);
+        }
+        Ok(())
+    }
+
+    #[inline]
+    fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
+        output.write_len(self.len())?;
+        self.iter().try_for_each(|(k, v)| {
+            k.write_thrift(output)?;
+            v.write_thrift(output)
+        })?;
+        Ok(())
+    }
+}
+
+
 #[cfg(test)]
 mod tests {
-    use crate::{CompactThriftInputSlice, CompactThriftProtocol};
+    use std::collections::HashMap;
+    use crate::{thrift_struct, CompactThriftInputSlice, CompactThriftProtocol};
 
     #[test]
     fn test_encode_boolean_list() {
@@ -414,4 +445,20 @@ mod tests {
         let values = Vec::<bool>::read_thrift(&mut CompactThriftInputSlice::new(&input)).unwrap();
         assert_eq!(&values, &[false, true, false]);
     }
+
+    #[test]
+    fn test_decode_map_bool_int() {
+
+        thrift_struct!(
+            struct StructWithMap {
+                1: required HashMap<bool, i32> m;
+                2: required i32 i;
+            }
+        );
+
+        let input = [0x1b, 2, 0x25, 1, 14, 2, 16, 0x15, 84, 0];
+        let values = StructWithMap::read_thrift(&mut CompactThriftInputSlice::new(&input)).unwrap();
+        assert_eq!(values.i, 42);
+    }
+
 }

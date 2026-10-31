@@ -51,18 +51,19 @@ macro_rules! thrift {
 /// ```
 #[macro_export]
 macro_rules! thrift_struct {
-    ($(#[$($def_attrs:meta)*])* struct $identifier:ident { $($(#[$($field_attrs:meta)*])* $field_id:literal : $required_or_optional:ident $field_type:ident $(< $element_type:ident >)? $field_name:ident $(= $default_value:literal)? $(;)?)* }) => {
+    ($(#[$($def_attrs:meta)*])* struct $identifier:ident { $($(#[$($field_attrs:meta)*])* $field_id:literal : $required_or_optional:ident $field_type:ident $(< $element_type:ident $(, $map_value_type:ident)? >)? $field_name:ident $(= $default_value:literal)? $(;)?)* }) => {
         $(#[cfg_attr(not(doctest), $($def_attrs)*)])*
         #[derive(Default, Clone, Debug, PartialEq)]
         #[allow(non_camel_case_types)]
         #[allow(non_snake_case)]
         pub struct $identifier {
-            $($(#[cfg_attr(not(doctest), $($field_attrs)*)])* pub $field_name: $crate::__thrift_required_or_optional!($required_or_optional $crate::__thrift_field_type!($field_type $(< $element_type >)?))),*
+            $($(#[cfg_attr(not(doctest), $($field_attrs)*)])* pub $field_name: $crate::__thrift_required_or_optional!($required_or_optional $crate::__thrift_field_type!($field_type $(< $element_type $(, $map_value_type)? >)?))),*
         }
 
         impl $identifier {
             #[allow(clippy::too_many_arguments)]
-            pub fn new($($field_name: impl Into<$crate::__thrift_required_or_optional!($required_or_optional $crate::__thrift_field_type!($field_type $(< $element_type >)?))>),*) -> Self {
+            #[allow(dead_code)]
+            pub fn new($($field_name: impl Into<$crate::__thrift_required_or_optional!($required_or_optional $crate::__thrift_field_type!($field_type $(< $element_type $(, $map_value_type)? >)?))>),*) -> Self {
                 Self {
                     $($field_name: $field_name.into(),)*
                 }
@@ -125,13 +126,13 @@ macro_rules! thrift_struct {
 /// ```
 #[macro_export]
 macro_rules! thrift_union {
-    ($(#[$($def_attrs:meta)*])* union $identifier:ident { $($(#[$($field_attrs:meta)*])* $field_id:literal : $field_type:ident $(< $element_type:ty >)? $field_name:ident $(;)?)* }) => {
+    ($(#[$($def_attrs:meta)*])* union $identifier:ident { $($(#[$($field_attrs:meta)*])* $field_id:literal : $field_type:ident $(< $element_type:ident $(, $map_value_type:ident)? >)? $field_name:ident $(;)?)* }) => {
         $(#[cfg_attr(not(doctest), $($def_attrs)*)])*
         #[derive(Clone, Debug, PartialEq)]
         #[allow(non_camel_case_types)]
         #[allow(non_snake_case)]
         pub enum $identifier {
-            $($(#[cfg_attr(not(doctest), $($field_attrs)*)])* $field_name($crate::__thrift_field_type!($field_type $(< $element_type >)?))),*
+            $($(#[cfg_attr(not(doctest), $($field_attrs)*)])* $field_name($crate::__thrift_field_type!($field_type $(< $element_type $(, map_value_type:ty)? >)?))),*
         }
 
         impl Default for $identifier {
@@ -179,7 +180,7 @@ macro_rules! thrift_union {
             fn write_thrift<T: $crate::CompactThriftOutput>(&self, output: &mut T) -> std::result::Result<(), $crate::ThriftError> {
                 let mut last_field_id = 0_i16;
                 match self {
-                    $(Self::$field_name(inner) => inner.write_thrift_field(output, $field_id, &mut last_field_id)?),*
+                    $(Self::$field_name(inner) => inner.write_thrift_field(output, $field_id, &mut last_field_id)?,)*
                 }
                 output.write_byte(0)?;
                 Ok(())
@@ -252,6 +253,7 @@ macro_rules! __thrift_union_default {
 macro_rules! __thrift_field_type {
     (list < $element_type:ident >) => { std::vec::Vec< $crate::__thrift_field_type!($element_type) > };
     (set < $element_type:ident >) => { std::vec::Vec< $crate::__thrift_field_type!($element_type) > };
+    (map < $key_type:ident, $val_type:ident >) => { std::collections::HashMap< $crate::__thrift_field_type!($key_type), $crate::__thrift_field_type!($val_type) > };
     (binary) => { Vec<u8> };
     (string) => { String };
     (byte) => { u8 };
