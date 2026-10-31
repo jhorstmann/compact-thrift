@@ -301,6 +301,9 @@ impl TryFrom<&LogicalType> for PrimitiveLogicalType {
             LogicalType::VARIANT(_) => Err(ParquetError::Schema(
                 "Unsupported variant logical type for primitive",
             )),
+            LogicalType::FILE(_) => Err(ParquetError::Schema(
+                "Unsupported file logical type for primitive",
+            )),
         }
     }
 }
@@ -313,6 +316,7 @@ pub enum GroupLogicalType {
     Variant {
         specification_version: Option<i8>,
     },
+    File,
 }
 
 impl TryFrom<&LogicalType> for GroupLogicalType {
@@ -323,6 +327,7 @@ impl TryFrom<&LogicalType> for GroupLogicalType {
             LogicalType::MAP(_) => Ok(GroupLogicalType::Map),
             LogicalType::LIST(_) => Ok(GroupLogicalType::List),
             LogicalType::VARIANT(VariantType { specification_version }) => Ok(GroupLogicalType::Variant{ specification_version: *specification_version }),
+            LogicalType::FILE(_) => Ok(GroupLogicalType::File),
             _ => Err(ParquetError::Schema("Unsupported logical type for group")),
         }
     }
