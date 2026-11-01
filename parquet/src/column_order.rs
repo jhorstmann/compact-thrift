@@ -20,6 +20,7 @@ impl ColumnOrder {
     pub const INT96_TIMESTAMP_ORDER: ColumnOrder = ColumnOrder(3);
 }
 
+/// The default value is 0, explicitly marking it as unknown.
 impl Default for ColumnOrder {
     fn default() -> Self {
         Self(0)

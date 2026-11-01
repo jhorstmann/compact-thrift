@@ -35,7 +35,7 @@ impl From<ThriftError> for ParquetError {
     }
 }
 
-const PARQUET_MAGIC: [u8; 4] = [b'P', b'A', b'R', b'1'];
+const PARQUET_MAGIC: [u8; 4] = *b"PAR1";
 
 #[expect(clippy::uninit_vec)]
 pub fn get_metadata_chunk<R: Read + Seek>(input: &mut R) -> Result<Vec<u8>, ParquetError> {

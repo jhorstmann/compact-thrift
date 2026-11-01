@@ -11,6 +11,9 @@ readme = "README.md"
 edition = "2021"
 rust-version = "1.91.0"
 
+[lints.clippy]
+manual_range_contains = "allow"
+
 [dependencies]
 compact-thrift-runtime = { version = "0.3.0", path = "../runtime" }
 
