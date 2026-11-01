@@ -9,7 +9,7 @@ authors = ["Jörn Horstmann <git@jhorstmann.net>"]
 keywords = ["thrift", "parquet"]
 readme = "README.md"
 edition = "2021"
-rust-version = "1.76.0"
+rust-version = "1.91.0"
 
 [dependencies]
 compact-thrift-runtime = { version = "0.3.0", path = "../runtime" }
