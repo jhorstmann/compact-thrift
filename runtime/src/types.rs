@@ -266,9 +266,6 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
 
     #[inline]
     fn fill_thrift_field<T: CompactThriftInput<'i>>(&mut self, input: &mut T, field_type: u8) -> Result<(), ThriftError> {
-        if field_type != Self::FIELD_TYPE {
-            return Err(ThriftError::InvalidType)
-        }
         let value = init_once_default(self)?;
         match value.fill_thrift_field(input, field_type) {
             Err(ThriftError::UnknownVariant(_, _)) => {
@@ -278,7 +275,6 @@ impl <'i, P: CompactThriftProtocol<'i> + Default> CompactThriftProtocol<'i> for 
             r => r,
         }
     }
-
 
     #[inline]
     fn write_thrift<T: CompactThriftOutput>(&self, output: &mut T) -> Result<(), ThriftError> {
@@ -425,7 +421,7 @@ impl<'i, K: CompactThriftProtocol<'i> + Default + Eq + std::hash::Hash, V: Compa
 #[cfg(test)]
 mod tests {
     use std::collections::HashMap;
-    use crate::{thrift_struct, CompactThriftInputSlice, CompactThriftProtocol};
+    use crate::{thrift_struct, CompactThriftInputSlice, CompactThriftProtocol, ThriftError};
 
     #[test]
     fn test_encode_boolean_list() {
@@ -461,4 +457,24 @@ mod tests {
         assert_eq!(values.i, 42);
     }
 
+    #[test]
+    fn test_decode_optional_bool() {
+        thrift_struct!(
+            struct StructWithBoolean {
+                1: optional bool b;
+            }
+        );
+
+        let input = [0x11, 0];
+        let values = StructWithBoolean::read_thrift(&mut CompactThriftInputSlice::new(&input)).unwrap();
+        assert_eq!(values.b, Some(true));
+
+        let input = [0x12, 0];
+        let values = StructWithBoolean::read_thrift(&mut CompactThriftInputSlice::new(&input)).unwrap();
+        assert_eq!(values.b, Some(false));
+
+        let input = [0x11, 0x02, 2, 0];
+        let err = StructWithBoolean::read_thrift(&mut CompactThriftInputSlice::new(&input)).unwrap_err();
+        assert!(matches!(err, ThriftError::DuplicateField));
+    }
 }
